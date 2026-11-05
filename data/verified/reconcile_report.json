@@ -1,0 +1,150 @@
+{
+  "schema_version": "1.0",
+  "checked_at": "2026-11-05T04:06:18Z",
+  "summary": {
+    "total": 19,
+    "ok": 8,
+    "low": 3,
+    "fail": 0,
+    "pending": 4,
+    "unverified": 4
+  },
+  "checks": [
+    {
+      "check": "q4_residual",
+      "status": "ok",
+      "detail": "MSFT 2023-Q2 Q4 residual 0.0000%",
+      "ticker": "MSFT",
+      "quarter": "2023-Q2",
+      "residual": 0.0
+    },
+    {
+      "check": "q4_residual",
+      "status": "ok",
+      "detail": "MSFT 2024-Q2 Q4 residual 0.0000%",
+      "ticker": "MSFT",
+      "quarter": "2024-Q2",
+      "residual": 0.0
+    },
+    {
+      "check": "q4_residual",
+      "status": "ok",
+      "detail": "MSFT 2025-Q2 Q4 residual 0.0000%",
+      "ticker": "MSFT",
+      "quarter": "2025-Q2",
+      "residual": 0.0
+    },
+    {
+      "check": "q4_residual",
+      "status": "ok",
+      "detail": "MSFT 2026-Q2 Q4 residual 0.0000%",
+      "ticker": "MSFT",
+      "quarter": "2026-Q2",
+      "residual": 0.0
+    },
+    {
+      "check": "q4_residual",
+      "status": "ok",
+      "detail": "GOOGL 2022-Q4 Q4 residual 0.0000%",
+      "ticker": "GOOGL",
+      "quarter": "2022-Q4",
+      "residual": 0.0
+    },
+    {
+      "check": "q4_residual",
+      "status": "ok",
+      "detail": "GOOGL 2023-Q4 Q4 residual 0.0000%",
+      "ticker": "GOOGL",
+      "quarter": "2023-Q4",
+      "residual": 0.0
+    },
+    {
+      "check": "q4_residual",
+      "status": "ok",
+      "detail": "GOOGL 2024-Q4 Q4 residual 0.0000%",
+      "ticker": "GOOGL",
+      "quarter": "2024-Q4",
+      "residual": 0.0
+    },
+    {
+      "check": "q4_residual",
+      "status": "ok",
+      "detail": "GOOGL 2025-Q4 Q4 residual 0.0000%",
+      "ticker": "GOOGL",
+      "quarter": "2025-Q4",
+      "residual": 0.0
+    },
+    {
+      "check": "segment_sum",
+      "status": "low",
+      "detail": "GOOGL 2022-Q2 goog_3 revenue sum diff 0.5381%",
+      "ticker": "GOOGL",
+      "quarter": "2022-Q2",
+      "scheme": "goog_3"
+    },
+    {
+      "check": "segment_sum",
+      "status": "low",
+      "detail": "GOOGL 2022-Q3 goog_3 revenue sum diff 0.9234%",
+      "ticker": "GOOGL",
+      "quarter": "2022-Q3",
+      "scheme": "goog_3"
+    },
+    {
+      "check": "segment_sum",
+      "status": "low",
+      "detail": "GOOGL 2022-Q4 goog_3 revenue sum diff 0.8797%",
+      "ticker": "GOOGL",
+      "quarter": "2022-Q4",
+      "scheme": "goog_3"
+    },
+    {
+      "check": "secondary_close",
+      "status": "pending",
+      "detail": "GOOGL: Nasdaq API is outside the CR-13 allowlist; secondary close not run",
+      "ticker": "GOOGL"
+    },
+    {
+      "check": "secondary_adjusted_close",
+      "status": "unverified",
+      "detail": "GOOGL: Alpha Vantage key not available; adjusted close cross-check not run",
+      "ticker": "GOOGL"
+    },
+    {
+      "check": "secondary_close",
+      "status": "pending",
+      "detail": "MSFT: Nasdaq API is outside the CR-13 allowlist; secondary close not run",
+      "ticker": "MSFT"
+    },
+    {
+      "check": "secondary_adjusted_close",
+      "status": "unverified",
+      "detail": "MSFT: Alpha Vantage key not available; adjusted close cross-check not run",
+      "ticker": "MSFT"
+    },
+    {
+      "check": "secondary_close",
+      "status": "pending",
+      "detail": "QQQ: Nasdaq API is outside the CR-13 allowlist; secondary close not run",
+      "ticker": "QQQ"
+    },
+    {
+      "check": "secondary_adjusted_close",
+      "status": "unverified",
+      "detail": "QQQ: Alpha Vantage key not available; adjusted close cross-check not run",
+      "ticker": "QQQ"
+    },
+    {
+      "check": "secondary_close",
+      "status": "pending",
+      "detail": "SPY: Nasdaq API is outside the CR-13 allowlist; secondary close not run",
+      "ticker": "SPY"
+    },
+    {
+      "check": "secondary_adjusted_close",
+      "status": "unverified",
+      "detail": "SPY: Alpha Vantage key not available; adjusted close cross-check not run",
+      "ticker": "SPY"
+    }
+  ]
+}

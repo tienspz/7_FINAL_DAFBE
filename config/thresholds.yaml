@@ -1,0 +1,40 @@
+version: "1.0"
+analysis:
+  start_year: 2022
+  start_quarter: 1
+  end_year: 2026
+  end_quarter: 3
+  price_history_start: "2020-12-01"
+  financial_history_start: "2021-01-01"
+
+quality:
+  q4_residual_ok: 0.005
+  q4_residual_low: 0.02
+  segment_sum_tolerance: 0.005
+  price_diff_tolerance: 0.001
+  adjusted_close_diff_tolerance: 0.001
+  filing_lag_days: 120
+  restatement_min_usd: 1000000
+  restatement_min_eps: 0.01
+  min_price_days_for_reconciliation: 30
+  price_sample_seed: 20261104
+
+stats:
+  alpha: 0.05
+  min_n_warning: 30
+  max_lag: 4
+  holm_family: "bt4_bt5"
+  adf_regression: "c"
+  adf_autolag: "AIC"
+
+snapshot:
+  version_prefix: "v"
+
+decision:
+  revenue_growth_positive: 0.10
+  operating_margin_positive: 0.20
+  fcf_margin_positive: 0.15
+  capex_intensity_caution: 0.25
+  pe_caution: 35
+  volatility_caution: 0.40
+  drawdown_caution: -0.30

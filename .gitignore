@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+*.egg-info/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Secrets and local configuration
+.env
+.env.*
+*.pem
+*.key
+secrets/
+!*.example
+
+# Agent/tooling state (not part of the deliverable)
+.agents/
+.opencode/
+
+# Runtime caches and generated databases
+data/raw/_cache/
+data/db/
+data/snapshots/
+logs/
+*.log
+
+# Dated raw price snapshots are regenerated on every crawl.
+data/raw/prices/*_20*.csv
+
+# Large processed handoff; the dashboard JSON and verified reports are kept.
+data/verified/prices_processed.csv

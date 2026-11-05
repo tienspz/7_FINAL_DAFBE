@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "snapshot_version": "v20261104.9",
+  "generated_at": "2026-11-05T04:06:18Z",
+  "data_as_of": "2026-11-04",
+  "latest_quarter": "2026-Q3",
+  "companies": [
+    "MSFT",
+    "GOOGL"
+  ],
+  "files": {
+    "financials": "financials.json",
+    "overview": "overview.json",
+    "investor": "investor.json",
+    "ai_analysis": "ai_analysis.json",
+    "decision": "decision.json",
+    "methodology": "methodology.json",
+    "tests": "tests.json",
+    "prices/GOOGL": "prices/GOOGL.json",
+    "prices/MSFT": "prices/MSFT.json",
+    "prices/QQQ": "prices/QQQ.json",
+    "prices/SPY": "prices/SPY.json"
+  },
+  "row_counts": {
+    "filings": 48,
+    "facts": 4427,
+    "prices": 5956,
+    "segments": 461,
+    "financial_quarters": 38
+  },
+  "source_versions": {
+    "yfinance": "1.7.0",
+    "pandas": "3.0.3",
+    "python": "3.14.7"
+  },
+  "link_report_summary": {
+    "total": 84,
+    "ok": 84,
+    "broken": 0,
+    "blocked": 0,
+    "soft404": 0,
+    "low": 0,
+    "pending": 0
+  },
+  "quality_summary": {
+    "companies": [
+      "MSFT",
+      "GOOGL"
+    ],
+    "quarters_expected_per_company": 19,
+    "quarters_expected_total": 38,
+    "quarters_present": 38,
+    "missing_metric_cells": 0,
+    "low_metric_cells": 34,
+    "verified_ratio": 1.0
+  },
+  "checksums": {
+    "financials.json": "sha256:ece295f9e76ce3018dc1552572f9619eba9d3d011647e23f950499035dc0688d",
+    "overview.json": "sha256:bbc96ac50da66b56cb590c1227bda289edb85f0c89a30e3e0c3706f3132076fe",
+    "investor.json": "sha256:b22859b9264d8df6f7200f4fac8eb1f98ab9e56f8b712f4d9ed6234a60251c14",
+    "ai_analysis.json": "sha256:444513e93143abf5a4898f7612359e4e45f56539840863b6d31ffd6a3252eed5",
+    "decision.json": "sha256:bb5e9dad21d64293596cf86b4978a5374311a49bc207ee1e8014da9b9a0c29a1",
+    "methodology.json": "sha256:bfda2fcfd4241fb65ef21ea472a96b047d5de1439109212cdcc86c6d2aebcd64",
+    "tests.json": "sha256:903317afba1145c4d91307a40657cc43ed1bc6cda82ffb7d59a740a28a84f1c3",
+    "prices/GOOGL.json": "sha256:bb1a896fc4caee407da68ab3f1bb614efaf00398e22211fb535519f321620a8f",
+    "prices/MSFT.json": "sha256:031d782a82abb686385ec5a18de0ba40d2797e87fa344c0d08f6b0a3cf9c754d",
+    "prices/QQQ.json": "sha256:b92f5ea1f638c4720c5451ba60dda61986d90355e345315e106e276dc27437bc",
+    "prices/SPY.json": "sha256:f108b738a9f03653d4df27a23631427ae57db0a7f819e66c2da03f31a7067f13"
+  }
+}

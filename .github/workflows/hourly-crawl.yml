@@ -1,0 +1,81 @@
+name: Hourly data crawl
+
+on:
+  schedule:
+    # GitHub may delay scheduled runs; concurrency prevents overlap.
+    - cron: "17 * * * *"
+  workflow_dispatch:
+    inputs:
+      force_commit:
+        description: "Force a data commit even if the UTC-day gate was already used"
+        required: false
+        default: false
+        type: boolean
+  push:
+    branches: [main]
+    paths-ignore:
+      - "data/**"
+      - "web/public/data/**"
+      - "docs/evidence/**"
+      - ".github/aicor_fingerprint"
+      - ".github/aicor_last_commit"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: aicor-hourly-crawl
+  cancel-in-progress: false
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      PYTHONUNBUFFERED: "1"
+      SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT || 'AICOR research project (student project; contact: aicor@example.com)' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Run unit tests
+        run: python -m pytest -q
+
+      - name: Crawl and rebuild dashboard
+        run: python -m pipeline.run --mode full
+
+      - name: Acceptance check
+        run: |
+          for attempt in 1 2 3; do
+            if python scripts/acceptance_check.py; then
+              exit 0
+            fi
+            echo "acceptance attempt ${attempt} failed; retrying in 30s" >&2
+            sleep 30
+          done
+          exit 1
+
+      - name: Detect semantic data change
+        id: fingerprint
+        run: python scripts/ci_sync_data.py --check
+
+      - name: Commit and push data
+        if: ${{ steps.fingerprint.outputs.changed == 'true' || (github.event_name == 'workflow_dispatch' && inputs.force_commit) }}
+        run: |
+          python scripts/ci_sync_data.py --commit ${{ (github.event_name == 'workflow_dispatch' && inputs.force_commit) && '--force' || '' }}

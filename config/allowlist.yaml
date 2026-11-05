@@ -1,0 +1,23 @@
+version: "1.0"
+# CR-13 allowlist. Only domains listed here may be used by automated crawlers.
+allowed_domains:
+  - sec.gov
+  - data.sec.gov
+  - finance.yahoo.com
+  - query1.finance.yahoo.com
+  - yfinance
+  - stooq.com
+  - microsoft.com
+  - abc.xyz
+
+# Proposed additions need an explicit team decision before the crawler uses them.
+proposed_additions:
+  - domain: api.nasdaq.com
+    reason: Secondary raw-close source because Stooq is blocked by a JavaScript challenge.
+    status: pending_approval
+  - domain: alphavantage.co
+    reason: Potential secondary adjusted-close source; requires a real API key.
+    status: pending_approval
+  - domain: blog.google
+    reason: Official Google blog candidate for AI event timeline.
+    status: pending_approval

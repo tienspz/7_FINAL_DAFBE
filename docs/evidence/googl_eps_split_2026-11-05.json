@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "purpose": "Evidence for the GOOGL 20:1 split restatement applied to eps_diluted. Values are read live from SEC companyconcept; nothing is typed from memory.",
+  "checked_at": "2026-11-05T04:07:13Z",
+  "source": {
+    "url": "https://data.sec.gov/api/xbrl/companyconcept/CIK0001652044/us-gaap/EarningsPerShareDiluted.json",
+    "http_status": 200,
+    "content_type": "application/json",
+    "bytes": 19485,
+    "response_sha256": "b22fef8d429677fc2c586ad00fc6cdca4b825dea1e1ab13991adbe881e31b7a3",
+    "user_agent": "AICOR research project (student project; contact: aicor@example.com)"
+  },
+  "company": {
+    "ticker": "GOOGL",
+    "cik": "0001652044"
+  },
+  "facts": [
+    {
+      "period_start": "2022-01-01",
+      "period_end": "2022-03-31",
+      "value_usd_per_share": 24.62,
+      "accession_number": "0001652044-22-000029",
+      "form": "10-Q",
+      "filed_date": "2022-04-27",
+      "is_original_10_q_or_10_k": true,
+      "role": "pre-split original"
+    },
+    {
+      "period_start": "2022-04-01",
+      "period_end": "2022-06-30",
+      "value_usd_per_share": 1.21,
+      "accession_number": "0001652044-22-000071",
+      "form": "10-Q",
+      "filed_date": "2022-07-27",
+      "is_original_10_q_or_10_k": true,
+      "role": "post-split original"
+    },
+    {
+      "period_start": "2022-01-01",
+      "period_end": "2022-12-31",
+      "value_usd_per_share": 4.56,
+      "accession_number": "0001652044-23-000016",
+      "form": "10-K",
+      "filed_date": "2023-02-03",
+      "is_original_10_q_or_10_k": true,
+      "role": "annual post-split"
+    },
+    {
+      "period_start": "2022-01-01",
+      "period_end": "2022-03-31",
+      "value_usd_per_share": 1.23,
+      "accession_number": "0001652044-23-000045",
+      "form": "10-Q",
+      "filed_date": "2023-04-26",
+      "is_original_10_q_or_10_k": false,
+      "role": "later comparative (rounded to 1.23)"
+    }
+  ],
+  "decision": {
+    "rule": "Only periods ending strictly before 2022-06-30 are divided by 20.",
+    "ratio": 20,
+    "cutoff_exclusive": "2022-06-30",
+    "reason": "Q1/2022 was reported pre-split (24.62). Q2/2022 was reported after the split (1.21) and must not be divided again.",
+    "preserved_fields": [
+      "reported_value",
+      "split_adjustment",
+      "source_url",
+      "accession_number"
+    ],
+    "quality_flag": "low"
+  },
+  "arithmetic_check": {
+    "q1_reported": 24.62,
+    "q1_adjusted": 1.231,
+    "q2_reported_post_split": 1.21,
+    "q3_reported_post_split": 1.06,
+    "fy2022_reported_post_split": 4.56,
+    "derived_q4": 1.059,
+    "trailing_2022_q4": 4.56,
+    "expected_trailing_2022_q4": 4.56,
+    "difference": 0.0
+  },
+  "pipeline_cross_check": {
+    "financials_json": "web/public/data/financials.json",
+    "googl_2022_q1_eps_value": 1.231,
+    "googl_2022_q1_reported_value": 24.62,
+    "googl_2022_q1_split_adjustment": 20,
+    "googl_2022_q4_eps_trailing_4q": 4.56,
+    "acceptance_sample": "V06",
+    "acceptance_check": "googl_pre_split_eps_adjustment"
+  }
+}
