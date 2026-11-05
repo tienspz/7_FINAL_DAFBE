@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
-  "checked_at": "2026-11-05T04:32:32Z",
+  "checked_at": "2026-11-05T07:06:56Z",
   "summary": {
     "total": 19,
-    "ok": 8,
+    "ok": 12,
     "low": 3,
     "fail": 0,
-    "pending": 4,
+    "pending": 0,
     "unverified": 4
   },
   "checks": [
@@ -100,51 +100,91 @@
     },
     {
       "check": "secondary_close",
-      "status": "pending",
-      "detail": "GOOGL: Nasdaq API is outside the CR-13 allowlist; secondary close not run",
-      "ticker": "GOOGL"
+      "status": "ok",
+      "detail": "GOOGL: 30/30 Nasdaq closes within 0.100% (max 0.0015%)",
+      "ticker": "GOOGL",
+      "compared_days": 30,
+      "matched_days": 30,
+      "max_relative_difference": 1.4690410100353355e-05,
+      "window_start": "2026-09-24",
+      "window_end": "2026-11-04",
+      "source_url": "https://api.nasdaq.com/api/quote/GOOGL/historical?assetclass=stocks&fromdate=2026-08-06&todate=2026-11-04&limit=120",
+      "response_sha256": "b3446fe4cbac9a480f38966816379a55c858c2aeaf0f88314c8c4dd0cab37ce5",
+      "artifact": "data/raw/prices/nasdaq/GOOGL.json"
     },
     {
       "check": "secondary_adjusted_close",
       "status": "unverified",
-      "detail": "GOOGL: Alpha Vantage key not available; adjusted close cross-check not run",
-      "ticker": "GOOGL"
+      "detail": "GOOGL: ALPHAVANTAGE_API_KEY is not set (or equals the demo key); adjusted-close cross-check was not run. The demo key is not accepted as data.",
+      "ticker": "GOOGL",
+      "source_url": null,
+      "response_sha256": null
     },
     {
       "check": "secondary_close",
-      "status": "pending",
-      "detail": "MSFT: Nasdaq API is outside the CR-13 allowlist; secondary close not run",
-      "ticker": "MSFT"
+      "status": "ok",
+      "detail": "MSFT: 30/30 Nasdaq closes within 0.100% (max 0.0000%)",
+      "ticker": "MSFT",
+      "compared_days": 30,
+      "matched_days": 30,
+      "max_relative_difference": 5.6609037209987524e-08,
+      "window_start": "2026-09-24",
+      "window_end": "2026-11-04",
+      "source_url": "https://api.nasdaq.com/api/quote/MSFT/historical?assetclass=stocks&fromdate=2026-08-06&todate=2026-11-04&limit=120",
+      "response_sha256": "bb1a312789bbd78a7788ee9c0495a62609336fe429caf9ff91fcdc43d23ef5cb",
+      "artifact": "data/raw/prices/nasdaq/MSFT.json"
     },
     {
       "check": "secondary_adjusted_close",
       "status": "unverified",
-      "detail": "MSFT: Alpha Vantage key not available; adjusted close cross-check not run",
-      "ticker": "MSFT"
+      "detail": "MSFT: ALPHAVANTAGE_API_KEY is not set (or equals the demo key); adjusted-close cross-check was not run. The demo key is not accepted as data.",
+      "ticker": "MSFT",
+      "source_url": null,
+      "response_sha256": null
     },
     {
       "check": "secondary_close",
-      "status": "pending",
-      "detail": "QQQ: Nasdaq API is outside the CR-13 allowlist; secondary close not run",
-      "ticker": "QQQ"
+      "status": "ok",
+      "detail": "QQQ: 30/30 Nasdaq closes within 0.100% (max 0.0000%)",
+      "ticker": "QQQ",
+      "compared_days": 30,
+      "matched_days": 30,
+      "max_relative_difference": 4.27516854822625e-08,
+      "window_start": "2026-09-24",
+      "window_end": "2026-11-04",
+      "source_url": "https://api.nasdaq.com/api/quote/QQQ/historical?assetclass=etf&fromdate=2026-08-06&todate=2026-11-04&limit=120",
+      "response_sha256": "9bc7ffbcb16ec1b0d7fda693bbd4888568ec02b2336a1d8a1db08179d630a018",
+      "artifact": "data/raw/prices/nasdaq/QQQ.json"
     },
     {
       "check": "secondary_adjusted_close",
       "status": "unverified",
-      "detail": "QQQ: Alpha Vantage key not available; adjusted close cross-check not run",
-      "ticker": "QQQ"
+      "detail": "QQQ: ALPHAVANTAGE_API_KEY is not set (or equals the demo key); adjusted-close cross-check was not run. The demo key is not accepted as data.",
+      "ticker": "QQQ",
+      "source_url": null,
+      "response_sha256": null
     },
     {
       "check": "secondary_close",
-      "status": "pending",
-      "detail": "SPY: Nasdaq API is outside the CR-13 allowlist; secondary close not run",
-      "ticker": "SPY"
+      "status": "ok",
+      "detail": "SPY: 30/30 Nasdaq closes within 0.100% (max 0.0000%)",
+      "ticker": "SPY",
+      "compared_days": 30,
+      "matched_days": 30,
+      "max_relative_difference": 3.876683828307421e-08,
+      "window_start": "2026-09-24",
+      "window_end": "2026-11-04",
+      "source_url": "https://api.nasdaq.com/api/quote/SPY/historical?assetclass=etf&fromdate=2026-08-06&todate=2026-11-04&limit=120",
+      "response_sha256": "2ff213eed0ae7aa03221e035f5a037f2d8908b315cbe80d8128c7e487de38687",
+      "artifact": "data/raw/prices/nasdaq/SPY.json"
     },
     {
       "check": "secondary_adjusted_close",
       "status": "unverified",
-      "detail": "SPY: Alpha Vantage key not available; adjusted close cross-check not run",
-      "ticker": "SPY"
+      "detail": "SPY: ALPHAVANTAGE_API_KEY is not set (or equals the demo key); adjusted-close cross-check was not run. The demo key is not accepted as data.",
+      "ticker": "SPY",
+      "source_url": null,
+      "response_sha256": null
     }
   ]
 }

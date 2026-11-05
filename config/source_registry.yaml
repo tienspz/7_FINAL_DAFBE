@@ -1,5 +1,6 @@
-version: "1.0"
+version: "1.1"
 checked_at: "2026-11-04T16:17:27Z"
+reviewed_on: "2026-11-05"
 sources:
   - id: S1
     name: SEC submissions - MSFT
@@ -75,7 +76,8 @@ sources:
     name: Nasdaq historical API
     url: https://api.nasdaq.com/api/quote/MSFT/historical
     kind: price_reconciliation
-    status: pending_allowlist
+    status: qualified_secondary_close
+    allowlisted_on: "2026-11-05"
   - id: S16
     name: Microsoft Investor Relations
     url: https://www.microsoft.com/en-us/Investor/
@@ -86,6 +88,25 @@ sources:
     url: https://abc.xyz/investor/
     kind: ir_manual
     status: reachable_manual_only
+  - id: S18
+    name: Alpha Vantage daily adjusted
+    url: https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=MSFT
+    kind: adjusted_close_cross_check
+    status: qualified_conditional_requires_key
+    requires_env: ALPHAVANTAGE_API_KEY
+    allowlisted_on: "2026-11-05"
+  - id: S19
+    name: Google official AI blog
+    url: https://blog.google/innovation-and-ai/technology/ai/google-gemini-ai/
+    kind: ai_event_source
+    status: qualified
+    allowlisted_on: "2026-11-05"
+  - id: S20
+    name: Microsoft official blog
+    url: https://blogs.microsoft.com/blog/2023/01/23/microsoftandopenaiextendpartnership/
+    kind: ai_event_source
+    status: qualified
+    allowlisted_on: "2026-11-05"
 negative_sources:
   - id: R1
     name: Stooq CSV
@@ -110,5 +131,5 @@ negative_sources:
   - id: R5
     name: Google Gemini blog post
     url: https://blog.google/innovation-and-ai/technology/ai/google-gemini-ai/
-    status: pending_allowlist_decision
-    reason: Page is valid but blog.google is not in the CR-13 allowlist.
+    status: resolved_allowlist_approved
+    reason: Page is valid; blog.google was approved for CR-13 on 2026-11-05 and is now used only as AI event evidence.

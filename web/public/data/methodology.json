@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "snapshot_version": "v20261104.10",
-  "generated_at": "2026-11-05T04:32:32Z",
+  "snapshot_version": "v20261104.11",
+  "generated_at": "2026-11-05T07:06:56Z",
   "formulas": {
     "revenue_growth_yoy": "(Revenue_t - Revenue_t-4) / Revenue_t-4",
     "operating_margin": "Operating Income / Revenue",
@@ -123,7 +123,8 @@
       "name": "Nasdaq historical API",
       "url": "https://api.nasdaq.com/api/quote/MSFT/historical",
       "kind": "price_reconciliation",
-      "status": "pending_allowlist"
+      "status": "qualified_secondary_close",
+      "allowlisted_on": "2026-11-05"
     },
     {
       "id": "S16",
@@ -138,6 +139,31 @@
       "url": "https://abc.xyz/investor/",
       "kind": "ir_manual",
       "status": "reachable_manual_only"
+    },
+    {
+      "id": "S18",
+      "name": "Alpha Vantage daily adjusted",
+      "url": "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=MSFT",
+      "kind": "adjusted_close_cross_check",
+      "status": "qualified_conditional_requires_key",
+      "requires_env": "ALPHAVANTAGE_API_KEY",
+      "allowlisted_on": "2026-11-05"
+    },
+    {
+      "id": "S19",
+      "name": "Google official AI blog",
+      "url": "https://blog.google/innovation-and-ai/technology/ai/google-gemini-ai/",
+      "kind": "ai_event_source",
+      "status": "qualified",
+      "allowlisted_on": "2026-11-05"
+    },
+    {
+      "id": "S20",
+      "name": "Microsoft official blog",
+      "url": "https://blogs.microsoft.com/blog/2023/01/23/microsoftandopenaiextendpartnership/",
+      "kind": "ai_event_source",
+      "status": "qualified",
+      "allowlisted_on": "2026-11-05"
     }
   ],
   "negative_sources": [
@@ -173,8 +199,8 @@
       "id": "R5",
       "name": "Google Gemini blog post",
       "url": "https://blog.google/innovation-and-ai/technology/ai/google-gemini-ai/",
-      "status": "pending_allowlist_decision",
-      "reason": "Page is valid but blog.google is not in the CR-13 allowlist."
+      "status": "resolved_allowlist_approved",
+      "reason": "Page is valid; blog.google was approved for CR-13 on 2026-11-05 and is now used only as AI event evidence."
     }
   ],
   "quality_report_summary": {
@@ -200,19 +226,19 @@
   },
   "reconcile_summary": {
     "total": 19,
-    "ok": 8,
+    "ok": 12,
     "low": 3,
     "fail": 0,
-    "pending": 4,
+    "pending": 0,
     "unverified": 4
   },
   "limitations": [
     "yfinance is an unofficial source; version and output format must be pinned.",
-    "Nasdaq API and Alpha Vantage are outside the current CR-13 allowlist; secondary price checks are pending.",
-    "Adjusted-close cross-source verification is unverified until a real Alpha Vantage key is available.",
+    "Secondary unadjusted close is reconciled against the Nasdaq historical API over the last 30 trading days (api.nasdaq.com approved for CR-13 on 2026-11-05).",
+    "Adjusted-close cross-source verification stays unverified until a real Alpha Vantage API key is set in ALPHAVANTAGE_API_KEY; the demo key is never accepted as data.",
     "MSFT changed its segment structure in 2026-Q3; old and new segments are not directly comparable.",
     "GOOGL revenue changed XBRL tags at 2025-Q2; the switch is recorded in tag_switch.",
     "n is small: 19 quarters; YoY leaves 15 and lag 4 leaves 11.",
-    "No AI event is included unless reviewed and verified."
+    "AI events are only shown when the official page contains the recorded evidence quote and reports the expected publication date; the review is an automated evidence check, not human editorial review."
   ]
 }

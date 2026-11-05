@@ -1,0 +1,268 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-11-05T07:09:27Z",
+  "scope": "Completion of pending CR-13 allowlist, secondary close, adjusted close and CR-14 AI events",
+  "snapshot_version": "v20261104.11",
+  "data_as_of": "2026-11-04",
+  "unit_tests": {
+    "exit_code": 0,
+    "summary": "50 passed, 1 warning in 5.90s"
+  },
+  "acceptance": {
+    "evidence_file": "docs/evidence/acceptance_2026-11-04.json",
+    "checked_at": "2026-11-05T07:07:52Z",
+    "source_checks": {
+      "total": 10,
+      "matched": 10,
+      "failed": 0,
+      "passed": true,
+      "seed": 20261104,
+      "selection": "2 core financial + 1 EPS per company, 1 segment per company, 1 price per company"
+    },
+    "contract_checks": {
+      "total": 31,
+      "passed": 31,
+      "failed": 0,
+      "passed_all": true
+    },
+    "overall": "PASS"
+  },
+  "allowlist_cr13": {
+    "version": "1.1",
+    "allowed_domains": [
+      "sec.gov",
+      "data.sec.gov",
+      "finance.yahoo.com",
+      "query1.finance.yahoo.com",
+      "yfinance",
+      "stooq.com",
+      "microsoft.com",
+      "abc.xyz",
+      "api.nasdaq.com",
+      "blog.google",
+      "alphavantage.co"
+    ],
+    "conditional_domains": [
+      {
+        "domain": "alphavantage.co",
+        "reason": "Adjusted-close cross-check only; requires a real API key (never the demo key).",
+        "requires_env": "ALPHAVANTAGE_API_KEY",
+        "status": "approved_conditional"
+      }
+    ],
+    "decisions": [
+      {
+        "domain": "api.nasdaq.com",
+        "decided_on": "2026-11-05",
+        "decision": "approved",
+        "scope": "Secondary unadjusted close for MSFT, GOOGL, SPY, QQQ (30 trading days).",
+        "reason": "Stooq is blocked by a JavaScript challenge, so it cannot serve as a secondary close source."
+      },
+      {
+        "domain": "blog.google",
+        "decided_on": "2026-11-05",
+        "decision": "approved",
+        "scope": "Official Google/Alphabet AI announcement pages used as AI event evidence.",
+        "reason": "Needed for CR-14 AI events with an official primary source."
+      },
+      {
+        "domain": "alphavantage.co",
+        "decided_on": "2026-11-05",
+        "decision": "approved_conditional",
+        "scope": "Adjusted-close cross-check only, when ALPHAVANTAGE_API_KEY is set.",
+        "reason": "Secondary adjusted-close source; the demo key is explicitly not accepted as data."
+      }
+    ],
+    "enforced_in": "pipeline/http.py: CachedHttpClient(enforce_allowlist=True) raises AllowlistError before any network call",
+    "negative_control_exception": "pipeline/verify/links.py uses allow_unlisted=True only for R1-R3 probes"
+  },
+  "secondary_close": {
+    "source": "Nasdaq historical API",
+    "tolerance": 0.001,
+    "checks": [
+      {
+        "ticker": "GOOGL",
+        "status": "ok",
+        "compared_days": 30,
+        "matched_days": 30,
+        "max_relative_difference": 1.4690410100353355e-05,
+        "window_start": "2026-09-24",
+        "window_end": "2026-11-04",
+        "source_url": "https://api.nasdaq.com/api/quote/GOOGL/historical?assetclass=stocks&fromdate=2026-08-06&todate=2026-11-04&limit=120",
+        "response_sha256": "b3446fe4cbac9a480f38966816379a55c858c2aeaf0f88314c8c4dd0cab37ce5",
+        "artifact": "data/raw/prices/nasdaq/GOOGL.json"
+      },
+      {
+        "ticker": "MSFT",
+        "status": "ok",
+        "compared_days": 30,
+        "matched_days": 30,
+        "max_relative_difference": 5.6609037209987524e-08,
+        "window_start": "2026-09-24",
+        "window_end": "2026-11-04",
+        "source_url": "https://api.nasdaq.com/api/quote/MSFT/historical?assetclass=stocks&fromdate=2026-08-06&todate=2026-11-04&limit=120",
+        "response_sha256": "bb1a312789bbd78a7788ee9c0495a62609336fe429caf9ff91fcdc43d23ef5cb",
+        "artifact": "data/raw/prices/nasdaq/MSFT.json"
+      },
+      {
+        "ticker": "QQQ",
+        "status": "ok",
+        "compared_days": 30,
+        "matched_days": 30,
+        "max_relative_difference": 4.27516854822625e-08,
+        "window_start": "2026-09-24",
+        "window_end": "2026-11-04",
+        "source_url": "https://api.nasdaq.com/api/quote/QQQ/historical?assetclass=etf&fromdate=2026-08-06&todate=2026-11-04&limit=120",
+        "response_sha256": "9bc7ffbcb16ec1b0d7fda693bbd4888568ec02b2336a1d8a1db08179d630a018",
+        "artifact": "data/raw/prices/nasdaq/QQQ.json"
+      },
+      {
+        "ticker": "SPY",
+        "status": "ok",
+        "compared_days": 30,
+        "matched_days": 30,
+        "max_relative_difference": 3.876683828307421e-08,
+        "window_start": "2026-09-24",
+        "window_end": "2026-11-04",
+        "source_url": "https://api.nasdaq.com/api/quote/SPY/historical?assetclass=etf&fromdate=2026-08-06&todate=2026-11-04&limit=120",
+        "response_sha256": "2ff213eed0ae7aa03221e035f5a037f2d8908b315cbe80d8128c7e487de38687",
+        "artifact": "data/raw/prices/nasdaq/SPY.json"
+      }
+    ],
+    "all_ok": true
+  },
+  "adjusted_close": {
+    "source": "Alpha Vantage TIME_SERIES_DAILY_ADJUSTED",
+    "key_env": "ALPHAVANTAGE_API_KEY",
+    "key_present": false,
+    "demo_key_used": false,
+    "checks": [
+      {
+        "ticker": "GOOGL",
+        "status": "unverified",
+        "detail": "GOOGL: ALPHAVANTAGE_API_KEY is not set (or equals the demo key); adjusted-close cross-check was not run. The demo key is not accepted as data."
+      },
+      {
+        "ticker": "MSFT",
+        "status": "unverified",
+        "detail": "MSFT: ALPHAVANTAGE_API_KEY is not set (or equals the demo key); adjusted-close cross-check was not run. The demo key is not accepted as data."
+      },
+      {
+        "ticker": "QQQ",
+        "status": "unverified",
+        "detail": "QQQ: ALPHAVANTAGE_API_KEY is not set (or equals the demo key); adjusted-close cross-check was not run. The demo key is not accepted as data."
+      },
+      {
+        "ticker": "SPY",
+        "status": "unverified",
+        "detail": "SPY: ALPHAVANTAGE_API_KEY is not set (or equals the demo key); adjusted-close cross-check was not run. The demo key is not accepted as data."
+      }
+    ],
+    "status": "unverified",
+    "reason": "No real Alpha Vantage API key is available; the demo key is not accepted as data."
+  },
+  "ai_events_cr14": {
+    "review_method": "automated_evidence_check",
+    "verified": 6,
+    "rejected": 0,
+    "events": [
+      {
+        "id": "msft-openai-partnership-extended",
+        "ticker": "MSFT",
+        "published_date": "2023-01-23",
+        "title": "Microsoft and OpenAI extend partnership",
+        "category": "partnership",
+        "source_url": "https://blogs.microsoft.com/blog/2023/01/23/microsoftandopenaiextendpartnership/",
+        "evidence_quote": "It extends our ongoing collaboration across AI supercomputing and research and enables each of us to independently commercialize the resulting advanced AI technologies.",
+        "content_sha256": "1932ff6a6d106f226eb4c95be4b4abf1476402f1fea16e148844e5944bd274ec",
+        "http_status": 200,
+        "entered_by": "curated:config/ai_events.yaml",
+        "reviewed_by": "pipeline.ai_events.autoverify@1.0",
+        "review_method": "automated_evidence_check",
+        "review_status": "verified"
+      },
+      {
+        "id": "googl-bard-announced",
+        "ticker": "GOOGL",
+        "published_date": "2023-02-06",
+        "title": "Google AI updates: Bard and new AI features in Search",
+        "category": "model_launch",
+        "source_url": "https://blog.google/innovation-and-ai/technology/ai/bard-google-ai-search-updates/",
+        "evidence_quote": "We've been working on an experimental conversational AI service, powered by LaMDA, that we're calling Bard.",
+        "content_sha256": "b5914573523fd37958572708df93d5ce71fa7b4c24c121d7eca012ada6ca124f",
+        "http_status": 200,
+        "entered_by": "curated:config/ai_events.yaml",
+        "reviewed_by": "pipeline.ai_events.autoverify@1.0",
+        "review_method": "automated_evidence_check",
+        "review_status": "verified"
+      },
+      {
+        "id": "msft-microsoft-365-copilot",
+        "ticker": "MSFT",
+        "published_date": "2023-03-16",
+        "title": "Introducing Microsoft 365 Copilot - your copilot for work",
+        "category": "product_launch",
+        "source_url": "https://blogs.microsoft.com/blog/2023/03/16/introducing-microsoft-365-copilot-your-copilot-for-work/",
+        "evidence_quote": "Today, we are bringing the power of next-generation AI to work.",
+        "content_sha256": "af512e4c088cb45ea04d25546c2bab7127c24796e407f81aebe533061c50372a",
+        "http_status": 200,
+        "entered_by": "curated:config/ai_events.yaml",
+        "reviewed_by": "pipeline.ai_events.autoverify@1.0",
+        "review_method": "automated_evidence_check",
+        "review_status": "verified"
+      },
+      {
+        "id": "googl-gemini-1-0",
+        "ticker": "GOOGL",
+        "published_date": "2023-12-06",
+        "title": "Introducing Gemini: Google's most capable AI model yet",
+        "category": "model_launch",
+        "source_url": "https://blog.google/innovation-and-ai/technology/ai/google-gemini-ai/",
+        "evidence_quote": "Today, we're a step closer to this vision as we introduce Gemini, the most capable and general model we've ever built.",
+        "content_sha256": "7e24625060c2a855465beb412cda45a820dddb7f7a828bc8d044069a27aa1a58",
+        "http_status": 200,
+        "entered_by": "curated:config/ai_events.yaml",
+        "reviewed_by": "pipeline.ai_events.autoverify@1.0",
+        "review_method": "automated_evidence_check",
+        "review_status": "verified"
+      },
+      {
+        "id": "googl-gemini-1-5",
+        "ticker": "GOOGL",
+        "published_date": "2024-02-15",
+        "title": "Introducing Gemini 1.5, Google's next-generation AI model",
+        "category": "model_launch",
+        "source_url": "https://blog.google/innovation-and-ai/products/google-gemini-next-generation-model-february-2024/",
+        "evidence_quote": "Today, we're announcing our next-generation model: Gemini 1.5.",
+        "content_sha256": "96b823f5cf40ddb1e2fc95b29700baca3c009a939b2a50f2f272633e3c7c20c4",
+        "http_status": 200,
+        "entered_by": "curated:config/ai_events.yaml",
+        "reviewed_by": "pipeline.ai_events.autoverify@1.0",
+        "review_method": "automated_evidence_check",
+        "review_status": "verified"
+      },
+      {
+        "id": "msft-copilot-plus-pcs",
+        "ticker": "MSFT",
+        "published_date": "2024-05-20",
+        "title": "Introducing Copilot+ PCs",
+        "category": "product_launch",
+        "source_url": "https://blogs.microsoft.com/blog/2024/05/20/introducing-copilot-pcs/",
+        "evidence_quote": "Today, at a special event on our new Microsoft campus, we introduced the world to a new category of Windows PCs designed for AI, Copilot+ PCs.",
+        "content_sha256": "52abee70d3d2e2df31bd197de9389670a60658bfbaf92ae12a114009e3a5351d",
+        "http_status": 200,
+        "entered_by": "curated:config/ai_events.yaml",
+        "reviewed_by": "pipeline.ai_events.autoverify@1.0",
+        "review_method": "automated_evidence_check",
+        "review_status": "verified"
+      }
+    ],
+    "note": "Machine evidence check against official pages; not human editorial review."
+  },
+  "remaining_open": [
+    "Adjusted-close cross-check stays unverified until a real Alpha Vantage key is configured (secret ALPHAVANTAGE_API_KEY).",
+    "AI events have automated evidence review, not human editorial sign-off.",
+    "Nasdaq historical API is unofficial and has no SLA; a schema change degrades to pending, not silent success."
+  ],
+  "not_investment_advice": true
+}

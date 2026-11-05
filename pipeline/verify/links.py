@@ -235,7 +235,8 @@ def run_negative_checks(client: CachedHttpClient) -> list[dict[str, Any]]:
     ]
     for check_id, source_type, url in checks:
         try:
-            response = client.get(url)
+            # Negative controls deliberately probe rejected sources outside CR-13.
+            response = client.get(url, allow_unlisted=True)
             title = page_title(response.text)
             if check_id == "R1":
                 is_csv = response.text.lower().startswith("date,") or "date,open" in response.text.lower()

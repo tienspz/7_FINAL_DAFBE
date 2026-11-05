@@ -1,0 +1,55 @@
+version: "1.0"
+# CR-14 AI event seeds.
+#
+# Rules enforced by pipeline/crawlers/ai_events.py:
+#   * source_url must be an official company page on an allowlisted domain;
+#   * evidence_quote must appear verbatim (after whitespace/typography
+#     normalization) in the fetched page text;
+#   * published_date must match the page's own machine-readable date;
+#   * the response hash is stored with the event.
+# An event failing any check is rejected and never reaches the dashboard.
+review_method: automated_evidence_check
+reviewer: pipeline.ai_events.autoverify@1.0
+events:
+  - id: googl-bard-announced
+    ticker: GOOGL
+    title: "Google AI updates: Bard and new AI features in Search"
+    category: model_launch
+    published_date: "2023-02-06"
+    source_url: "https://blog.google/innovation-and-ai/technology/ai/bard-google-ai-search-updates/"
+    evidence_quote: "We've been working on an experimental conversational AI service, powered by LaMDA, that we're calling Bard."
+  - id: msft-openai-partnership-extended
+    ticker: MSFT
+    title: "Microsoft and OpenAI extend partnership"
+    category: partnership
+    published_date: "2023-01-23"
+    source_url: "https://blogs.microsoft.com/blog/2023/01/23/microsoftandopenaiextendpartnership/"
+    evidence_quote: "It extends our ongoing collaboration across AI supercomputing and research and enables each of us to independently commercialize the resulting advanced AI technologies."
+  - id: msft-microsoft-365-copilot
+    ticker: MSFT
+    title: "Introducing Microsoft 365 Copilot - your copilot for work"
+    category: product_launch
+    published_date: "2023-03-16"
+    source_url: "https://blogs.microsoft.com/blog/2023/03/16/introducing-microsoft-365-copilot-your-copilot-for-work/"
+    evidence_quote: "Today, we are bringing the power of next-generation AI to work."
+  - id: googl-gemini-1-0
+    ticker: GOOGL
+    title: "Introducing Gemini: Google's most capable AI model yet"
+    category: model_launch
+    published_date: "2023-12-06"
+    source_url: "https://blog.google/innovation-and-ai/technology/ai/google-gemini-ai/"
+    evidence_quote: "Today, we're a step closer to this vision as we introduce Gemini, the most capable and general model we've ever built."
+  - id: googl-gemini-1-5
+    ticker: GOOGL
+    title: "Introducing Gemini 1.5, Google's next-generation AI model"
+    category: model_launch
+    published_date: "2024-02-15"
+    source_url: "https://blog.google/innovation-and-ai/products/google-gemini-next-generation-model-february-2024/"
+    evidence_quote: "Today, we're announcing our next-generation model: Gemini 1.5."
+  - id: msft-copilot-plus-pcs
+    ticker: MSFT
+    title: "Introducing Copilot+ PCs"
+    category: product_launch
+    published_date: "2024-05-20"
+    source_url: "https://blogs.microsoft.com/blog/2024/05/20/introducing-copilot-pcs/"
+    evidence_quote: "Today, at a special event on our new Microsoft campus, we introduced the world to a new category of Windows PCs designed for AI, Copilot+ PCs."

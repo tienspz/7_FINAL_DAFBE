@@ -28,6 +28,7 @@ from pathlib import Path
 from typing import Any
 
 import requests
+import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "web" / "public" / "data"
@@ -57,7 +58,7 @@ def load_json(path: Path) -> Any:
 
 def write_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
 
 
 def sha256_bytes(content: bytes) -> str:
@@ -459,8 +460,20 @@ def contract_checks() -> list[dict[str, Any]]:
     checks.append(check("investor_contract", set(investor.get("price_files", {})) == {"MSFT", "GOOGL", "SPY", "QQQ"} and investor.get("benchmarks") == ["SPY", "QQQ"] and len(investor.get("excess_return_tests", [])) == 2 and len(investor.get("monthly_returns", {})) == 4, "prices/benchmarks/returns"))
 
     ai = load_json(DATA_DIR / "ai_analysis.json")
-    ai_ok = ai.get("events") == [] and bool(ai.get("event_empty_state")) and "n = 11-15" in " ".join(ai.get("warnings", [])) and set(ai.get("label_definitions", {})) == {"Reported", "Proxy", "Estimated"} and len(ai.get("correlations", [])) == 70
-    checks.append(check("ai_analysis_contract", ai_ok, "empty verified-event state, labels, 70 correlations"))
+    ai_events = ai.get("events") or []
+    event_fields = (
+        "id", "ticker", "published_date", "title", "category", "source_url",
+        "evidence_quote", "content_sha256", "entered_by", "reviewed_by", "review_status",
+    )
+    events_ok = (
+        bool(ai_events)
+        and all(all(event.get(field) for field in event_fields) for event in ai_events)
+        and all(event.get("review_status") == "verified" and event.get("http_status") == 200 for event in ai_events)
+        and all(event.get("ticker") in {"MSFT", "GOOGL"} for event in ai_events)
+    )
+    empty_state_ok = (not ai_events and bool(ai.get("event_empty_state"))) or (bool(ai_events) and not ai.get("event_empty_state"))
+    ai_ok = events_ok and empty_state_ok and "n = 11-15" in " ".join(ai.get("warnings", [])) and set(ai.get("label_definitions", {})) == {"Reported", "Proxy", "Estimated"} and len(ai.get("correlations", [])) == 70
+    checks.append(check("ai_analysis_contract", ai_ok, f"{len(ai_events)} verified events, labels, 70 correlations"))
 
     decision = load_json(DATA_DIR / "decision.json")
     decision_ok = len(decision.get("comparison", [])) == 2 and all(row.get("not_investment_advice") is True for row in decision.get("comparison", [])) and "Không phải khuyến nghị" in decision.get("disclaimer", "")
@@ -481,7 +494,17 @@ def contract_checks() -> list[dict[str, Any]]:
     quality_ok = qsummary.get("quarters_expected_total") == 38 and qsummary.get("quarters_present") == 38 and qsummary.get("missing_metric_cells") == 0 and qsummary.get("verified_ratio") == 1.0 and quality.get("tag_switch") and quality.get("segment_break")
     checks.append(check("quality_contract", quality_ok, json.dumps(qsummary, ensure_ascii=False)))
     checks.append(check("tag_switch_recorded", any(item.get("ticker") == "GOOGL" and item.get("calendar_key") == "2025-Q2" for item in quality.get("tag_switch", [])), "GOOGL 2025-Q2"))
-    checks.append(check("no_unverified_ai_events", quality.get("restatements") is not None and not (RAW_DIR / "manual" / "ai_events.csv").exists(), "no AI event file and no event rows"))
+    ai_report = load_json(VERIFIED_DIR / "ai_events_report.json")
+    verified_events = ai_report.get("events", [])
+    ai_evidence_ok = (
+        quality.get("restatements") is not None
+        and ai_report.get("verified") == len(ai_events)
+        and len(verified_events) == len(ai_events)
+        and all(re.fullmatch(r"[0-9a-f]{64}", event.get("content_sha256", "")) for event in verified_events)
+        and all(event.get("checks", {}).get("quote_present") for event in verified_events)
+        and all(event.get("checks", {}).get("published_date_matches") for event in verified_events)
+    )
+    checks.append(check("ai_event_evidence", ai_evidence_ok, f"verified={ai_report.get('verified')}, rejected={ai_report.get('rejected')}"))
 
     link = load_json(VERIFIED_DIR / "link_report.json")
     link_ok = link.get("summary", {}).get("total") == 84 and link.get("summary", {}).get("ok") == 84 and link.get("summary", {}).get("broken") == 0
@@ -495,6 +518,43 @@ def contract_checks() -> list[dict[str, Any]]:
     q4 = [item for item in rchecks if item.get("check") == "q4_residual"]
     reconcile_ok = rsummary.get("fail") == 0 and len(q4) == 8 and all(item.get("status") == "ok" and item.get("residual", 1) <= 0.005 for item in q4)
     checks.append(check("reconcile_contract", reconcile_ok, json.dumps(rsummary, ensure_ascii=False)))
+
+    secondary_checks = [item for item in rchecks if item.get("check") == "secondary_close"]
+    secondary_ok = (
+        len(secondary_checks) == 4
+        and all(item.get("status") == "ok" for item in secondary_checks)
+        and all(item.get("compared_days", 0) >= 30 for item in secondary_checks)
+        and all(item.get("max_relative_difference", 1) <= 0.001 for item in secondary_checks)
+        and all(item.get("response_sha256") for item in secondary_checks)
+    )
+    checks.append(check("secondary_close_contract", secondary_ok, "; ".join(f"{item.get('ticker')}={item.get('status')}" for item in secondary_checks)))
+
+    adjusted_checks = [item for item in rchecks if item.get("check") == "secondary_adjusted_close"]
+    adjusted_by_ticker = {item.get("ticker"): item for item in adjusted_checks}
+    env_key = os.environ.get("ALPHAVANTAGE_API_KEY", "").strip()
+    key_present = bool(env_key) and env_key.lower() != "demo"
+    if key_present:
+        adjusted_ok = all(
+            adjusted_by_ticker.get(ticker, {}).get("status") in {"ok", "low"}
+            and adjusted_by_ticker.get(ticker, {}).get("response_sha256")
+            for ticker in ("MSFT", "GOOGL")
+        )
+    else:
+        adjusted_ok = len(adjusted_checks) == 4 and all(
+            item.get("status") == "unverified" for item in adjusted_checks
+        )
+    checks.append(check("adjusted_close_contract", adjusted_ok, "; ".join(f"{item.get('ticker')}={item.get('status')}" for item in adjusted_checks)))
+    allowlist = yaml.safe_load((ROOT / "config" / "allowlist.yaml").read_text(encoding="utf-8"))
+    allowlist_ok = {"api.nasdaq.com", "blog.google", "alphavantage.co"}.issubset(
+        set(allowlist.get("allowed_domains", []))
+    )
+    checks.append(
+        check(
+            "approved_allowlist_domains",
+            allowlist_ok,
+            f"{len(allowlist.get('allowed_domains', []))} domains, CR-13 additions approved",
+        )
+    )
 
     facts_path = RAW_DIR / "sec" / "facts.csv"
     facts_traceable = False

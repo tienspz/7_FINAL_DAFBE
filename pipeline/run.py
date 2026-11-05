@@ -13,13 +13,19 @@ import csv
 import json
 import sqlite3
 import sys
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
 import pandas as pd
 
 from pipeline.config import get_settings
+from pipeline.crawlers.ai_events import build_verified_events, load_ai_event_seeds
+from pipeline.crawlers.alphavantage import fetch_adjusted_closes
+from pipeline.crawlers.nasdaq import (
+    BROWSER_USER_AGENT,
+    fetch_secondary_closes,
+)
 from pipeline.crawlers.prices import PRICE_TICKERS, fetch_prices
 from pipeline.crawlers.sec import (
     CIKS,
@@ -157,11 +163,24 @@ def main(argv: list[str] | None = None) -> int:
         cache_dir=settings.raw_dir / "_cache",
         user_agent=sec_user_agent(),
         min_delay_seconds=0.2,
+        allowed_domains=settings.allowed_domains,
+        enforce_allowlist=True,
     )
     yahoo_client = CachedHttpClient(
         cache_dir=settings.raw_dir / "_cache",
         user_agent=sec_user_agent(),
         min_delay_seconds=1.0,
+        allowed_domains=settings.allowed_domains,
+        enforce_allowlist=True,
+    )
+    # Nasdaq and the official AI blogs reject the SEC User-Agent.
+    browser_client = CachedHttpClient(
+        cache_dir=settings.raw_dir / "_cache",
+        user_agent=BROWSER_USER_AGENT,
+        min_delay_seconds=1.0,
+        allowed_domains=settings.allowed_domains,
+        enforce_allowlist=True,
+        redact_query_keys=("apikey",),
     )
 
     # 1) SEC submissions and filings.
@@ -227,6 +246,48 @@ def main(argv: list[str] | None = None) -> int:
         for ticker, group in price_bundle.prices.groupby("ticker")
     }
     log(f"prices: {len(price_bundle.prices)} rows across {len(prices_by_ticker)} tickers")
+    data_as_of = max(
+        frame["trade_date"].max().isoformat()
+        for frame in prices_by_ticker.values()
+        if not frame.empty
+    )
+    price_end_date = date.fromisoformat(data_as_of)
+
+    # 3b) Secondary unadjusted close (Nasdaq, CR-13 approved).
+    log("secondary closes nasdaq")
+    secondary = fetch_secondary_closes(
+        client=browser_client,
+        tickers=PRICE_TICKERS,
+        start=price_end_date - timedelta(days=90),
+        end=price_end_date,
+        raw_dir=settings.raw_dir,
+    )
+    log(
+        f"  {len(secondary['rows_by_ticker'])} tickers reconciled, "
+        f"{len(secondary['errors'])} unavailable"
+    )
+
+    # 3c) Conditional adjusted-close cross-check (Alpha Vantage, real key only).
+    log("adjusted close alphavantage")
+    adjusted = fetch_adjusted_closes(
+        client=browser_client,
+        tickers=["MSFT", "GOOGL"],
+        raw_dir=settings.raw_dir,
+        as_of=data_as_of,
+    )
+    log("  available" if adjusted["available"] else f"  unverified: {adjusted['reason']}")
+
+    # 3d) CR-14 AI events: official pages only, quote + date verified.
+    log("AI event verification")
+    ai_events, ai_event_report = build_verified_events(
+        client=browser_client,
+        seeds=load_ai_event_seeds(settings),
+    )
+    write_json(settings.verified_dir / "ai_events_report.json", ai_event_report)
+    log(
+        f"  {ai_event_report['verified']}/{ai_event_report['total_seeds']} events verified, "
+        f"{ai_event_report['rejected']} rejected"
+    )
 
     # 4) Segments.
     segment_rows: list[dict[str, Any]] = []
@@ -269,12 +330,6 @@ def main(argv: list[str] | None = None) -> int:
 
     # 6) Price analytics and derived metrics.
     log("price analytics")
-    data_as_of = max(
-        frame["trade_date"].max().isoformat()
-        for frame in prices_by_ticker.values()
-        if not frame.empty
-    )
-    price_end_date = date.fromisoformat(data_as_of)
     price_analytics: dict[str, Any] = {}
     for ticker, frame in prices_by_ticker.items():
         price_analytics[ticker] = build_price_analytics(
@@ -379,7 +434,15 @@ def main(argv: list[str] | None = None) -> int:
         snapshot_date=date.today(),
     )
     checks.extend(reconcile_segments(segment_rows=segment_table, settings=settings))
-    checks.extend(reconcile_prices(price_analytics=price_analytics, settings=settings))
+    checks.extend(
+        reconcile_prices(
+            price_analytics=price_analytics,
+            settings=settings,
+            prices_by_ticker=prices_by_ticker,
+            secondary=secondary,
+            adjusted=adjusted,
+        )
+    )
     reconcile_report = {
         "schema_version": "1.0",
         "checked_at": utc_now_iso(),
@@ -437,6 +500,7 @@ def main(argv: list[str] | None = None) -> int:
         tests=stats_payload,
         snapshot_version=snapshot_version,
         generated_at=generated_at,
+        events=ai_events,
     )
     outputs["decision.json"] = build_decision(
         rows_by_ticker=rows_by_ticker,
@@ -482,6 +546,7 @@ def main(argv: list[str] | None = None) -> int:
             "prices": len(price_bundle.prices),
             "segments": len(segment_rows),
             "financial_quarters": len(financial_rows),
+            "ai_events": len(ai_events),
         },
         link_report=link_report,
         quality_report=quality_report,
@@ -524,6 +589,21 @@ def main(argv: list[str] | None = None) -> int:
                 "quality": quality_report["summary"],
                 "reconcile": reconcile_report["summary"],
                 "tests": len(stats_payload.get("results", [])),
+                "secondary_close": {
+                    ticker: next(
+                        (check["status"] for check in checks if check["check"] == "secondary_close" and check.get("ticker") == ticker),
+                        "missing",
+                    )
+                    for ticker in PRICE_TICKERS
+                },
+                "adjusted_close": {
+                    ticker: next(
+                        (check["status"] for check in checks if check["check"] == "secondary_adjusted_close" and check.get("ticker") == ticker),
+                        "missing",
+                    )
+                    for ticker in ("MSFT", "GOOGL")
+                },
+                "ai_events": len(ai_events),
             },
             ensure_ascii=False,
             indent=2,

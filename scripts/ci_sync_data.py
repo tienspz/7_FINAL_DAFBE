@@ -41,12 +41,15 @@ FINGERPRINT_GLOBS = [
 COMMIT_PATHS = [
     "data/raw/sec",
     "data/raw/prices/corporate_actions.csv",
+    "data/raw/prices/nasdaq",
+    "data/raw/prices/alphavantage",
     "data/verified/company_financials.csv",
     "data/verified/segment_financials.csv",
     "data/verified/manifest.json",
     "data/verified/link_report.json",
     "data/verified/reconcile_report.json",
     "data/verified/quality_report.json",
+    "data/verified/ai_events_report.json",
     "web/public/data",
     "docs/evidence",
     ".github/aicor_fingerprint",
@@ -106,7 +109,7 @@ def _read_text(path: Path) -> str:
 
 def _write_text(path: Path, value: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(value.strip() + "\n", encoding="utf-8")
+    path.write_text(value.strip() + "\n", encoding="utf-8", newline="\n")
 
 
 def _emit_output(name: str, value: str) -> None:

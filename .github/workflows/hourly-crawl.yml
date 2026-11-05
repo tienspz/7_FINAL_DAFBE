@@ -34,6 +34,9 @@ jobs:
     env:
       PYTHONUNBUFFERED: "1"
       SEC_USER_AGENT: "${{ secrets.SEC_USER_AGENT || 'AICOR research project (student project; contact: aicor@example.com)' }}"
+      # Optional: a real Alpha Vantage key enables the adjusted-close cross-check.
+      # When unset the pipeline records the check as unverified; the demo key is never used.
+      ALPHAVANTAGE_API_KEY: "${{ secrets.ALPHAVANTAGE_API_KEY }}"
 
     steps:
       - name: Checkout repository

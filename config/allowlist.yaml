@@ -1,5 +1,6 @@
-version: "1.0"
+version: "1.1"
 # CR-13 allowlist. Only domains listed here may be used by automated crawlers.
+# Decision 2026-11-05: api.nasdaq.com, blog.google and alphavantage.co approved.
 allowed_domains:
   - sec.gov
   - data.sec.gov
@@ -9,15 +10,37 @@ allowed_domains:
   - stooq.com
   - microsoft.com
   - abc.xyz
+  - api.nasdaq.com
+  - blog.google
+  - alphavantage.co
 
-# Proposed additions need an explicit team decision before the crawler uses them.
-proposed_additions:
-  - domain: api.nasdaq.com
-    reason: Secondary raw-close source because Stooq is blocked by a JavaScript challenge.
-    status: pending_approval
+# Conditional domains are usable only when their requirement is met at runtime.
+conditional_domains:
   - domain: alphavantage.co
-    reason: Potential secondary adjusted-close source; requires a real API key.
-    status: pending_approval
+    reason: Adjusted-close cross-check only; requires a real API key (never the demo key).
+    requires_env: ALPHAVANTAGE_API_KEY
+    status: approved_conditional
+
+# Domains approved by decision, kept here for traceability of the CR-13 review.
+decisions:
+  - domain: api.nasdaq.com
+    decided_on: "2026-11-05"
+    decision: approved
+    scope: Secondary unadjusted close for MSFT, GOOGL, SPY, QQQ (30 trading days).
+    reason: Stooq is blocked by a JavaScript challenge, so it cannot serve as a secondary close source.
   - domain: blog.google
-    reason: Official Google blog candidate for AI event timeline.
-    status: pending_approval
+    decided_on: "2026-11-05"
+    decision: approved
+    scope: Official Google/Alphabet AI announcement pages used as AI event evidence.
+    reason: Needed for CR-14 AI events with an official primary source.
+  - domain: alphavantage.co
+    decided_on: "2026-11-05"
+    decision: approved_conditional
+    scope: Adjusted-close cross-check only, when ALPHAVANTAGE_API_KEY is set.
+    reason: Secondary adjusted-close source; the demo key is explicitly not accepted as data.
+
+# Negative controls are deliberate probes of rejected sources and run outside the
+# allowlist on purpose. They never contribute data to the dashboard.
+negative_control_domains:
+  - stooq.com
+  - news.microsoft.com

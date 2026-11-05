@@ -1,11 +1,11 @@
 {
   "schema_version": "1.0",
-  "checked_at": "2026-11-05T04:32:36Z",
-  "snapshot_version": "v20261104.10",
+  "checked_at": "2026-11-05T07:07:52Z",
+  "snapshot_version": "v20261104.11",
   "data_as_of": "2026-11-04",
   "environment": {
-    "python": "3.14.9",
-    "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.43"
+    "python": "3.14.7",
+    "platform": "Windows-11-10.0.26300-SP0"
   },
   "source_checks": {
     "total": 10,
@@ -36,7 +36,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "e3b7b0612986c02c0d846615a6675766013426a859e2d1fddb0d038042bf94c9",
-      "fetched_at": "2026-11-05T04:32:33Z",
+      "fetched_at": "2026-11-05T07:07:49Z",
       "id": "V01"
     },
     {
@@ -59,7 +59,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "3375e0a9a05ffe410d9d290b4b120e43ff93a87e013f6f27ec5052aa92779067",
-      "fetched_at": "2026-11-05T04:32:33Z",
+      "fetched_at": "2026-11-05T07:07:49Z",
       "id": "V02"
     },
     {
@@ -84,7 +84,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "a795727f74e61e9190e09e5a4333cee37d5b2db6c4933d8ce883b0f852e7009f",
-      "fetched_at": "2026-11-05T04:32:33Z",
+      "fetched_at": "2026-11-05T07:07:49Z",
       "id": "V03"
     },
     {
@@ -107,7 +107,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "baa3f1b8c8cb4c85e54a7990a70c0feeb834017658ca18525bca9768bffc7b8c",
-      "fetched_at": "2026-11-05T04:32:34Z",
+      "fetched_at": "2026-11-05T07:07:50Z",
       "id": "V04"
     },
     {
@@ -130,7 +130,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "796226022b0fc9c021465047021622fa00d33f3de1793484aa12474a0eef2cfb",
-      "fetched_at": "2026-11-05T04:32:34Z",
+      "fetched_at": "2026-11-05T07:07:50Z",
       "id": "V05"
     },
     {
@@ -155,7 +155,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "b22fef8d429677fc2c586ad00fc6cdca4b825dea1e1ab13991adbe881e31b7a3",
-      "fetched_at": "2026-11-05T04:32:34Z",
+      "fetched_at": "2026-11-05T07:07:50Z",
       "id": "V06"
     },
     {
@@ -178,7 +178,7 @@
       "source_value_display_unit": 15484.0,
       "http_status": 200,
       "response_sha256": "12c4dc9e8b1f6859dba65b3d0c4610dfdad224f249f2fd152505380b87bac761",
-      "fetched_at": "2026-11-05T04:32:35Z",
+      "fetched_at": "2026-11-05T07:07:51Z",
       "id": "V07"
     },
     {
@@ -201,7 +201,7 @@
       "source_value_display_unit": 285.0,
       "http_status": 200,
       "response_sha256": "6e24f5821676840346190a0f7e3bd67406ccd215b45b80764728dde85a8acc3d",
-      "fetched_at": "2026-11-05T04:32:35Z",
+      "fetched_at": "2026-11-05T07:07:51Z",
       "id": "V08"
     },
     {
@@ -219,8 +219,8 @@
       "difference": 0.0,
       "relative_difference": 0.0,
       "http_status": 200,
-      "response_sha256": "c15d6b21dc8c771f4462b88f603d501356edbdd4c01c304b825d4337399edbab",
-      "fetched_at": "2026-11-05T04:32:35Z",
+      "response_sha256": "ea7329520f1878131d500bee53d5f95afc2833ccf6778577834b42f5e06981af",
+      "fetched_at": "2026-11-05T07:07:52Z",
       "id": "V09"
     },
     {
@@ -238,14 +238,14 @@
       "difference": 0.0,
       "relative_difference": 0.0,
       "http_status": 200,
-      "response_sha256": "ae661dffaab8950acb2e2385aaa65e910d7ff1d812410c8fbf3a18ce88ede0a8",
-      "fetched_at": "2026-11-05T04:32:36Z",
+      "response_sha256": "d06ab10e01e406a64b73f91a69daebc32005fc53f0be19d4ded33548f03aea85",
+      "fetched_at": "2026-11-05T07:07:52Z",
       "id": "V10"
     }
   ],
   "contract_checks": {
-    "total": 28,
-    "passed": 28,
+    "total": 31,
+    "passed": 31,
     "failed": 0,
     "passed_all": true
   },
@@ -258,7 +258,7 @@
     {
       "name": "json_metadata",
       "result": "ok",
-      "detail": "snapshot=v20261104.10"
+      "detail": "snapshot=v20261104.11"
     },
     {
       "name": "manifest_checksums",
@@ -283,7 +283,7 @@
     {
       "name": "googl_2022q4_trailing_eps",
       "result": "ok",
-      "detail": "eps_trailing_4q=4.56, pe_trailing=19.1663056089167"
+      "detail": "eps_trailing_4q=4.56, pe_trailing=19.16630226269103"
     },
     {
       "name": "segment_contract",
@@ -313,7 +313,7 @@
     {
       "name": "ai_analysis_contract",
       "result": "ok",
-      "detail": "empty verified-event state, labels, 70 correlations"
+      "detail": "6 verified events, labels, 70 correlations"
     },
     {
       "name": "decision_contract",
@@ -341,9 +341,9 @@
       "detail": "GOOGL 2025-Q2"
     },
     {
-      "name": "no_unverified_ai_events",
+      "name": "ai_event_evidence",
       "result": "ok",
-      "detail": "no AI event file and no event rows"
+      "detail": "verified=6, rejected=0"
     },
     {
       "name": "link_report_contract",
@@ -358,7 +358,22 @@
     {
       "name": "reconcile_contract",
       "result": "ok",
-      "detail": "{\"total\": 19, \"ok\": 8, \"low\": 3, \"fail\": 0, \"pending\": 4, \"unverified\": 4}"
+      "detail": "{\"total\": 19, \"ok\": 12, \"low\": 3, \"fail\": 0, \"pending\": 0, \"unverified\": 4}"
+    },
+    {
+      "name": "secondary_close_contract",
+      "result": "ok",
+      "detail": "GOOGL=ok; MSFT=ok; QQQ=ok; SPY=ok"
+    },
+    {
+      "name": "adjusted_close_contract",
+      "result": "ok",
+      "detail": "GOOGL=unverified; MSFT=unverified; QQQ=unverified; SPY=unverified"
+    },
+    {
+      "name": "approved_allowlist_domains",
+      "result": "ok",
+      "detail": "11 domains, CR-13 additions approved"
     },
     {
       "name": "raw_facts_traceability",
@@ -368,7 +383,7 @@
     {
       "name": "response_cache_present",
       "result": "ok",
-      "detail": "/home/runner/work/7_FINAL_DAFBE/7_FINAL_DAFBE/data/raw/_cache/_index.jsonl"
+      "detail": "D:\\Learning\\DangHoc\\DAFBE\\7_FINAL\\data\\raw\\_cache\\_index.jsonl"
     },
     {
       "name": "googl_split_2022_07_18",
@@ -383,7 +398,7 @@
     {
       "name": "web_data_size_under_5mb",
       "result": "ok",
-      "detail": "2503418 bytes"
+      "detail": "2598859 bytes"
     },
     {
       "name": "no_future_market_data",

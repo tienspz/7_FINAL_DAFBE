@@ -180,29 +180,162 @@ def reconcile_segments(
     return checks
 
 
+def _compare_close_series(
+    *,
+    frame: Any,
+    rows: list[dict[str, Any]],
+    price_field: str,
+    secondary_field: str,
+    tolerance: float,
+    min_days: int,
+) -> dict[str, Any] | None:
+    """Compare two close series by trading date over the most recent window."""
+    prices: dict[str, float] = {}
+    for row in frame.itertuples():
+        trade_date = getattr(row, "trade_date", None)
+        value = getattr(row, price_field, None)
+        if trade_date is None or value is None:
+            continue
+        key = trade_date.isoformat() if hasattr(trade_date, "isoformat") else str(trade_date)
+        prices[key] = float(value)
+
+    pairs: list[tuple[str, float, float]] = []
+    for row in rows:
+        trade_date = row.get("trade_date")
+        source_value = row.get(secondary_field)
+        if trade_date in prices and source_value is not None:
+            pairs.append((trade_date, prices[trade_date], float(source_value)))
+    pairs.sort()
+    pairs = pairs[-min_days:]
+    if not pairs:
+        return None
+
+    differences = [abs(price - source) / max(abs(source), 1e-9) for _, price, source in pairs]
+    matched = sum(1 for difference in differences if difference <= tolerance)
+    ratio = matched / len(differences)
+    status = "ok" if matched == len(differences) else ("low" if ratio >= 0.9 else "fail")
+    return {
+        "status": status,
+        "compared_days": len(differences),
+        "matched_days": matched,
+        "max_relative_difference": max(differences),
+        "window_start": pairs[0][0],
+        "window_end": pairs[-1][0],
+    }
+
+
 def reconcile_prices(
     *,
     price_analytics: dict[str, Any],
     settings: Settings,
+    prices_by_ticker: dict[str, Any] | None = None,
+    secondary: dict[str, Any] | None = None,
+    adjusted: dict[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
+    quality = settings.thresholds["quality"]
+    tolerance = float(quality["price_diff_tolerance"])
+    adjusted_tolerance = float(quality.get("adjusted_close_diff_tolerance", tolerance))
+    min_days = int(quality.get("min_price_days_for_reconciliation", 30))
+    secondary = secondary or {}
+    adjusted = adjusted or {}
     checks: list[dict[str, Any]] = []
+
     for ticker, analytics in price_analytics.items():
         if not analytics.get("rows"):
             checks.append(_check("price_rows", "fail", f"{ticker} has no price rows", ticker=ticker))
-        checks.append(
-            _check(
-                "secondary_close",
-                "pending",
-                f"{ticker}: Nasdaq API is outside the CR-13 allowlist; secondary close not run",
-                ticker=ticker,
+        frame = (prices_by_ticker or {}).get(ticker)
+        artifact = (secondary.get("artifacts") or {}).get(ticker) or {}
+        secondary_rows = (secondary.get("rows_by_ticker") or {}).get(ticker) or []
+        error = (secondary.get("errors") or {}).get(ticker)
+
+        comparison = (
+            _compare_close_series(
+                frame=frame,
+                rows=secondary_rows,
+                price_field="close",
+                secondary_field="close",
+                tolerance=tolerance,
+                min_days=min_days,
             )
+            if frame is not None and secondary_rows
+            else None
         )
-        checks.append(
-            _check(
-                "secondary_adjusted_close",
-                "unverified",
-                f"{ticker}: Alpha Vantage key not available; adjusted close cross-check not run",
-                ticker=ticker,
+        if comparison:
+            checks.append(
+                _check(
+                    "secondary_close",
+                    comparison["status"],
+                    (
+                        f"{ticker}: {comparison['matched_days']}/{comparison['compared_days']} Nasdaq closes "
+                        f"within {tolerance:.3%} (max {comparison['max_relative_difference']:.4%})"
+                    ),
+                    ticker=ticker,
+                    compared_days=comparison["compared_days"],
+                    matched_days=comparison["matched_days"],
+                    max_relative_difference=comparison["max_relative_difference"],
+                    window_start=comparison["window_start"],
+                    window_end=comparison["window_end"],
+                    source_url=artifact.get("source_url"),
+                    response_sha256=artifact.get("response_sha256"),
+                    artifact=artifact.get("path"),
+                )
             )
+        else:
+            reason = f" ({error})" if error else ""
+            checks.append(
+                _check(
+                    "secondary_close",
+                    "pending",
+                    f"{ticker}: Nasdaq secondary close not available{reason}",
+                    ticker=ticker,
+                    source_url=artifact.get("source_url"),
+                    response_sha256=artifact.get("response_sha256"),
+                )
+            )
+
+        adjusted_artifact = (adjusted.get("artifacts") or {}).get(ticker) or {}
+        adjusted_rows = (adjusted.get("rows_by_ticker") or {}).get(ticker) or []
+        adjusted_comparison = (
+            _compare_close_series(
+                frame=frame,
+                rows=adjusted_rows,
+                price_field="adj_close",
+                secondary_field="adjusted_close",
+                tolerance=adjusted_tolerance,
+                min_days=min_days,
+            )
+            if frame is not None and adjusted.get("available") and adjusted_rows
+            else None
         )
+        if adjusted_comparison:
+            checks.append(
+                _check(
+                    "secondary_adjusted_close",
+                    adjusted_comparison["status"],
+                    (
+                        f"{ticker}: {adjusted_comparison['matched_days']}/{adjusted_comparison['compared_days']} "
+                        f"Alpha Vantage adjusted closes within {adjusted_tolerance:.3%}"
+                    ),
+                    ticker=ticker,
+                    compared_days=adjusted_comparison["compared_days"],
+                    matched_days=adjusted_comparison["matched_days"],
+                    max_relative_difference=adjusted_comparison["max_relative_difference"],
+                    source_url=adjusted_artifact.get("source_url"),
+                    response_sha256=adjusted_artifact.get("response_sha256"),
+                )
+            )
+        else:
+            reason = adjusted.get("reason") or (
+                "Alpha Vantage key not available; adjusted close cross-check not run"
+            )
+            checks.append(
+                _check(
+                    "secondary_adjusted_close",
+                    "unverified",
+                    f"{ticker}: {reason}",
+                    ticker=ticker,
+                    source_url=adjusted_artifact.get("source_url"),
+                    response_sha256=adjusted_artifact.get("response_sha256"),
+                )
+            )
     return checks

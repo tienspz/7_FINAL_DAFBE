@@ -1167,3 +1167,59 @@ M4 cần nhận:
 ---
 
 **Kết luận:** Kế hoạch này chỉ sử dụng các nguồn đã kiểm chứng thực tế tại ngày 2026-11-04. Stooq bị loại; Alpha Vantage chưa đủ điều kiện; Microsoft Source 404 là ví dụ negative; MSFT segment và GOOGL tag switch là hai điểm phải xử lý trong preprocess. Mọi số liệu xuất ra dashboard phải có `source_url`, `accession_number`, `response_sha256` và vượt qua kiểm tra 10/10 trước khi nghiệm thu.
+
+---
+
+## PHỤ LỤC E — CẬP NHẬT TRIỂN KHAI 2026-11-05
+
+Mục này thay thế các dòng "CHỜ QUYẾT ĐỊNH" ở Phụ lục C cho các hạng mục đã chốt.
+
+### E.1 Chốt allowlist CR-13 (D1, D4, D6)
+
+| Domain | Quyết định | Phạm vi dùng | Căn cứ |
+|---|---|---|---|
+| `api.nasdaq.com` | **Approved** 2026-11-05 | Close chưa điều chỉnh, 30 phiên gần nhất cho MSFT/GOOGL/SPY/QQQ | Stooq chỉ trả JavaScript challenge; Nasdaq trả JSON thật khi dùng browser User-Agent |
+| `blog.google` | **Approved** 2026-11-05 | Chỉ làm bằng chứng sự kiện AI | Trang chính thức của Google/Alphabet |
+| `microsoft.com` (gồm `blogs.microsoft.com`) | Đã có từ trước | Bằng chứng sự kiện AI | Blog chính thức của Microsoft |
+| `alphavantage.co` | **Approved có điều kiện** | Chỉ adjusted-close cross-check khi có key thật | Không chấp nhận `apikey=demo` |
+
+`pipeline/http.py` nay **enforce** allowlist: request ra domain ngoài danh sách sẽ raise `AllowlistError` trước khi gọi mạng. Negative controls R1–R3 là ngoại lệ có chủ đích, dùng `allow_unlisted=True` và không đóng góp dữ liệu dashboard.
+
+### E.2 Hoàn tất T2.2 — secondary close
+
+- Crawler: `pipeline/crawlers/nasdaq.py`; artifact `data/raw/prices/nasdaq/{ticker}.json` lưu `source_url`, `http_status`, `fetched_at`, `response_sha256`, `rows`.
+- So khớp 30 phiên gần nhất, ngưỡng 0,1% (`price_diff_tolerance`).
+- Kết quả 2026-11-05: **30/30 phiên khớp cho cả 4 mã**; sai lệch lớn nhất: GOOGL 0,0015%, MSFT/SPY/QQQ ≤ 0,00001%.
+- Reconcile: `secondary_close` chuyển từ `pending` sang `ok`; 19 check gồm 12 ok, 3 low, 0 fail, 4 unverified.
+
+### E.3 T2.6 — adjusted close vẫn conditional
+
+- Crawler `pipeline/crawlers/alphavantage.py` chỉ chạy khi `ALPHAVANTAGE_API_KEY` tồn tại và khác `demo`; URL lưu vào cache/report được **redact** tham số `apikey`.
+- Chưa có key trong môi trường hiện tại → `secondary_adjusted_close = unverified` cho cả 4 mã; acceptance kiểm tra đúng trạng thái này thay vì giả vờ đã xác minh.
+- Khi có key, cùng ngưỡng 0,1%; trạng thái sẽ là `ok`/`low`/`fail` kèm `response_sha256`.
+
+### E.4 T3.4 — AI events CR-14
+
+- `config/ai_events.yaml` chứa seed do con người chọn: trang chính thức, câu trích nguyên văn, ngày công bố kỳ vọng.
+- `pipeline/crawlers/ai_events.py` fetch lại trang, chuẩn hoá typography, kiểm tra quote xuất hiện nguyên văn, kiểm tra `<meta article:published_time>` trùng ngày, lưu `content_sha256`.
+- Bất kỳ check nào sai → event `rejected`, không vào dashboard; báo cáo ở `data/verified/ai_events_report.json`.
+- Kết quả: **6/6 verified, 0 rejected** (Google Bard 2023-02-06; Gemini 1.0 2023-12-06; Gemini 1.5 2024-02-15; Microsoft–OpenAI 2023-01-23; Microsoft 365 Copilot 2023-03-16; Copilot+ PCs 2024-05-20).
+- `entered_by`/`reviewed_by` là provenance rõ ràng; đây là **kiểm tra bằng chứng tự động**, không phải review biên tập của người, và được ghi như vậy trong `methodology.json` và `ai_analysis.json`.
+- Empty state vẫn tồn tại cho trường hợp 0 sự kiện verified.
+
+### E.5 Acceptance
+
+`scripts/acceptance_check.py` nay có 31 contract check, bổ sung:
+
+- `secondary_close_contract`: đủ 4 mã, ≥30 phiên, sai lệch ≤0,1%, có `response_sha256`.
+- `adjusted_close_contract`: nếu có key thật thì MSFT/GOOGL phải ok/low kèm hash; nếu không có key thì cả 4 mã phải `unverified`.
+- `ai_analysis_contract` + `ai_event_evidence`: mọi event hiển thị phải verified, có quote/hash/URL và quote thực sự có trong trang.
+- `approved_allowlist_domains`: ba domain mới đã nằm trong `allowed_domains`.
+
+Kết quả 2026-11-05: **10/10 nguồn, 31/31 contract, PASS**.
+
+### E.6 Việc còn mở
+
+- Chưa có Alpha Vantage key thật → adjusted close vẫn `unverified` (đúng theo thiết kế, không claim quá mức).
+- Chưa có review biên tập bởi con người cho AI events; nếu nhóm cần, bổ sung bước duyệt tay và đổi `review_method` thành `human_review`.
+- Nasdaq không có SLA; nếu API đổi schema, reconcile sẽ về `pending` và acceptance fail thay vì che lỗi.

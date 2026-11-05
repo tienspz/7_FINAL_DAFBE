@@ -37,6 +37,7 @@ class Settings:
     source_registry: dict[str, Any]
     allowlist: dict[str, Any]
     thresholds: dict[str, Any]
+    ai_events: dict[str, Any] | None = None
     project_root: Path = PROJECT_ROOT
     data_dir: Path = DATA_DIR
     raw_dir: Path = RAW_DIR
@@ -61,4 +62,5 @@ def get_settings() -> Settings:
         source_registry=load_yaml("source_registry.yaml"),
         allowlist=load_yaml("allowlist.yaml"),
         thresholds=load_yaml("thresholds.yaml"),
+        ai_events=load_yaml("ai_events.yaml"),
     )

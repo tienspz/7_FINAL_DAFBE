@@ -172,7 +172,9 @@ def build_ai_analysis(
     tests: dict[str, Any],
     snapshot_version: str,
     generated_at: str,
+    events: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
+    verified_events = [event for event in (events or []) if event.get("review_status") == "verified"]
     correlations = [
         result
         for result in tests.get("results", [])
@@ -203,11 +205,26 @@ def build_ai_analysis(
         },
         "correlations": correlations,
         "indicators": indicators,
-        "events": [],
-        "event_empty_state": "Chưa có sự kiện AI nào được kiểm chứng. Không hiển thị sự kiện mẫu.",
+        "events": verified_events,
+        "event_empty_state": (
+            ""
+            if verified_events
+            else "Chưa có sự kiện AI nào được kiểm chứng. Không hiển thị sự kiện mẫu."
+        ),
+        "event_summary": {
+            "total": len(verified_events),
+            "verified": len(verified_events),
+            "review_method": "automated_evidence_check",
+            "note": (
+                "Sự kiện chỉ lấy từ trang chính thức của Google/Microsoft và được kiểm tra "
+                "trùng nguyên văn câu trích dẫn cùng ngày công bố; đây là kiểm tra bằng chứng "
+                "tự động, không phải review biên tập của con người."
+            ),
+        },
         "warnings": [
             "n = 11-15 at lags 0-4; results are reference only.",
             "Correlation does not imply causation.",
+            "AI events are context only; they are verified against official page text, not investment signals.",
         ],
     }
 
@@ -322,12 +339,12 @@ def build_methodology(
         "reconcile_summary": reconcile_report.get("summary", {}),
         "limitations": [
             "yfinance is an unofficial source; version and output format must be pinned.",
-            "Nasdaq API and Alpha Vantage are outside the current CR-13 allowlist; secondary price checks are pending.",
-            "Adjusted-close cross-source verification is unverified until a real Alpha Vantage key is available.",
+            "Secondary unadjusted close is reconciled against the Nasdaq historical API over the last 30 trading days (api.nasdaq.com approved for CR-13 on 2026-11-05).",
+            "Adjusted-close cross-source verification stays unverified until a real Alpha Vantage API key is set in ALPHAVANTAGE_API_KEY; the demo key is never accepted as data.",
             "MSFT changed its segment structure in 2026-Q3; old and new segments are not directly comparable.",
             "GOOGL revenue changed XBRL tags at 2025-Q2; the switch is recorded in tag_switch.",
             "n is small: 19 quarters; YoY leaves 15 and lag 4 leaves 11.",
-            "No AI event is included unless reviewed and verified.",
+            "AI events are only shown when the official page contains the recorded evidence quote and reports the expected publication date; the review is an automated evidence check, not human editorial review.",
         ],
     }
 
