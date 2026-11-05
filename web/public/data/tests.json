@@ -9,31 +9,31 @@
     {
       "bt_code": "BT1",
       "test_name": "MSFT monthly excess return vs SPY",
-      "statistic": 0.6069848840778093,
-      "p_value": 0.5458247645217884,
+      "statistic": 0.5954024606565823,
+      "p_value": 0.5534946029473423,
       "p_adjusted": null,
       "n": 71,
       "alpha": 0.05,
       "decision": "fail_to_reject_h0",
       "note": "n >= 30 expected for monthly returns",
-      "wilcoxon_statistic": 1216.0,
-      "wilcoxon_p_value": 0.7224024430674437,
-      "mean_excess_return": 0.004169797519726368,
+      "wilcoxon_statistic": 1219.0,
+      "wilcoxon_p_value": 0.7353177361145561,
+      "mean_excess_return": 0.004085736353900225,
       "benchmark": "SPY"
     },
     {
       "bt_code": "BT1",
       "test_name": "GOOGL monthly excess return vs SPY",
-      "statistic": 1.026296689892255,
-      "p_value": 0.308285239660277,
+      "statistic": 1.0415552555990055,
+      "p_value": 0.3012019384240677,
       "p_adjusted": null,
       "n": 71,
       "alpha": 0.05,
       "decision": "fail_to_reject_h0",
       "note": "n >= 30 expected for monthly returns",
-      "wilcoxon_statistic": 1145.0,
-      "wilcoxon_p_value": 0.4460193209296298,
-      "mean_excess_return": 0.008824256980504484,
+      "wilcoxon_statistic": 1138.0,
+      "wilcoxon_p_value": 0.42245056872750886,
+      "mean_excess_return": 0.008958638917928287,
       "benchmark": "SPY"
     },
     {
@@ -1291,6 +1291,6 @@
       "method": "spearman"
     }
   ],
-  "snapshot_version": "v20261104.11",
-  "generated_at": "2026-11-05T07:06:56Z"
+  "snapshot_version": "v20261105.3",
+  "generated_at": "2026-11-05T15:02:47Z"
 }

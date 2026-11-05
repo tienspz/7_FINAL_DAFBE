@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "checked_at": "2026-11-05T07:06:56Z",
+  "checked_at": "2026-11-05T15:02:47Z",
   "summary": {
     "total": 19,
     "ok": 12,
@@ -108,8 +108,8 @@
       "max_relative_difference": 1.4690410100353355e-05,
       "window_start": "2026-09-24",
       "window_end": "2026-11-04",
-      "source_url": "https://api.nasdaq.com/api/quote/GOOGL/historical?assetclass=stocks&fromdate=2026-08-06&todate=2026-11-04&limit=120",
-      "response_sha256": "b3446fe4cbac9a480f38966816379a55c858c2aeaf0f88314c8c4dd0cab37ce5",
+      "source_url": "https://api.nasdaq.com/api/quote/GOOGL/historical?assetclass=stocks&fromdate=2026-08-07&todate=2026-11-05&limit=120",
+      "response_sha256": "24b2cbfb1bf88c941e9f719e8cf8d8a0f20b668e3bad85014549871b691f7ecb",
       "artifact": "data/raw/prices/nasdaq/GOOGL.json"
     },
     {
@@ -130,8 +130,8 @@
       "max_relative_difference": 5.6609037209987524e-08,
       "window_start": "2026-09-24",
       "window_end": "2026-11-04",
-      "source_url": "https://api.nasdaq.com/api/quote/MSFT/historical?assetclass=stocks&fromdate=2026-08-06&todate=2026-11-04&limit=120",
-      "response_sha256": "bb1a312789bbd78a7788ee9c0495a62609336fe429caf9ff91fcdc43d23ef5cb",
+      "source_url": "https://api.nasdaq.com/api/quote/MSFT/historical?assetclass=stocks&fromdate=2026-08-07&todate=2026-11-05&limit=120",
+      "response_sha256": "3f85279a7d711e7fba802a22e5d125e0d7177e73ea6fbc6c4bf6c277157d7986",
       "artifact": "data/raw/prices/nasdaq/MSFT.json"
     },
     {
@@ -152,8 +152,8 @@
       "max_relative_difference": 4.27516854822625e-08,
       "window_start": "2026-09-24",
       "window_end": "2026-11-04",
-      "source_url": "https://api.nasdaq.com/api/quote/QQQ/historical?assetclass=etf&fromdate=2026-08-06&todate=2026-11-04&limit=120",
-      "response_sha256": "9bc7ffbcb16ec1b0d7fda693bbd4888568ec02b2336a1d8a1db08179d630a018",
+      "source_url": "https://api.nasdaq.com/api/quote/QQQ/historical?assetclass=etf&fromdate=2026-08-07&todate=2026-11-05&limit=120",
+      "response_sha256": "13a126ad180ef6dc54a78e4ab61e715bdf3ae0dc7ee9fcc4d6e8f662d9b374ef",
       "artifact": "data/raw/prices/nasdaq/QQQ.json"
     },
     {
@@ -174,8 +174,8 @@
       "max_relative_difference": 3.876683828307421e-08,
       "window_start": "2026-09-24",
       "window_end": "2026-11-04",
-      "source_url": "https://api.nasdaq.com/api/quote/SPY/historical?assetclass=etf&fromdate=2026-08-06&todate=2026-11-04&limit=120",
-      "response_sha256": "2ff213eed0ae7aa03221e035f5a037f2d8908b315cbe80d8128c7e487de38687",
+      "source_url": "https://api.nasdaq.com/api/quote/SPY/historical?assetclass=etf&fromdate=2026-08-07&todate=2026-11-05&limit=120",
+      "response_sha256": "5518d50ac91b9ad8021ca03349a4bd824180c379873d33dedf5990a5c5817c52",
       "artifact": "data/raw/prices/nasdaq/SPY.json"
     },
     {

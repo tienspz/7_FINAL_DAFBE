@@ -30,6 +30,7 @@ secrets/
 
 # Runtime caches and generated databases
 data/raw/_cache/
+data/raw/runs/
 data/db/
 data/snapshots/
 logs/

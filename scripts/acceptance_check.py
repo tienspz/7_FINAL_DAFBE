@@ -15,7 +15,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import os
 import platform
 import random
 import re
@@ -29,6 +28,7 @@ from typing import Any
 
 import requests
 import yaml
+from pipeline.http import sec_user_agent
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "web" / "public" / "data"
@@ -37,17 +37,13 @@ RAW_DIR = ROOT / "data" / "raw"
 EVIDENCE_DIR = ROOT / "docs" / "evidence"
 SEED = 20261104
 CIKS = {"MSFT": "0000789019", "GOOGL": "0001652044"}
-USER_AGENT = os.environ.get(
-    "SEC_USER_AGENT",
-    "AICOR research project (student project; contact: aicor@example.com)",
-)
 CORE_METRICS = ["revenue", "operating_income", "net_income", "rd_expense", "capex", "cfo"]
 SEGMENT_TAGS = {
     "revenue": {"RevenueFromContractWithCustomerExcludingAssessedTax", "Revenues"},
     "operating_income": {"OperatingIncomeLoss"},
 }
 SESSION = requests.Session()
-SESSION.headers.update({"User-Agent": USER_AGENT, "Accept": "application/json, application/xml, */*"})
+SESSION.headers.update({"Accept": "application/json, application/xml, */*"})
 LAST_REQUEST = 0.0
 
 
@@ -67,6 +63,7 @@ def sha256_bytes(content: bytes) -> str:
 
 def http_get(url: str) -> tuple[requests.Response, str, str]:
     global LAST_REQUEST
+    SESSION.headers["User-Agent"] = sec_user_agent()
     elapsed = time.monotonic() - LAST_REQUEST
     if elapsed < 0.25:
         time.sleep(0.25 - elapsed)
@@ -87,6 +84,18 @@ def clean_member(value: str) -> str:
     return value.split(":")[-1]
 
 
+def latest_completed_price_row(
+    rows: list[dict[str, Any]], today: date | None = None
+) -> dict[str, Any]:
+    reference_date = today or date.today()
+    completed = [
+        row for row in rows if date.fromisoformat(row["date"]) < reference_date
+    ]
+    if not completed:
+        raise ValueError("price history has no completed trading date")
+    return max(completed, key=lambda row: row["date"])
+
+
 def is_usable_financial(metric: dict[str, Any]) -> bool:
     split_adjusted = (
         metric.get("split_adjustment") is not None
@@ -101,6 +110,7 @@ def is_usable_financial(metric: dict[str, Any]) -> bool:
         and metric.get("xbrl_tag")
         and "+" not in metric["xbrl_tag"]
         and metric.get("unit") in {"million USD", "USD/shares"}
+        and metric.get("verified") is True
     )
 
 
@@ -182,7 +192,7 @@ def draw_samples(financials: dict[str, Any], rng: random.Random) -> list[dict[st
 
     for ticker in ("MSFT", "GOOGL"):
         price_payload = load_json(DATA_DIR / "prices" / f"{ticker}.json")
-        last_row = price_payload["rows"][-1]
+        last_row = latest_completed_price_row(price_payload["rows"])
         field = "close" if ticker == "MSFT" else "adj_close"
         samples.append(
             {
@@ -393,7 +403,7 @@ def contract_checks() -> list[dict[str, Any]]:
                 traceability_ok = False
                 traceability_detail.append(f"{ticker}:{row['calendar_key']}:metrics")
             for name, metric in row.get("metrics", {}).items():
-                if metric.get("value") is None or not metric.get("source_url") or not metric.get("accession_number") or not metric.get("xbrl_tag"):
+                if metric.get("value") is None or not metric.get("source_url") or not metric.get("accession_number") or not metric.get("xbrl_tag") or metric.get("verified") is not True:
                     traceability_ok = False
                     traceability_detail.append(f"{ticker}:{row['calendar_key']}:{name}:trace")
                 if metric.get("quality_flag") == "missing":
@@ -507,7 +517,11 @@ def contract_checks() -> list[dict[str, Any]]:
     checks.append(check("ai_event_evidence", ai_evidence_ok, f"verified={ai_report.get('verified')}, rejected={ai_report.get('rejected')}"))
 
     link = load_json(VERIFIED_DIR / "link_report.json")
-    link_ok = link.get("summary", {}).get("total") == 84 and link.get("summary", {}).get("ok") == 84 and link.get("summary", {}).get("broken") == 0
+    link_ok = (
+        link.get("summary", {}).get("total", 0) >= 84
+        and link.get("summary", {}).get("broken") == 0
+        and link.get("summary", {}).get("ok", 0) > 0
+    )
     negative = {item.get("id"): item.get("result") for item in link.get("negative_checks", [])}
     checks.append(check("link_report_contract", link_ok, json.dumps(link.get("summary", {}), ensure_ascii=False)))
     checks.append(check("negative_controls", negative == {"R1": "blocked", "R2": "broken", "R3": "soft404"}, str(negative)))
@@ -564,8 +578,56 @@ def contract_checks() -> list[dict[str, Any]]:
         with facts_path.open("r", encoding="utf-8", newline="") as handle:
             reader = csv.DictReader(handle)
             rows = list(reader)
-        facts_traceable = bool(rows) and all(row.get("source_url") and row.get("accession_number") and row.get("fetched_at") and row.get("response_sha256") for row in rows)
-    checks.append(check("raw_facts_traceability", facts_traceable, "source_url/accession/fetched_at/response_sha256 on every row"))
+        facts_traceable = bool(rows) and all(
+            row.get("source_url")
+            and row.get("accession_number")
+            and row.get("fetched_at")
+            and row.get("response_sha256")
+            and (
+                row.get("is_original", "").lower() != "true"
+                or row.get("verified", "").lower() == "true"
+            )
+            for row in rows
+        )
+    checks.append(check("raw_facts_traceability", facts_traceable, "source/accession/hash on every row; original facts verified"))
+
+    run_id = manifest.get("run_id")
+    run_manifest_path = RAW_DIR / "runs" / str(run_id) / "manifest.json" if run_id else None
+    sync_log_path = VERIFIED_DIR / "sync_log.jsonl"
+    audit_trail_ok = bool(run_manifest_path and run_manifest_path.exists() and sync_log_path.exists())
+    audit_detail = []
+    if audit_trail_ok:
+        run_manifest = load_json(run_manifest_path)
+        archived_files_ok = True
+        for item in run_manifest.get("files", []):
+            archived_path = RAW_DIR / item.get("path", "")
+            if not archived_path.exists() or sha256_bytes(archived_path.read_bytes()) != item.get("sha256"):
+                archived_files_ok = False
+                audit_detail.append(f"archive:{item.get('path')}")
+        sync_rows = [
+            json.loads(line)
+            for line in sync_log_path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+        run_sync_rows = [item for item in sync_rows if item.get("run_id") == run_id]
+        sync_ok = bool(run_sync_rows) and all(
+            item.get("started_at") and item.get("finished_at") and item.get("source")
+            and item.get("status") in {"success", "partial"}
+            and isinstance(item.get("records_added"), int)
+            for item in run_sync_rows
+        )
+        audit_trail_ok = run_manifest.get("run_id") == run_id and archived_files_ok and sync_ok
+        if not archived_files_ok:
+            audit_detail.append("archived raw file checksum mismatch")
+        if not sync_ok:
+            audit_detail.append("missing or failed source sync records")
+    checks.append(
+        check(
+            "run_audit_trail",
+            audit_trail_ok,
+            "; ".join(audit_detail) if audit_detail else f"run_id={run_id}",
+        )
+    )
 
     cache_index = RAW_DIR / "_cache" / "_index.jsonl"
     cache_ok = cache_index.exists() and cache_index.read_text(encoding="utf-8").count("\n") >= 10

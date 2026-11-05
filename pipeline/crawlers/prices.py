@@ -5,11 +5,13 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import date, datetime, time, timedelta, timezone
 from pathlib import Path
+import time as time_module
 from typing import Any
 
 import pandas as pd
 import yfinance as yf
 
+from pipeline.http import MUTABLE_DATA_CACHE_MAX_AGE_SECONDS
 from pipeline.util import sha256_bytes, utc_now_iso
 
 PRICE_TICKERS = ["MSFT", "GOOGL", "SPY", "QQQ"]
@@ -41,6 +43,7 @@ def fetch_prices(
     raw_dir: Path,
     as_of: str,
     refresh: bool = False,
+    max_age_seconds: int | None = MUTABLE_DATA_CACHE_MAX_AGE_SECONDS,
 ) -> PriceBundle:
     prices_dir = raw_dir / "prices"
     prices_dir.mkdir(parents=True, exist_ok=True)
@@ -48,11 +51,15 @@ def fetch_prices(
     ticker_paths: dict[str, Path] = {}
     frames: list[pd.DataFrame] = []
     actions: list[pd.DataFrame] = []
+    last_request_at = 0.0
 
     for ticker in tickers:
         ticker_path = prices_dir / f"{ticker}_{as_of}.csv"
         ticker_paths[ticker] = ticker_path
-        if ticker_path.exists() and not refresh:
+        cache_fresh = False
+        if ticker_path.exists() and max_age_seconds is not None:
+            cache_fresh = time_module.time() - ticker_path.stat().st_mtime <= max_age_seconds
+        if ticker_path.exists() and not refresh and (max_age_seconds is None or cache_fresh):
             frame = pd.read_csv(ticker_path)
             frame["trade_date"] = pd.to_datetime(frame["trade_date"]).dt.date
             frames.append(frame)
@@ -61,12 +68,16 @@ def fetch_prices(
                 actions.append(action_rows[["ticker", "trade_date", "dividends", "stock_splits", "source_url", "evidence_url", "fetched_at", "response_sha256"]].copy())
             continue
 
+        elapsed = time_module.monotonic() - last_request_at
+        if last_request_at and elapsed < 1.0:
+            time_module.sleep(1.0 - elapsed)
         history = yf.Ticker(ticker).history(
             start=start.isoformat(),
             end=(end + timedelta(days=1)).isoformat(),
             auto_adjust=False,
             actions=True,
         )
+        last_request_at = time_module.monotonic()
         if history.empty:
             raise RuntimeError(f"yfinance returned no rows for {ticker}")
         history = history.reset_index()

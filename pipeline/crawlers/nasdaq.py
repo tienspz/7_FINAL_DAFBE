@@ -11,7 +11,7 @@ from datetime import date, datetime
 from pathlib import Path
 from typing import Any
 
-from pipeline.http import CachedHttpClient, HttpError
+from pipeline.http import CachedHttpClient, HttpError, MUTABLE_DATA_CACHE_MAX_AGE_SECONDS
 from pipeline.util import safe_float, write_json
 
 BROWSER_USER_AGENT = (
@@ -82,6 +82,7 @@ def fetch_secondary_closes(
     start: date,
     end: date,
     raw_dir: Path,
+    refresh: bool = False,
 ) -> dict[str, Any]:
     """Fetch Nasdaq closes for every ticker and persist a hashed raw artifact.
 
@@ -98,7 +99,7 @@ def fetch_secondary_closes(
     for ticker in tickers:
         url = nasdaq_url(ticker, start, end)
         try:
-            response = client.get(url)
+            response = client.get(url, refresh=refresh, max_age_seconds=MUTABLE_DATA_CACHE_MAX_AGE_SECONDS)
             rows = parse_nasdaq_payload(response.json())
             if len(rows) < MIN_COMPARE_DAYS:
                 raise ValueError(f"only {len(rows)} close rows returned (need {MIN_COMPARE_DAYS})")

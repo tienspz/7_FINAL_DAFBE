@@ -38,8 +38,12 @@ FINGERPRINT_GLOBS = [
     "scripts/acceptance_check.py",
     "requirements.txt",
 ]
+FINGERPRINT_FILES = [
+    "data/verified/sync_log.jsonl",
+]
 COMMIT_PATHS = [
     "data/raw/sec",
+    "data/verified/sync_log.jsonl",
     "data/raw/prices/corporate_actions.csv",
     "data/raw/prices/nasdaq",
     "data/raw/prices/alphavantage",
@@ -100,6 +104,12 @@ def compute_fingerprint() -> str:
     for path in _iter_code_files():
         relative = path.relative_to(ROOT).as_posix()
         digest.update(f"code:{relative}:{_file_digest(path)}\n".encode("utf-8"))
+    for relative in FINGERPRINT_FILES:
+        path = ROOT / relative
+        if path.exists():
+            digest.update(f"file:{relative}:{_file_digest(path)}\n".encode("utf-8"))
+        else:
+            digest.update(f"file:{relative}:missing\n".encode("utf-8"))
     return digest.hexdigest()
 
 

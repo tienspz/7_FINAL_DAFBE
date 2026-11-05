@@ -49,6 +49,7 @@ def make_fact(
     form: str = "10-Q",
     calendar_key: str | None = None,
     is_original: bool = True,
+    verified: bool = True,
     unit: str = "USD",
     fact_id: str | None = None,
 ) -> dict[str, Any]:
@@ -69,6 +70,7 @@ def make_fact(
         "form": form,
         "source_url": f"https://www.sec.gov/Archives/edgar/data/1/{accession}/",
         "is_original": is_original,
+        "verified": verified,
     }
 
 

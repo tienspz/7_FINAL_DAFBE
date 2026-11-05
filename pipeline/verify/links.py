@@ -8,7 +8,7 @@ from datetime import date, datetime, timezone
 from typing import Any
 
 from pipeline.config import Settings
-from pipeline.http import CachedHttpClient, HttpError
+from pipeline.http import CachedHttpClient, HttpError, MUTABLE_DATA_CACHE_MAX_AGE_SECONDS
 from pipeline.util import normalize_accession, utc_now_iso
 
 TITLE_RE = re.compile(r"<title[^>]*>(.*?)</title>", re.IGNORECASE | re.DOTALL)
@@ -88,6 +88,7 @@ def verify_concepts(
     *,
     client: CachedHttpClient,
     facts: list[dict[str, Any]],
+    refresh: bool = False,
 ) -> list[dict[str, Any]]:
     results: list[dict[str, Any]] = []
     groups: dict[tuple[str, str, str], list[dict[str, Any]]] = {}
@@ -100,56 +101,80 @@ def verify_concepts(
     for (cik, tag, unit), group in sorted(groups.items()):
         url = f"https://data.sec.gov/api/xbrl/companyconcept/CIK{cik}/us-gaap/{tag}.json"
         try:
-            payload = client.get_json(url)
-            rows = payload.get("units", {}).get(unit, [])
-            target = group[0]
-            matched = None
-            for row in rows:
-                if (
-                    row.get("accn") == target.get("accession_number")
+            response = client.get(
+                url,
+                refresh=refresh,
+                max_age_seconds=MUTABLE_DATA_CACHE_MAX_AGE_SECONDS,
+            )
+            payload = response.json()
+            if not isinstance(payload, dict) or not isinstance(payload.get("units"), dict):
+                raise ValueError("invalid companyconcept response structure")
+            rows = payload["units"].get(unit, [])
+            if not isinstance(rows, list):
+                raise ValueError(f"invalid companyconcept unit data for {unit}")
+            checked_at = utc_now_iso()
+            for target in group:
+                matching_period = [
+                    row
+                    for row in rows
+                    if isinstance(row, dict)
+                    and row.get("accn") == target.get("accession_number")
                     and row.get("end") == target.get("period_end")
-                    and abs(float(row.get("val", 0)) - float(target.get("value_usd", 0))) < 0.01
-                ):
-                    matched = row
-                    break
-            results.append(
-                {
-                    "url": url,
-                    "domain": "data.sec.gov",
-                    "source_type": "sec_companyconcept",
-                    "checked_at": utc_now_iso(),
-                    "http_status": 200,
-                    "content_type": "application/json",
-                    "page_title": "",
-                    "content_sha256": "",
-                    "content_length": 0,
-                    "matched_accession": target.get("accession_number"),
-                    "matched_period_end": target.get("period_end"),
-                    "matched_value": target.get("value_usd"),
-                    "result": "ok" if matched else "broken",
-                    "reason": "" if matched else "no matching XBRL fact in companyconcept",
-                    "tag": tag,
-                }
-            )
-        except (HttpError, json.JSONDecodeError) as exc:
-            results.append(
-                {
-                    "url": url,
-                    "domain": "data.sec.gov",
-                    "source_type": "sec_companyconcept",
-                    "checked_at": utc_now_iso(),
-                    "http_status": getattr(exc, "status", None),
-                    "content_type": "",
-                    "page_title": "",
-                    "content_sha256": "",
-                    "content_length": 0,
-                    "matched_accession": group[0].get("accession_number"),
-                    "matched_period_end": group[0].get("period_end"),
-                    "result": "broken",
-                    "reason": str(exc),
-                    "tag": tag,
-                }
-            )
+                    and (row.get("start") or "") == (target.get("period_start") or "")
+                ]
+                matching_value = any(
+                    float(row.get("val")) == float(target.get("value_usd"))
+                    for row in matching_period
+                    if row.get("val") is not None
+                )
+                results.append(
+                    {
+                        "fact_id": target.get("fact_id"),
+                        "url": url,
+                        "domain": "data.sec.gov",
+                        "source_type": "sec_companyconcept",
+                        "checked_at": checked_at,
+                        "http_status": response.status,
+                        "content_type": response.content_type,
+                        "page_title": "",
+                        "content_sha256": response.sha256,
+                        "content_length": len(response.content),
+                        "matched_accession": target.get("accession_number"),
+                        "matched_period_end": target.get("period_end"),
+                        "matched_value": target.get("value_usd"),
+                        "result": "ok" if matching_value else "broken",
+                        "reason": (
+                            ""
+                            if matching_value
+                            else "XBRL value mismatch"
+                            if matching_period
+                            else "no matching XBRL fact in companyconcept"
+                        ),
+                        "tag": tag,
+                    }
+                )
+        except (HttpError, json.JSONDecodeError, TypeError, ValueError) as exc:
+            for target in group:
+                results.append(
+                    {
+                        "fact_id": target.get("fact_id"),
+                        "url": url,
+                        "domain": "data.sec.gov",
+                        "source_type": "sec_companyconcept",
+                        "checked_at": utc_now_iso(),
+                        "http_status": getattr(exc, "status", None),
+                        "content_type": "",
+                        "page_title": "",
+                        "content_sha256": "",
+                        "content_length": 0,
+                        "matched_accession": target.get("accession_number"),
+                        "matched_period_end": target.get("period_end"),
+                        "matched_value": target.get("value_usd"),
+                        "result": "broken",
+                        "reason": str(exc),
+                        "tag": tag,
+                    }
+                )
     return results
 
 
@@ -158,6 +183,7 @@ def verify_price_evidence(
     client: CachedHttpClient,
     prices_by_ticker: dict[str, Any],
     sample_size: int = 30,
+    refresh: bool = False,
 ) -> list[dict[str, Any]]:
     results: list[dict[str, Any]] = []
     for ticker, frame in prices_by_ticker.items():
@@ -166,7 +192,11 @@ def verify_price_evidence(
         sampled = frame.tail(sample_size)
         url = sampled.iloc[-1]["evidence_url"]
         try:
-            payload = client.get_json(url)
+            payload = client.get_json(
+                url,
+                refresh=refresh,
+                max_age_seconds=MUTABLE_DATA_CACHE_MAX_AGE_SECONDS,
+            )
             result = payload.get("chart", {}).get("result", [])
             if not result:
                 raise ValueError("no chart result")

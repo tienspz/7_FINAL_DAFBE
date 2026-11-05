@@ -99,6 +99,8 @@ class RawFact:
     is_original: bool = False
     is_restated: bool = False
     is_duplicate: bool = False
+    verified: bool = False
+    verification_reason: str = "not verified"
     restatement_of_fact_id: str = ""
     restatement_delta: float | None = None
 
@@ -135,6 +137,8 @@ class RawFact:
             "is_original": self.is_original,
             "is_restated": self.is_restated,
             "is_duplicate": self.is_duplicate,
+            "verified": self.verified,
+            "verification_reason": self.verification_reason,
             "restatement_of_fact_id": self.restatement_of_fact_id,
             "restatement_delta": self.restatement_delta,
         }

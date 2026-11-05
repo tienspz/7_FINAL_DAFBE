@@ -11,7 +11,7 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
-from pipeline.http import CachedHttpClient, HttpError
+from pipeline.http import CachedHttpClient, HttpError, MUTABLE_DATA_CACHE_MAX_AGE_SECONDS
 from pipeline.util import safe_float, write_json
 
 ENV_KEY = "ALPHAVANTAGE_API_KEY"
@@ -61,6 +61,7 @@ def fetch_adjusted_closes(
     tickers: list[str] | None = None,
     raw_dir: Path,
     as_of: str | None = None,
+    refresh: bool = False,
 ) -> dict[str, Any]:
     """Return adjusted closes when a real key exists, otherwise unverified state."""
     key = available_api_key()
@@ -83,7 +84,7 @@ def fetch_adjusted_closes(
     for ticker in tickers or DEFAULT_TICKERS:
         url = adjusted_url(ticker, key)
         try:
-            response = client.get(url)
+            response = client.get(url, refresh=refresh, max_age_seconds=MUTABLE_DATA_CACHE_MAX_AGE_SECONDS)
             payload = response.json()
             problems = {name: payload.get(name) for name in ERROR_KEYS if payload.get(name)}
             if problems:

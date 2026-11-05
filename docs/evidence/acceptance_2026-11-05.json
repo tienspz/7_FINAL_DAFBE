@@ -1,0 +1,415 @@
+{
+  "schema_version": "1.0",
+  "checked_at": "2026-11-05T15:03:00Z",
+  "snapshot_version": "v20261105.3",
+  "data_as_of": "2026-11-05",
+  "environment": {
+    "python": "3.14.7",
+    "platform": "Windows-11-10.0.26300-SP0"
+  },
+  "source_checks": {
+    "total": 10,
+    "matched": 10,
+    "failed": 0,
+    "passed": true,
+    "seed": 20261104,
+    "selection": "2 core financial + 1 EPS per company, 1 segment per company, 1 price per company"
+  },
+  "samples": [
+    {
+      "type": "financial",
+      "ticker": "MSFT",
+      "metric": "cfo",
+      "calendar_key": "2023-Q4",
+      "period_end": "2023-12-31",
+      "displayed_value": 18853.0,
+      "displayed_unit": "million USD",
+      "accession_number": "0000950170-24-008814",
+      "xbrl_tag": "NetCashProvidedByUsedInOperatingActivities",
+      "source_url": "https://data.sec.gov/api/xbrl/companyconcept/CIK0000789019/us-gaap/NetCashProvidedByUsedInOperatingActivities.json",
+      "result": "ok",
+      "reason": "",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/789019/000095017024008814/",
+      "source_value_native": 18853000000.0,
+      "source_value_display_unit": 18853.0,
+      "expected_source_value_native": 18853000000.0,
+      "difference": 0.0,
+      "http_status": 200,
+      "response_sha256": "e3b7b0612986c02c0d846615a6675766013426a859e2d1fddb0d038042bf94c9",
+      "fetched_at": "2026-11-05T15:02:55Z",
+      "id": "V01"
+    },
+    {
+      "type": "financial",
+      "ticker": "MSFT",
+      "metric": "operating_income",
+      "calendar_key": "2023-Q4",
+      "period_end": "2023-12-31",
+      "displayed_value": 27032.0,
+      "displayed_unit": "million USD",
+      "accession_number": "0000950170-24-008814",
+      "xbrl_tag": "OperatingIncomeLoss",
+      "source_url": "https://data.sec.gov/api/xbrl/companyconcept/CIK0000789019/us-gaap/OperatingIncomeLoss.json",
+      "result": "ok",
+      "reason": "",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/789019/000095017024008814/",
+      "source_value_native": 27032000000.0,
+      "source_value_display_unit": 27032.0,
+      "expected_source_value_native": 27032000000.0,
+      "difference": 0.0,
+      "http_status": 200,
+      "response_sha256": "3375e0a9a05ffe410d9d290b4b120e43ff93a87e013f6f27ec5052aa92779067",
+      "fetched_at": "2026-11-05T15:02:56Z",
+      "id": "V02"
+    },
+    {
+      "type": "financial",
+      "ticker": "MSFT",
+      "metric": "eps_diluted",
+      "calendar_key": "2024-Q3",
+      "period_end": "2024-09-30",
+      "displayed_value": 3.3,
+      "displayed_unit": "USD/shares",
+      "accession_number": "0000950170-24-118967",
+      "xbrl_tag": "EarningsPerShareDiluted",
+      "source_url": "https://data.sec.gov/api/xbrl/companyconcept/CIK0000789019/us-gaap/EarningsPerShareDiluted.json",
+      "reported_value": null,
+      "split_adjustment": null,
+      "result": "ok",
+      "reason": "",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/789019/000095017024118967/",
+      "source_value_native": 3.3,
+      "source_value_display_unit": 3.3,
+      "expected_source_value_native": 3.3,
+      "difference": 0.0,
+      "http_status": 200,
+      "response_sha256": "a795727f74e61e9190e09e5a4333cee37d5b2db6c4933d8ce883b0f852e7009f",
+      "fetched_at": "2026-11-05T15:02:56Z",
+      "id": "V03"
+    },
+    {
+      "type": "financial",
+      "ticker": "GOOGL",
+      "metric": "capex",
+      "calendar_key": "2023-Q1",
+      "period_end": "2023-03-31",
+      "displayed_value": 6289.0,
+      "displayed_unit": "million USD",
+      "accession_number": "0001652044-23-000045",
+      "xbrl_tag": "PaymentsToAcquirePropertyPlantAndEquipment",
+      "source_url": "https://data.sec.gov/api/xbrl/companyconcept/CIK0001652044/us-gaap/PaymentsToAcquirePropertyPlantAndEquipment.json",
+      "result": "ok",
+      "reason": "",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204423000045/",
+      "source_value_native": 6289000000.0,
+      "source_value_display_unit": 6289.0,
+      "expected_source_value_native": 6289000000.0,
+      "difference": 0.0,
+      "http_status": 200,
+      "response_sha256": "baa3f1b8c8cb4c85e54a7990a70c0feeb834017658ca18525bca9768bffc7b8c",
+      "fetched_at": "2026-11-05T15:02:57Z",
+      "id": "V04"
+    },
+    {
+      "type": "financial",
+      "ticker": "GOOGL",
+      "metric": "revenue",
+      "calendar_key": "2024-Q1",
+      "period_end": "2024-03-31",
+      "displayed_value": 80539.0,
+      "displayed_unit": "million USD",
+      "accession_number": "0001652044-24-000053",
+      "xbrl_tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+      "source_url": "https://data.sec.gov/api/xbrl/companyconcept/CIK0001652044/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax.json",
+      "result": "ok",
+      "reason": "",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204424000053/",
+      "source_value_native": 80539000000.0,
+      "source_value_display_unit": 80539.0,
+      "expected_source_value_native": 80539000000.0,
+      "difference": 0.0,
+      "http_status": 200,
+      "response_sha256": "796226022b0fc9c021465047021622fa00d33f3de1793484aa12474a0eef2cfb",
+      "fetched_at": "2026-11-05T15:02:57Z",
+      "id": "V05"
+    },
+    {
+      "type": "financial",
+      "ticker": "GOOGL",
+      "metric": "eps_diluted",
+      "calendar_key": "2022-Q1",
+      "period_end": "2022-03-31",
+      "displayed_value": 1.231,
+      "displayed_unit": "USD/shares",
+      "accession_number": "0001652044-22-000029",
+      "xbrl_tag": "EarningsPerShareDiluted",
+      "source_url": "https://data.sec.gov/api/xbrl/companyconcept/CIK0001652044/us-gaap/EarningsPerShareDiluted.json",
+      "reported_value": 24.62,
+      "split_adjustment": 20.0,
+      "result": "ok",
+      "reason": "",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204422000029/",
+      "source_value_native": 24.62,
+      "source_value_display_unit": 24.62,
+      "expected_source_value_native": 24.62,
+      "difference": 0.0,
+      "http_status": 200,
+      "response_sha256": "b22fef8d429677fc2c586ad00fc6cdca4b825dea1e1ab13991adbe881e31b7a3",
+      "fetched_at": "2026-11-05T15:02:58Z",
+      "id": "V06"
+    },
+    {
+      "type": "segment",
+      "ticker": "MSFT",
+      "metric": "revenue",
+      "calendar_key": "2026-Q3",
+      "period_end": "2026-09-30",
+      "segment_scheme": "msft_new_2",
+      "segment_name": "Devices & Consumer",
+      "segment_member": "DevicesAndConsumerMember",
+      "displayed_value": 15484.0,
+      "displayed_unit": "million USD",
+      "accession_number": "0001193125-26-436133",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526436133/",
+      "evidence_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526436133/msft-20260930_htm.xml",
+      "result": "ok",
+      "reason": "",
+      "source_value_native": 15484000000.0,
+      "source_value_display_unit": 15484.0,
+      "http_status": 200,
+      "response_sha256": "12c4dc9e8b1f6859dba65b3d0c4610dfdad224f249f2fd152505380b87bac761",
+      "fetched_at": "2026-11-05T15:02:58Z",
+      "id": "V07"
+    },
+    {
+      "type": "segment",
+      "ticker": "GOOGL",
+      "metric": "revenue",
+      "calendar_key": "2023-Q2",
+      "period_end": "2023-06-30",
+      "segment_scheme": "goog_3",
+      "segment_name": "Other Bets",
+      "segment_member": "AllOtherSegmentsMember",
+      "displayed_value": 285.0,
+      "displayed_unit": "million USD",
+      "accession_number": "0001652044-24-000079",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204424000079/",
+      "evidence_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204424000079/goog-20240630_htm.xml",
+      "result": "ok",
+      "reason": "",
+      "source_value_native": 285000000.0,
+      "source_value_display_unit": 285.0,
+      "http_status": 200,
+      "response_sha256": "6e24f5821676840346190a0f7e3bd67406ccd215b45b80764728dde85a8acc3d",
+      "fetched_at": "2026-11-05T15:02:59Z",
+      "id": "V08"
+    },
+    {
+      "type": "price",
+      "ticker": "MSFT",
+      "metric": "close",
+      "trade_date": "2026-11-04",
+      "displayed_value": 555.7999877929688,
+      "displayed_unit": "USD/share",
+      "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?period1=1606780800&period2=1793923200&interval=1d&events=div%2Csplits",
+      "evidence_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?period1=1606780800&period2=1793923200&interval=1d&events=div%2Csplits",
+      "result": "ok",
+      "reason": "",
+      "source_value_native": 555.7999877929688,
+      "difference": 0.0,
+      "relative_difference": 0.0,
+      "http_status": 200,
+      "response_sha256": "da71dbdbeb4795a2e43596ae4cb11b49d4cbd5a43e9fb7d4f4beda398752a314",
+      "fetched_at": "2026-11-05T15:02:59Z",
+      "id": "V09"
+    },
+    {
+      "type": "price",
+      "ticker": "GOOGL",
+      "metric": "adj_close",
+      "trade_date": "2026-11-04",
+      "displayed_value": 288.92999267578125,
+      "displayed_unit": "USD/share",
+      "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?period1=1606780800&period2=1793923200&interval=1d&events=div%2Csplits",
+      "evidence_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?period1=1606780800&period2=1793923200&interval=1d&events=div%2Csplits",
+      "result": "ok",
+      "reason": "",
+      "source_value_native": 288.92999267578125,
+      "difference": 0.0,
+      "relative_difference": 0.0,
+      "http_status": 200,
+      "response_sha256": "7d05e39350ce6a15e08d02b0fb7d9db94629ef806ecb5849ec87b23e43b7514b",
+      "fetched_at": "2026-11-05T15:03:00Z",
+      "id": "V10"
+    }
+  ],
+  "contract_checks": {
+    "total": 32,
+    "passed": 32,
+    "failed": 0,
+    "passed_all": true
+  },
+  "checks": [
+    {
+      "name": "dashboard_files",
+      "result": "ok",
+      "detail": "all present"
+    },
+    {
+      "name": "json_metadata",
+      "result": "ok",
+      "detail": "snapshot=v20261105.3"
+    },
+    {
+      "name": "manifest_checksums",
+      "result": "ok",
+      "detail": "11 files"
+    },
+    {
+      "name": "financials_38_quarters_with_traceability",
+      "result": "ok",
+      "detail": "38 quarters, 13 metrics, 0 missing"
+    },
+    {
+      "name": "financials_no_duplicate_quarters",
+      "result": "ok",
+      "detail": "38 rows"
+    },
+    {
+      "name": "googl_pre_split_eps_adjustment",
+      "result": "ok",
+      "detail": "adjusted=['2022-Q1'], value=1.231, reported=24.62"
+    },
+    {
+      "name": "googl_2022q4_trailing_eps",
+      "result": "ok",
+      "detail": "eps_trailing_4q=4.56, pe_trailing=19.1663056089167"
+    },
+    {
+      "name": "segment_contract",
+      "result": "ok",
+      "detail": "143 segment rows"
+    },
+    {
+      "name": "segment_schemes",
+      "result": "ok",
+      "detail": "[('GOOGL', 'goog_3'), ('MSFT', 'msft_legacy_3'), ('MSFT', 'msft_new_2')]"
+    },
+    {
+      "name": "msft_segment_break_not_comparable",
+      "result": "ok",
+      "detail": "8 rows"
+    },
+    {
+      "name": "overview_contract",
+      "result": "ok",
+      "detail": "kpis/normalized/latest_quarter"
+    },
+    {
+      "name": "investor_contract",
+      "result": "ok",
+      "detail": "prices/benchmarks/returns"
+    },
+    {
+      "name": "ai_analysis_contract",
+      "result": "ok",
+      "detail": "6 verified events, labels, 70 correlations"
+    },
+    {
+      "name": "decision_contract",
+      "result": "ok",
+      "detail": "2 companies, disclaimer, no advice flag"
+    },
+    {
+      "name": "methodology_contract",
+      "result": "ok",
+      "detail": "formulas, sources, limitations"
+    },
+    {
+      "name": "bt1_bt5_contract",
+      "result": "ok",
+      "detail": "78 results, codes=['BT1', 'BT2', 'BT3', 'BT4', 'BT5']"
+    },
+    {
+      "name": "quality_contract",
+      "result": "ok",
+      "detail": "{\"companies\": [\"MSFT\", \"GOOGL\"], \"quarters_expected_per_company\": 19, \"quarters_expected_total\": 38, \"quarters_present\": 38, \"missing_metric_cells\": 0, \"low_metric_cells\": 34, \"verified_ratio\": 1.0}"
+    },
+    {
+      "name": "tag_switch_recorded",
+      "result": "ok",
+      "detail": "GOOGL 2025-Q2"
+    },
+    {
+      "name": "ai_event_evidence",
+      "result": "ok",
+      "detail": "verified=6, rejected=0"
+    },
+    {
+      "name": "link_report_contract",
+      "result": "ok",
+      "detail": "{\"total\": 2223, \"ok\": 2223, \"broken\": 0, \"blocked\": 0, \"soft404\": 0, \"low\": 0, \"pending\": 0}"
+    },
+    {
+      "name": "negative_controls",
+      "result": "ok",
+      "detail": "{'R1': 'blocked', 'R2': 'broken', 'R3': 'soft404'}"
+    },
+    {
+      "name": "reconcile_contract",
+      "result": "ok",
+      "detail": "{\"total\": 19, \"ok\": 12, \"low\": 3, \"fail\": 0, \"pending\": 0, \"unverified\": 4}"
+    },
+    {
+      "name": "secondary_close_contract",
+      "result": "ok",
+      "detail": "GOOGL=ok; MSFT=ok; QQQ=ok; SPY=ok"
+    },
+    {
+      "name": "adjusted_close_contract",
+      "result": "ok",
+      "detail": "GOOGL=unverified; MSFT=unverified; QQQ=unverified; SPY=unverified"
+    },
+    {
+      "name": "approved_allowlist_domains",
+      "result": "ok",
+      "detail": "11 domains, CR-13 additions approved"
+    },
+    {
+      "name": "raw_facts_traceability",
+      "result": "ok",
+      "detail": "source/accession/hash on every row; original facts verified"
+    },
+    {
+      "name": "run_audit_trail",
+      "result": "ok",
+      "detail": "run_id=run_20261105T150239Z_c58343f8"
+    },
+    {
+      "name": "response_cache_present",
+      "result": "ok",
+      "detail": "D:\\Learning\\DangHoc\\DAFBE\\7_FINAL\\data\\raw\\_cache\\_index.jsonl"
+    },
+    {
+      "name": "googl_split_2022_07_18",
+      "result": "ok",
+      "detail": "20:1 split recorded"
+    },
+    {
+      "name": "sqlite_handoff",
+      "result": "ok",
+      "detail": "db={'facts': 4427, 'filings': 48, 'segments': 461, 'company_financials': 38, 'prices': 5960}, manifest={'facts': 4427, 'filings': 48, 'segments': 461, 'company_financials': 38, 'prices': 5960}"
+    },
+    {
+      "name": "web_data_size_under_5mb",
+      "result": "ok",
+      "detail": "2509487 bytes"
+    },
+    {
+      "name": "no_future_market_data",
+      "result": "ok",
+      "detail": "max_price_date=2026-11-05, data_as_of=2026-11-05"
+    }
+  ],
+  "overall": "PASS"
+}

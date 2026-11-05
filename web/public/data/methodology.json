@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "snapshot_version": "v20261104.11",
-  "generated_at": "2026-11-05T07:06:56Z",
+  "snapshot_version": "v20261105.3",
+  "generated_at": "2026-11-05T15:02:47Z",
   "formulas": {
     "revenue_growth_yoy": "(Revenue_t - Revenue_t-4) / Revenue_t-4",
     "operating_margin": "Operating Income / Revenue",
@@ -216,8 +216,8 @@
     "verified_ratio": 1.0
   },
   "link_report_summary": {
-    "total": 84,
-    "ok": 84,
+    "total": 2223,
+    "ok": 2223,
     "broken": 0,
     "blocked": 0,
     "soft404": 0,

@@ -10,9 +10,11 @@ from __future__ import annotations
 
 import argparse
 import csv
+import io
 import json
 import sqlite3
 import sys
+import uuid
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -40,7 +42,11 @@ from pipeline.crawlers.sec import (
     recent_filings,
     submissions_url,
 )
-from pipeline.http import CachedHttpClient, sec_user_agent
+from pipeline.http import (
+    CachedHttpClient,
+    MUTABLE_DATA_CACHE_MAX_AGE_SECONDS,
+    sec_user_agent,
+)
 from pipeline.metrics.formulas import enrich_company_rows
 from pipeline.preprocess.build_outputs import (
     build_ai_analysis,
@@ -58,7 +64,8 @@ from pipeline.preprocess.facts import build_company_quarters
 from pipeline.preprocess.prices import build_price_analytics, normalize_prices
 from pipeline.preprocess.segments import build_segment_table
 from pipeline.stats.tests import run_all_tests
-from pipeline.util import to_million, utc_now_iso, write_json
+from pipeline.sync import SyncLog, archive_raw_file, raw_file_manifest
+from pipeline.util import atomic_write_text, to_million, utc_now_iso, write_json
 from pipeline.verify.links import (
     run_negative_checks,
     verify_concepts,
@@ -74,9 +81,8 @@ def log(message: str) -> None:
 
 
 def write_csv(path: Path, rows: list[dict[str, Any]], fieldnames: list[str] | None = None) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
     if not rows:
-        path.write_text("", encoding="utf-8")
+        atomic_write_text(path, "")
         return
     if fieldnames:
         names = list(fieldnames)
@@ -86,10 +92,28 @@ def write_csv(path: Path, rows: list[dict[str, Any]], fieldnames: list[str] | No
             for key in row:
                 if key not in names:
                     names.append(key)
-    with path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=names, extrasaction="ignore")
-        writer.writeheader()
-        writer.writerows(rows)
+    buffer = io.StringIO(newline="")
+    writer = csv.DictWriter(buffer, fieldnames=names, extrasaction="ignore")
+    writer.writeheader()
+    writer.writerows(rows)
+    atomic_write_text(path, buffer.getvalue())
+
+
+def original_fact_filing_references(facts: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    references: dict[str, dict[str, Any]] = {}
+    for fact in facts:
+        if not fact.get("is_original"):
+            continue
+        url = fact["source_url"]
+        references.setdefault(
+            url,
+            {
+                "source_url": url,
+                "accession_number": fact.get("accession_number"),
+                "report_date": fact.get("period_end"),
+            },
+        )
+    return list(references.values())
 
 
 def filing_rows(filings: list[Filing], run_id: str, http_status: int, fetched_at: str, sha: str) -> list[dict[str, Any]]:
@@ -153,11 +177,13 @@ def main(argv: list[str] | None = None) -> int:
 
     settings = get_settings()
     run_id = "run_" + utc_now_iso().replace("-", "").replace(":", "").replace("T", "T")
-    run_id = run_id.replace("Z", "Z")
+    run_id += "_" + uuid.uuid4().hex[:8]
     log(f"start {run_id} mode={args.mode}")
 
     for directory in [settings.raw_dir, settings.verified_dir, settings.snapshot_dir, settings.web_data_dir]:
         directory.mkdir(parents=True, exist_ok=True)
+    sync_log = SyncLog(settings.verified_dir / "sync_log.jsonl", run_id=run_id)
+    archived_raw_paths: list[Path] = []
 
     sec_client = CachedHttpClient(
         cache_dir=settings.raw_dir / "_cache",
@@ -186,46 +212,116 @@ def main(argv: list[str] | None = None) -> int:
     # 1) SEC submissions and filings.
     all_filings: list[Filing] = []
     filing_rows_data: list[dict[str, Any]] = []
-    for ticker, cik in CIKS.items():
-        log(f"SEC submissions {ticker}")
-        response = sec_client.get(submissions_url(cik), refresh=args.refresh)
-        payload = response.json()
-        filings = collect_filings(
-            client=sec_client,
-            submissions=payload,
-            ticker=ticker,
-            since="2021-01-01",
-        )
-        all_filings.extend(filings)
-        filing_rows_data.extend(
-            filing_rows(filings, run_id, response.status, response.fetched_at, response.sha256)
-        )
-        log(f"  {len(filings)} 10-Q/10-K filings")
-    write_csv(settings.raw_dir / "sec" / "filings.csv", filing_rows_data)
+    with sync_log.source("sec_submissions") as source_sync:
+        for ticker, cik in CIKS.items():
+            log(f"SEC submissions {ticker}")
+            response = sec_client.get(
+                submissions_url(cik),
+                refresh=args.refresh,
+                max_age_seconds=MUTABLE_DATA_CACHE_MAX_AGE_SECONDS,
+            )
+            payload = response.json()
+            filings = collect_filings(
+                client=sec_client,
+                submissions=payload,
+                ticker=ticker,
+                since="2021-01-01",
+            )
+            all_filings.extend(filings)
+            filing_rows_data.extend(
+                filing_rows(filings, run_id, response.status, response.fetched_at, response.sha256)
+            )
+            log(f"  {len(filings)} 10-Q/10-K filings")
+        filings_path = settings.raw_dir / "sec" / "filings.csv"
+        write_csv(filings_path, filing_rows_data)
+        archived_raw_paths.append(archive_raw_file(settings.raw_dir, run_id, filings_path))
+        source_sync.records_added = len(filing_rows_data)
 
     # 2) SEC companyfacts -> mapped facts.
     all_facts: list[RawFact] = []
-    for ticker, cik in CIKS.items():
-        log(f"SEC companyfacts {ticker}")
-        response = sec_client.get(companyfacts_url(cik), refresh=args.refresh)
-        facts = extract_facts(
-            ticker=ticker,
-            companyfacts=response.json(),
-            settings=settings,
-            run_id=run_id,
-            http_status=response.status,
-            fetched_at=response.fetched_at,
-            response_sha256=response.sha256,
-        )
-        all_facts.extend(facts)
-        log(f"  {len(facts)} mapped facts")
+    with sync_log.source("sec_companyfacts") as source_sync:
+        for ticker, cik in CIKS.items():
+            log(f"SEC companyfacts {ticker}")
+            response = sec_client.get(
+                companyfacts_url(cik),
+                refresh=args.refresh,
+                max_age_seconds=MUTABLE_DATA_CACHE_MAX_AGE_SECONDS,
+            )
+            facts = extract_facts(
+                ticker=ticker,
+                companyfacts=response.json(),
+                settings=settings,
+                run_id=run_id,
+                http_status=response.status,
+                fetched_at=response.fetched_at,
+                response_sha256=response.sha256,
+            )
+            all_facts.extend(facts)
+            log(f"  {len(facts)} mapped facts")
+        source_sync.records_added = len(all_facts)
     all_facts = mark_originals(
         all_facts,
         min_usd=settings.thresholds["quality"]["restatement_min_usd"],
         min_eps=settings.thresholds["quality"]["restatement_min_eps"],
     )
+
+    with sync_log.source("sec_fact_verification") as source_sync:
+        fact_rows = [fact.as_row() for fact in all_facts]
+        filing_references = {
+            filing.source_url: {
+                "source_url": filing.source_url,
+                "accession_number": filing.accession_number,
+                "report_date": filing.report_date,
+            }
+            for filing in all_filings
+        }
+        for item in original_fact_filing_references(fact_rows):
+            filing_references.setdefault(item["source_url"], item)
+        filing_verification_items = verify_filing_indexes(
+            client=sec_client,
+            filings=list(filing_references.values()),
+        )
+        filing_status = {
+            item["url"]: item["result"] == "ok" for item in filing_verification_items
+        }
+        concept_verification_items = verify_concepts(
+            client=sec_client,
+            facts=fact_rows,
+            refresh=args.refresh,
+        )
+        concept_status = {
+            item["fact_id"]: item for item in concept_verification_items if item.get("fact_id")
+        }
+        for fact in all_facts:
+            if not fact.is_original:
+                fact.verification_reason = "not selected: not the first-filed fact"
+                continue
+            concept_result = concept_status.get(fact.fact_id)
+            filing_verified = filing_status.get(fact.source_url, False)
+            concept_verified = bool(concept_result and concept_result["result"] == "ok")
+            fact.verified = filing_verified and concept_verified
+            reasons = []
+            if not filing_verified:
+                reasons.append("filing index verification failed")
+            if not concept_verified:
+                reasons.append(
+                    concept_result["reason"] if concept_result else "XBRL fact verification missing"
+                )
+            fact.verification_reason = "; ".join(reasons)
+            if fact.verified:
+                fact.verification_reason = ""
+        verified_originals = sum(fact.is_original and fact.verified for fact in all_facts)
+        original_count = sum(fact.is_original for fact in all_facts)
+        source_sync.records_added = len(concept_verification_items)
+        if verified_originals != original_count:
+            source_sync.mark_partial(
+                f"{original_count - verified_originals}/{original_count} original facts failed verification"
+            )
+
     facts_rows = [fact.as_row() for fact in all_facts]
-    write_csv(settings.raw_dir / "sec" / "facts.csv", facts_rows)
+    facts_path = settings.raw_dir / "sec" / "facts.csv"
+    write_csv(facts_path, facts_rows)
+    archived_raw_paths.append(archive_raw_file(settings.raw_dir, run_id, facts_path))
     log(f"facts.csv: {len(facts_rows)} rows")
 
     # 3) Prices.
@@ -233,14 +329,24 @@ def main(argv: list[str] | None = None) -> int:
     analysis = settings.thresholds["analysis"]
     price_start = date.fromisoformat(analysis["price_history_start"])
     price_end = date.today()
-    price_bundle = fetch_prices(
-        tickers=PRICE_TICKERS,
-        start=price_start,
-        end=price_end,
-        raw_dir=settings.raw_dir,
-        as_of=price_end.isoformat(),
-        refresh=args.refresh,
-    )
+    with sync_log.source("yahoo_prices") as source_sync:
+        price_bundle = fetch_prices(
+            tickers=PRICE_TICKERS,
+            start=price_start,
+            end=price_end,
+            raw_dir=settings.raw_dir,
+            as_of=price_end.isoformat(),
+            refresh=args.refresh,
+            max_age_seconds=MUTABLE_DATA_CACHE_MAX_AGE_SECONDS,
+        )
+        price_artifacts = {
+            price_bundle.combined_path,
+            *price_bundle.ticker_paths.values(),
+            settings.raw_dir / "prices" / "corporate_actions.csv",
+        }
+        for path in sorted(price_artifacts):
+            archived_raw_paths.append(archive_raw_file(settings.raw_dir, run_id, path))
+        source_sync.records_added = len(price_bundle.prices)
     prices_by_ticker = {
         ticker: normalize_prices(group)
         for ticker, group in price_bundle.prices.groupby("ticker")
@@ -255,13 +361,21 @@ def main(argv: list[str] | None = None) -> int:
 
     # 3b) Secondary unadjusted close (Nasdaq, CR-13 approved).
     log("secondary closes nasdaq")
-    secondary = fetch_secondary_closes(
-        client=browser_client,
-        tickers=PRICE_TICKERS,
-        start=price_end_date - timedelta(days=90),
-        end=price_end_date,
-        raw_dir=settings.raw_dir,
-    )
+    with sync_log.source("nasdaq_secondary_close") as source_sync:
+        secondary = fetch_secondary_closes(
+            client=browser_client,
+            tickers=PRICE_TICKERS,
+            start=price_end_date - timedelta(days=90),
+            end=price_end_date,
+            raw_dir=settings.raw_dir,
+            refresh=args.refresh,
+        )
+        for artifact in secondary["artifacts"].values():
+            path = settings.project_root / artifact["path"]
+            archived_raw_paths.append(archive_raw_file(settings.raw_dir, run_id, path))
+        source_sync.records_added = sum(len(rows) for rows in secondary["rows_by_ticker"].values())
+        if secondary["errors"]:
+            source_sync.mark_partial(json.dumps(secondary["errors"], sort_keys=True))
     log(
         f"  {len(secondary['rows_by_ticker'])} tickers reconciled, "
         f"{len(secondary['errors'])} unavailable"
@@ -269,20 +383,34 @@ def main(argv: list[str] | None = None) -> int:
 
     # 3c) Conditional adjusted-close cross-check (Alpha Vantage, real key only).
     log("adjusted close alphavantage")
-    adjusted = fetch_adjusted_closes(
-        client=browser_client,
-        tickers=["MSFT", "GOOGL"],
-        raw_dir=settings.raw_dir,
-        as_of=data_as_of,
-    )
+    with sync_log.source("alphavantage_adjusted_close") as source_sync:
+        adjusted = fetch_adjusted_closes(
+            client=browser_client,
+            tickers=["MSFT", "GOOGL"],
+            raw_dir=settings.raw_dir,
+            as_of=data_as_of,
+            refresh=args.refresh,
+        )
+        for artifact in adjusted["artifacts"].values():
+            path = settings.project_root / artifact["path"]
+            archived_raw_paths.append(archive_raw_file(settings.raw_dir, run_id, path))
+        source_sync.records_added = sum(len(rows) for rows in adjusted["rows_by_ticker"].values())
+        if not adjusted["available"]:
+            source_sync.mark_partial(adjusted["reason"])
+        elif adjusted["errors"]:
+            source_sync.mark_partial(json.dumps(adjusted["errors"], sort_keys=True))
     log("  available" if adjusted["available"] else f"  unverified: {adjusted['reason']}")
 
     # 3d) CR-14 AI events: official pages only, quote + date verified.
     log("AI event verification")
-    ai_events, ai_event_report = build_verified_events(
-        client=browser_client,
-        seeds=load_ai_event_seeds(settings),
-    )
+    with sync_log.source("official_ai_events") as source_sync:
+        ai_events, ai_event_report = build_verified_events(
+            client=browser_client,
+            seeds=load_ai_event_seeds(settings),
+        )
+        source_sync.records_added = len(ai_events)
+        if ai_event_report["rejected"]:
+            source_sync.mark_partial(f"{ai_event_report['rejected']} AI event seeds rejected")
     write_json(settings.verified_dir / "ai_events_report.json", ai_event_report)
     log(
         f"  {ai_event_report['verified']}/{ai_event_report['total_seeds']} events verified, "
@@ -292,27 +420,33 @@ def main(argv: list[str] | None = None) -> int:
     # 4) Segments.
     segment_rows: list[dict[str, Any]] = []
     if not args.skip_segments:
-        segment_filing_rows: list[dict[str, Any]] = []
-        for ticker in PRICE_TICKERS[:2]:
-            ticker_filings = [
-                filing
-                for filing in all_filings
-                if filing.ticker == ticker and filing.form in {"10-Q", "10-K"}
-            ]
-            ticker_filings.sort(key=lambda filing: filing.report_date)
-            if args.segment_limit:
-                ticker_filings = ticker_filings[-args.segment_limit :]
-            log(f"segments {ticker}: {len(ticker_filings)} filings")
-            segment_facts = fetch_segment_facts(
-                client=sec_client,
-                settings=settings,
-                ticker=ticker,
-                filings=ticker_filings,
-                run_id=run_id,
-            )
-            segment_rows.extend(fact.as_row() for fact in segment_facts)
-            log(f"  {len(segment_facts)} segment facts")
-        write_csv(settings.raw_dir / "sec" / "segments.csv", segment_rows)
+        with sync_log.source("sec_segments") as source_sync:
+            for ticker in PRICE_TICKERS[:2]:
+                ticker_filings = [
+                    filing
+                    for filing in all_filings
+                    if filing.ticker == ticker and filing.form in {"10-Q", "10-K"}
+                ]
+                ticker_filings.sort(key=lambda filing: filing.report_date)
+                if args.segment_limit:
+                    ticker_filings = ticker_filings[-args.segment_limit :]
+                log(f"segments {ticker}: {len(ticker_filings)} filings")
+                segment_facts = fetch_segment_facts(
+                    client=sec_client,
+                    settings=settings,
+                    ticker=ticker,
+                    filings=ticker_filings,
+                    run_id=run_id,
+                )
+                segment_rows.extend(fact.as_row() for fact in segment_facts)
+                log(f"  {len(segment_facts)} segment facts")
+            segments_path = settings.raw_dir / "sec" / "segments.csv"
+            write_csv(segments_path, segment_rows)
+            archived_raw_paths.append(archive_raw_file(settings.raw_dir, run_id, segments_path))
+            source_sync.records_added = len(segment_rows)
+
+    raw_run_directory = settings.raw_dir / "runs" / run_id
+    write_json(raw_run_directory / "manifest.json", raw_file_manifest(run_id, archived_raw_paths, settings.raw_dir))
 
     # 5) Preprocess quarterly financials.
     log("preprocess financials")
@@ -395,19 +529,18 @@ def main(argv: list[str] | None = None) -> int:
 
     # 10) Verification reports.
     log("verify links")
-    link_items = verify_filing_indexes(
-        client=sec_client,
-        filings=[
-            {
-                "source_url": filing.source_url,
-                "accession_number": filing.accession_number,
-                "report_date": filing.report_date,
-            }
-            for filing in all_filings
-        ],
-    )
-    link_items.extend(verify_concepts(client=sec_client, facts=facts_rows))
-    link_items.extend(verify_price_evidence(client=yahoo_client, prices_by_ticker=prices_by_ticker))
+    link_items = [*filing_verification_items, *concept_verification_items]
+    with sync_log.source("yahoo_price_evidence") as source_sync:
+        price_verification_items = verify_price_evidence(
+            client=yahoo_client,
+            prices_by_ticker=prices_by_ticker,
+            refresh=args.refresh,
+        )
+        link_items.extend(price_verification_items)
+        source_sync.records_added = len(price_verification_items)
+        failed_price_checks = sum(item["result"] != "ok" for item in price_verification_items)
+        if failed_price_checks:
+            source_sync.mark_partial(f"{failed_price_checks} Yahoo price evidence checks did not pass")
     negative_items = [] if args.skip_negative else run_negative_checks(sec_client)
     link_report = {
         "schema_version": "1.0",
@@ -556,23 +689,28 @@ def main(argv: list[str] | None = None) -> int:
             "python": sys.version.split()[0],
         },
     )
+    manifest["run_id"] = run_id
     write_json(settings.web_data_dir / "manifest.json", manifest)
     write_json(settings.verified_dir / "manifest.json", manifest)
 
     # 13) SQLite handoff and processed price CSV.
     log("write sqlite + processed price CSV")
-    write_csv(
-        settings.verified_dir / "prices_processed.csv",
-        price_bundle.prices.to_dict(orient="records"),
-    )
-    build_sqlite(
-        db_path=settings.data_dir / "db" / "aicor.sqlite",
-        facts_rows=facts_rows,
-        filing_rows_data=filing_rows_data,
-        segment_rows=segment_rows,
-        financial_rows=financial_rows,
-        prices=price_bundle.prices,
-    )
+    with sync_log.source("dashboard_handoff") as source_sync:
+        write_csv(
+            settings.verified_dir / "prices_processed.csv",
+            price_bundle.prices.to_dict(orient="records"),
+        )
+        build_sqlite(
+            db_path=settings.data_dir / "db" / "aicor.sqlite",
+            facts_rows=facts_rows,
+            filing_rows_data=filing_rows_data,
+            segment_rows=segment_rows,
+            financial_rows=financial_rows,
+            prices=price_bundle.prices,
+        )
+        source_sync.records_added = len(financial_rows) + len(price_bundle.prices)
+    with sync_log.source("pipeline_complete") as source_sync:
+        source_sync.records_added = len(all_files)
 
     log("done")
     print(

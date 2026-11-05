@@ -68,14 +68,17 @@ def _metric_facts(
     return _select_original(
         fact
         for fact in facts
-        if fact.get("ticker") == ticker and fact.get("metric") == metric
+        if fact.get("ticker") == ticker
+        and fact.get("metric") == metric
+        and fact.get("is_original")
     )
 
 
 def _choose_fact(facts: list[dict[str, Any]]) -> dict[str, Any] | None:
-    if not facts:
+    verified_facts = [fact for fact in facts if fact.get("verified") is True]
+    if not verified_facts:
         return None
-    return _sorted_by_filing(facts)[0]
+    return _sorted_by_filing(verified_facts)[0]
 
 
 def _direct_quarter(facts: list[dict[str, Any]], qkey: str) -> dict[str, Any] | None:
@@ -91,8 +94,13 @@ def _annual_quarter(facts: list[dict[str, Any]], qkey: str) -> dict[str, Any] | 
 
 
 def _fact_metadata(fact: dict[str, Any], *, derived: bool, quality: str, reason: str) -> MetricValue:
+    verified = fact.get("verified") is True
+    if not verified:
+        reason = "; ".join(
+            part for part in (reason, fact.get("verification_reason"), "source verification failed") if part
+        )
     return MetricValue(
-        value=safe_float(fact.get("value_usd")),
+        value=safe_float(fact.get("value_usd")) if verified else None,
         unit=fact.get("unit", "USD"),
         source_url=fact.get("source_url"),
         accession_number=fact.get("accession_number"),
@@ -101,8 +109,8 @@ def _fact_metadata(fact: dict[str, Any], *, derived: bool, quality: str, reason:
         filed_date=fact.get("filed_date"),
         period_end=fact.get("period_end"),
         derived=derived,
-        verified=bool(fact.get("source_url") and fact.get("accession_number")),
-        quality_flag=quality,
+        verified=verified,
+        quality_flag=quality if verified else "missing",
         reason=reason,
     )
 
@@ -227,7 +235,9 @@ def _instant_value(
     candidates = [
         fact
         for fact in facts
-        if fact.get("period_type") == "instant" and fact.get("calendar_key") == qkey
+        if fact.get("period_type") == "instant"
+        and fact.get("calendar_key") == qkey
+        and fact.get("verified") is True
     ]
     if not candidates:
         return _missing("USD", f"no balance-sheet fact for {qkey}")

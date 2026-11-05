@@ -6,6 +6,7 @@ import json
 import os
 import time
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Sequence
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
@@ -13,6 +14,8 @@ from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 import requests
 
 from pipeline.util import sha256_bytes, utc_now_iso
+
+MUTABLE_DATA_CACHE_MAX_AGE_SECONDS = 3300
 
 
 class HttpError(RuntimeError):
@@ -157,18 +160,34 @@ class CachedHttpClient:
         if elapsed < self.min_delay_seconds:
             time.sleep(self.min_delay_seconds - elapsed)
 
+    @staticmethod
+    def _cache_is_fresh(cached: dict[str, Any], max_age_seconds: int | None) -> bool:
+        if max_age_seconds is None:
+            return True
+        try:
+            fetched = datetime.fromisoformat(
+                str(cached.get("fetched_at", "")).replace("Z", "+00:00")
+            )
+        except ValueError:
+            return False
+        if fetched.tzinfo is None:
+            fetched = fetched.replace(tzinfo=timezone.utc)
+        age_seconds = (datetime.now(timezone.utc) - fetched.astimezone(timezone.utc)).total_seconds()
+        return 0 <= age_seconds <= max_age_seconds
+
     def get(
         self,
         url: str,
         *,
         refresh: bool = False,
+        max_age_seconds: int | None = None,
         timeout_seconds: int | None = None,
         allow_unlisted: bool = False,
     ) -> HttpResponse:
         self._assert_allowed(url, allow_unlisted=allow_unlisted)
         storage_url = self._storage_url(url)
         cached = self._index.get(storage_url)
-        if cached and not refresh:
+        if cached and not refresh and self._cache_is_fresh(cached, max_age_seconds):
             path = self.cache_dir / cached["sha256"]
             if path.exists():
                 content = path.read_bytes()
@@ -227,12 +246,26 @@ class CachedHttpClient:
                 time.sleep(2**attempt)
         raise HttpError(storage_url, None, f"request failed after retries: {last_error}")
 
-    def get_json(self, url: str, *, refresh: bool = False, allow_unlisted: bool = False) -> Any:
-        return self.get(url, refresh=refresh, allow_unlisted=allow_unlisted).json()
+    def get_json(
+        self,
+        url: str,
+        *,
+        refresh: bool = False,
+        max_age_seconds: int | None = None,
+        allow_unlisted: bool = False,
+    ) -> Any:
+        return self.get(
+            url,
+            refresh=refresh,
+            max_age_seconds=max_age_seconds,
+            allow_unlisted=allow_unlisted,
+        ).json()
 
 
 def sec_user_agent() -> str:
-    return os.environ.get(
-        "SEC_USER_AGENT",
-        "AICOR research project (student project; contact: aicor@example.com)",
-    )
+    user_agent = os.environ.get("SEC_USER_AGENT", "").strip()
+    if not user_agent:
+        raise RuntimeError(
+            "SEC_USER_AGENT must identify this project and provide a real contact address"
+        )
+    return user_agent

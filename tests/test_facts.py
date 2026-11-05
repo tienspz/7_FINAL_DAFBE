@@ -150,6 +150,32 @@ def test_missing_q4_annual_fact_is_marked_missing():
     assert "no 10-K annual fact" in revenue.reason
 
 
+def test_unverified_source_fact_is_not_used_for_quarterly_output():
+    settings = make_settings({"GOOGL": REVENUE})
+    fact = make_fact(
+        ticker="GOOGL",
+        metric="revenue",
+        tag="Revenue",
+        start="2025-01-01",
+        end="2025-03-31",
+        period_type="quarter",
+        value=100.0,
+        verified=False,
+    )
+
+    rows = build_company_quarters(
+        ticker="GOOGL",
+        facts=[fact],
+        settings=settings,
+        quarters=[make_quarter("2025-Q1")],
+    )
+
+    revenue = rows[0]["metrics"]["revenue"]
+    assert revenue.value is None
+    assert revenue.verified is False
+    assert revenue.quality_flag == "missing"
+
+
 def test_googl_pre_split_eps_is_adjusted_but_reported_value_preserved():
     definitions = {
         "eps_diluted": {
