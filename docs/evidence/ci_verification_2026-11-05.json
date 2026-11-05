@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "verified_at": "2026-11-05T04:41:41Z",
+  "verified_at": "2026-11-05T07:15:34Z",
   "repository": "https://github.com/tienspz/7_FINAL_DAFBE",
   "workflow": {
     "name": "Hourly data crawl",
@@ -68,16 +68,39 @@
       },
       "bot_commit": null,
       "note": "README-only push; the daily commit gate prevented a duplicate data commit."
+    },
+    {
+      "id": 41985535268,
+      "event": "push",
+      "head_sha": "03169ea43be38578891a93e1348fb46632b75ef1",
+      "conclusion": "success",
+      "created_at": "2026-11-05T07:11:58Z",
+      "updated_at": "2026-11-05T07:14:15Z",
+      "acceptance": {
+        "sources_total": 10,
+        "sources_matched": 10,
+        "contracts_total": 31,
+        "contracts_passed": 31,
+        "overall": "PASS"
+      },
+      "bot_commit": null,
+      "note": "CR-13/CR-14 release. All steps succeeded, including unit tests, full raw+preprocess crawl, acceptance and the daily commit gate; the gate blocked a second data commit on 2026-11-05, so remote HEAD stayed at 03169ea."
     }
   ],
   "loop_safety": {
     "bot_commit_sha": "c251c3b435d712170450254c33aa19dec94cf415",
     "bot_commit_push_triggered_new_run": false,
-    "mechanism": "Commit message uses [skip ci] and push.paths-ignore excludes data/**, web/public/data/**, docs/evidence/**, and fingerprint state files."
+    "mechanism": "Commit message uses [skip ci] and push.paths-ignore excludes data/**, web/public/data/**, docs/evidence/**, and fingerprint state files.",
+    "release_commit": "03169ea43be38578891a93e1348fb46632b75ef1",
+    "release_run_created_new_commit": false
   },
   "daily_commit_gate": {
     "last_commit_date": "2026-11-05",
     "observed_log": "a data commit already happened on 2026-11-05; waiting for the next UTC day",
-    "verified_in_runs": [41968542619, 41968991358]
+    "verified_in_runs": [
+      41968542619,
+      41968991358,
+      41985535268
+    ]
   }
 }

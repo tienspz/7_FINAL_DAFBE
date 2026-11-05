@@ -264,5 +264,15 @@
     "AI events have automated evidence review, not human editorial sign-off.",
     "Nasdaq historical API is unofficial and has no SLA; a schema change degrades to pending, not silent success."
   ],
-  "not_investment_advice": true
+  "not_investment_advice": true,
+  "ci_verification": {
+    "run_id": 41985535268,
+    "run_url": "https://github.com/tienspz/7_FINAL_DAFBE/actions/runs/41985535268",
+    "head_sha": "03169ea43be38578891a93e1348fb46632b75ef1",
+    "conclusion": "success",
+    "steps_all_success": true,
+    "bot_commit_created": false,
+    "remote_head_after_run": "03169ea43be38578891a93e1348fb46632b75ef1",
+    "note": "Daily commit gate already used on 2026-11-05; no duplicate data commit and no new workflow run."
+  }
 }
