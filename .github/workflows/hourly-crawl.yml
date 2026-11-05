@@ -33,7 +33,7 @@ jobs:
     timeout-minutes: 60
     env:
       PYTHONUNBUFFERED: "1"
-      SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT || 'AICOR research project (student project; contact: aicor@example.com)' }}
+      SEC_USER_AGENT: "${{ secrets.SEC_USER_AGENT || 'AICOR research project (student project; contact: aicor@example.com)' }}"
 
     steps:
       - name: Checkout repository
