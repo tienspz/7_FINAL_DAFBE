@@ -70,7 +70,7 @@ Workflow [`.github/workflows/hourly-crawl.yml`](.github/workflows/hourly-crawl.y
 
 ## Nghiệm thu
 
-Lần chạy gần nhất (snapshot `v20261104.9`, `data_as_of=2026-11-04`):
+Lần chạy gần nhất (snapshot `v20261104.10`, `data_as_of=2026-11-04`):
 
 - **10/10** nguồn trực tiếp khớp.
 - **28/28** contract dashboard pass.
