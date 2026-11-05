@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "verified_at": "2026-11-05T04:41:41Z",
+  "repository": "https://github.com/tienspz/7_FINAL_DAFBE",
+  "workflow": {
+    "name": "Hourly data crawl",
+    "path": ".github/workflows/hourly-crawl.yml",
+    "state": "active",
+    "schedule": "17 * * * *",
+    "timezone": "UTC",
+    "concurrency_group": "aicor-hourly-crawl",
+    "permissions": "contents: write"
+  },
+  "runs": [
+    {
+      "id": 41968179815,
+      "event": "push",
+      "head_sha": "3d3edc2ec4d1d5826eb75654f30a47d135523446",
+      "conclusion": "failure",
+      "note": "Initial validation failed before any job started: workflow YAML had an unquoted SEC_USER_AGENT expression containing a colon.",
+      "fix_commit": "e40d9143"
+    },
+    {
+      "id": 41968283155,
+      "event": "push",
+      "head_sha": "e40d9143",
+      "conclusion": "success",
+      "acceptance": {
+        "sources_total": 10,
+        "sources_matched": 10,
+        "contracts_total": 28,
+        "contracts_passed": 28,
+        "overall": "PASS"
+      },
+      "bot_commit": {
+        "sha": "c251c3b435d712170450254c33aa19dec94cf415",
+        "message": "chore(data): refresh snapshot v20261104.10 (2026-11-05 UTC) [skip ci]",
+        "snapshot_version": "v20261104.10",
+        "data_as_of": "2026-11-04"
+      }
+    },
+    {
+      "id": 41968542619,
+      "event": "workflow_dispatch",
+      "head_sha": "c251c3b435d712170450254c33aa19dec94cf415",
+      "conclusion": "success",
+      "acceptance": {
+        "sources_total": 10,
+        "sources_matched": 10,
+        "contracts_total": 28,
+        "contracts_passed": 28,
+        "overall": "PASS"
+      },
+      "bot_commit": null,
+      "note": "Daily commit gate was already set for 2026-11-05; no duplicate data commit was created."
+    },
+    {
+      "id": 41968991358,
+      "event": "push",
+      "head_sha": "54f4ccca632a9482a03648c4c7f1690f22490aa5",
+      "conclusion": "success",
+      "acceptance": {
+        "sources_total": 10,
+        "sources_matched": 10,
+        "contracts_total": 28,
+        "contracts_passed": 28,
+        "overall": "PASS"
+      },
+      "bot_commit": null,
+      "note": "README-only push; the daily commit gate prevented a duplicate data commit."
+    }
+  ],
+  "loop_safety": {
+    "bot_commit_sha": "c251c3b435d712170450254c33aa19dec94cf415",
+    "bot_commit_push_triggered_new_run": false,
+    "mechanism": "Commit message uses [skip ci] and push.paths-ignore excludes data/**, web/public/data/**, docs/evidence/**, and fingerprint state files."
+  },
+  "daily_commit_gate": {
+    "last_commit_date": "2026-11-05",
+    "observed_log": "a data commit already happened on 2026-11-05; waiting for the next UTC day",
+    "verified_in_runs": [41968542619, 41968991358]
+  }
+}
