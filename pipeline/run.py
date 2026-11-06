@@ -59,6 +59,7 @@ from pipeline.preprocess.build_outputs import (
     next_snapshot_version,
     write_price_files,
 )
+from pipeline.preprocess.export_csv import export_json_tables_to_csv
 from pipeline.preprocess.calendar import analysis_quarters
 from pipeline.preprocess.facts import build_company_quarters
 from pipeline.preprocess.prices import build_price_analytics, normalize_prices
@@ -692,6 +693,12 @@ def main(argv: list[str] | None = None) -> int:
     manifest["run_id"] = run_id
     write_json(settings.web_data_dir / "manifest.json", manifest)
     write_json(settings.verified_dir / "manifest.json", manifest)
+
+    log("export dashboard JSON tables to DataProcessedView")
+    export_json_tables_to_csv(
+        source_dir=settings.web_data_dir,
+        output_dir=settings.project_root / "DataProcessedView",
+    )
 
     # 13) SQLite handoff and processed price CSV.
     log("write sqlite + processed price CSV")

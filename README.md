@@ -37,6 +37,7 @@ data/
   raw/prices/           Corporate actions, artifact Nasdaq/Alpha Vantage
   verified/             Báo cáo chất lượng, reconcile, link, sync log
 web/public/data/        JSON dashboard + manifest/checksum
+DataProcessedView/      CSV dạng bảng sinh tự động từ các JSON dashboard
 docs/                   Kế hoạch và bằng chứng nghiệm thu
 .github/workflows/      Crawl tự động hằng giờ
 ```
@@ -55,6 +56,8 @@ python scripts/acceptance_check.py
 ```
 
 `python -m pipeline.run --mode full` crawl raw rồi preprocess trong **cùng một lần chạy**: SEC filings/facts/segments, giá yfinance, close Nasdaq, adjusted close có điều kiện, sự kiện AI, reconcile, quality report, rồi ghi JSON dashboard + SQLite handoff. Dữ liệu mutable SEC/Yahoo/Nasdaq/Alpha Vantage có cache tối đa 55 phút; filing archive bất biến dùng cache lâu dài. SEC requests được giãn cách tối thiểu 0,2 giây (tối đa 5 requests/giây); yfinance lấy tuần tự, cách nhau ít nhất 1 giây. Mỗi fact XBRL được đối chiếu theo accession, kỳ, đơn vị và giá trị trước khi đưa vào số liệu đã xác minh. Raw artifact được archive theo `run_id`; `manifest.json` gắn `run_id` với handoff và sync log.
+
+Sau khi tạo JSON dashboard, pipeline tự xuất mỗi mảng bản ghi thành một CSV trong `DataProcessedView/` (ví dụ `financials__quarters.csv` và `prices/GOOGL__rows.csv`). Các object lồng nhau được trải thành cột có tên phân cấp như `metrics.revenue`; mỗi lần chạy cập nhật CSV và dọn các CSV sinh ra trước đó mà không còn nguồn tương ứng. CSV dùng UTF-8 có BOM để Excel hiển thị tiếng Việt đúng hơn; JSON dashboard vẫn được giữ nguyên.
 
 Có thể đặt User-Agent riêng cho SEC (khuyến nghị khi chạy thường xuyên):
 

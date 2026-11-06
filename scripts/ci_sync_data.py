@@ -55,6 +55,7 @@ COMMIT_PATHS = [
     "data/verified/quality_report.json",
     "data/verified/ai_events_report.json",
     "web/public/data",
+    "DataProcessedView",
     "docs/evidence",
     ".github/aicor_fingerprint",
     ".github/aicor_last_commit",
@@ -63,7 +64,7 @@ COMMIT_PATHS = [
 
 def _normalized_csv_digest(path: Path) -> str:
     rows: list[str] = []
-    with path.open("r", encoding="utf-8", newline="") as handle:
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
         for row in reader:
             clean = {key: value for key, value in row.items() if key not in VOLATILE_COLUMNS}
@@ -101,6 +102,11 @@ def compute_fingerprint() -> str:
             digest.update(f"csv:{relative}:missing\n".encode("utf-8"))
             continue
         digest.update(f"csv:{relative}:{_normalized_csv_digest(path)}\n".encode("utf-8"))
+    processed_views = ROOT / "DataProcessedView"
+    if processed_views.exists():
+        for path in sorted(processed_views.rglob("*.csv")):
+            relative = path.relative_to(ROOT).as_posix()
+            digest.update(f"csv:{relative}:{_normalized_csv_digest(path)}\n".encode("utf-8"))
     for path in _iter_code_files():
         relative = path.relative_to(ROOT).as_posix()
         digest.update(f"code:{relative}:{_file_digest(path)}\n".encode("utf-8"))

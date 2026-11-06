@@ -1,0 +1,6 @@
+﻿id,name,url,status,reason
+R1,Stooq CSV,https://stooq.com/q/d/l/?s=msft.us&i=d,rejected_for_server_side_crawler,HTTP 200 but a 796-byte JavaScript challenge; no CSV rows.
+R2,Guessed Microsoft Source OpenAI announcement URL,https://news.microsoft.com/2023/01/23/microsoft-and-openai-announce-multiyear-multibillion-dollar-investment/,broken,"HTTP 404; title ""Page not found - Source""."
+R3,Microsoft IR earnings page,https://www.microsoft.com/en-us/investor/earnings,soft404_or_invalid_content,"HTTP 200 but title ""Default"" and no specific financial values in initial HTML."
+R4,Alpha Vantage demo key,https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=MSFT&outputsize=compact&apikey=demo,insufficient_no_real_key,HTTP 200 but only a demo-key notice; no MSFT time series.
+R5,Google Gemini blog post,https://blog.google/innovation-and-ai/technology/ai/google-gemini-ai/,resolved_allowlist_approved,Page is valid; blog.google was approved for CR-13 on 2026-11-05 and is now used only as AI event evidence.
