@@ -8,13 +8,14 @@ This script does two things:
    SQLite/CSV handoff artifacts.
 
 Usage:
-    python scripts/acceptance_check.py
+    python -m scripts.acceptance_check
 """
 
 from __future__ import annotations
 
 import hashlib
 import json
+import os
 import platform
 import random
 import re

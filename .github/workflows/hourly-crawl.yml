@@ -73,7 +73,7 @@ jobs:
       - name: Acceptance check
         run: |
           for attempt in 1 2 3; do
-            if python scripts/acceptance_check.py; then
+            if python -m scripts.acceptance_check; then
               exit 0
             fi
             echo "acceptance attempt ${attempt} failed; retrying in 30s" >&2
