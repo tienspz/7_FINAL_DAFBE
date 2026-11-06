@@ -89,7 +89,7 @@ Workflow [`.github/workflows/hourly-crawl.yml`](.github/workflows/hourly-crawl.y
 - `permissions: contents: write` để bot có thể commit dữ liệu.
 - Bot chỉ commit khi **fingerprint ngữ nghĩa** thay đổi và tối đa **một lần mỗi ngày UTC**; commit có `[skip ci]` và workflow bỏ qua thay đổi dữ liệu để tránh vòng lặp.
 - Có thể bắt buộc commit khi chạy tay bằng input `force_commit`.
-- Secret: `SEC_USER_AGENT` phải có tên dự án và email liên hệ thật; workflow dừng rõ ràng nếu chưa cấu hình bằng GitHub Secret. Pipeline không dùng địa chỉ liên hệ giả. `ALPHAVANTAGE_API_KEY` là tùy chọn; khi thiếu key, adjusted-close check được ghi `unverified`.
+- Secret: `SEC_USER_AGENT` phải có tên dự án và email liên hệ thật; workflow dừng rõ ràng nếu chưa cấu hình bằng GitHub Secret. Tạo **repository secret** tại **Settings → Secrets and variables → Actions → New repository secret**, đặt tên chính xác `SEC_USER_AGENT` và giá trị theo dạng `AICOR research project (contact: email-liên-hệ-thật)`. Không commit giá trị này vào mã nguồn; pipeline không dùng địa chỉ liên hệ giả. Sau khi thêm secret, push tiếp theo hoặc chạy thủ công **Actions → Hourly data crawl → Run workflow** sẽ kích hoạt lại crawler. `ALPHAVANTAGE_API_KEY` là tùy chọn; khi thiếu key, adjusted-close check được ghi `unverified`.
 - `data/verified/sync_log.jsonl` lưu thời gian, nguồn, trạng thái, số dòng và thông tin lỗi; acceptance kiểm tra sync log và checksum raw archive theo `run_id`.
 
 ## Nghiệm thu
