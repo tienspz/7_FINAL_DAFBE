@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import date
+import hashlib
 from typing import Any
 
 from pipeline.config import Settings
@@ -53,8 +54,9 @@ def make_fact(
     unit: str = "USD",
     fact_id: str | None = None,
 ) -> dict[str, Any]:
+    identifier = fact_id or f"{ticker}-{metric}-{start}-{end}"
     return {
-        "fact_id": fact_id or f"{ticker}-{metric}-{start}-{end}",
+        "fact_id": identifier,
         "ticker": ticker,
         "metric": metric,
         "xbrl_tag": tag,
@@ -69,6 +71,9 @@ def make_fact(
         "accession_number": accession,
         "form": form,
         "source_url": f"https://www.sec.gov/Archives/edgar/data/1/{accession}/",
+        "evidence_url": f"https://data.sec.gov/api/xbrl/companyconcept/CIK0000000001/us-gaap/{tag}.json",
+        "fetched_at": "2025-01-02T00:00:00Z",
+        "response_sha256": hashlib.sha256(identifier.encode("utf-8")).hexdigest(),
         "is_original": is_original,
         "verified": verified,
     }

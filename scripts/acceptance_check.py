@@ -62,6 +62,13 @@ def sha256_bytes(content: bytes) -> str:
     return hashlib.sha256(content).hexdigest()
 
 
+def manifest_checksum(path: Path) -> str:
+    content = path.read_bytes()
+    if path.suffix.lower() == ".json":
+        content = content.replace(b"\r\n", b"\n")
+    return "sha256:" + sha256_bytes(content)
+
+
 def http_get(url: str) -> tuple[requests.Response, str, str]:
     global LAST_REQUEST
     SESSION.headers["User-Agent"] = sec_user_agent()
@@ -380,7 +387,7 @@ def contract_checks() -> list[dict[str, Any]]:
         if not path.exists():
             checksum_failures.append(f"{name}:missing")
             continue
-        actual = "sha256:" + sha256_bytes(path.read_bytes())
+        actual = manifest_checksum(path)
         if actual != expected:
             checksum_failures.append(f"{name}:mismatch")
     checks.append(check("manifest_checksums", not checksum_failures, ", ".join(checksum_failures) if checksum_failures else f"{len(manifest.get('checksums', {}))} files"))

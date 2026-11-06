@@ -39,6 +39,18 @@ def test_msft_fiscal_q4_is_annual_minus_fiscal_q1_q3():
     assert rows[0]["fiscal_year"] == 2026
     assert rows[0]["fiscal_quarter"] == "Q4"
     assert "residual 0.0000%" in revenue.reason
+    assert revenue.fact_id == "MSFT-revenue-2025-07-01-2026-06-30"
+    assert revenue.response_sha256
+    assert revenue.evidence_url.endswith("/Revenue.json")
+    assert revenue.fetched_at == "2025-01-02T00:00:00Z"
+    assert [component["role"] for component in revenue.components] == [
+        "annual",
+        "fiscal_q1",
+        "fiscal_q2",
+        "fiscal_q3",
+    ]
+    assert all(component["response_sha256"] for component in revenue.components)
+    assert revenue.to_dict()["derivation_method"] == "FY - Q1 - Q2 - Q3"
 
 
 def test_googl_ytd_q2_and_q3_are_converted_to_quarters():
@@ -62,10 +74,19 @@ def test_googl_ytd_q2_and_q3_are_converted_to_quarters():
     assert q2.derived is True
     assert q2.quality_flag == "low"
     assert "YTD Q2 minus Q1" == q2.reason
+    assert q2.to_dict()["derivation_method"] == "YTD Q2 - Q1"
+    assert [component["role"] for component in q2.components] == ["ytd", "prior_quarter"]
+    assert all(component["source_url"] and component["evidence_url"] for component in q2.components)
     assert q3.value == 140.0
     assert q3.derived is True
     assert q3.quality_flag == "low"
     assert "YTD Q3 minus Q1 and Q2" == q3.reason
+    assert q3.to_dict()["derivation_method"] == "YTD Q3 - Q1 - Q2"
+    assert [component["role"] for component in q3.components] == [
+        "ytd",
+        "fiscal_q1",
+        "fiscal_q2",
+    ]
 
 
 def test_revenue_tag_switch_is_flagged_at_transition():
@@ -125,6 +146,10 @@ def test_total_debt_sums_components_and_falls_back_to_total_tag():
     summed = build_company_quarters(ticker="GOOGL", facts=summed_facts, settings=settings, quarters=[quarter])
     assert summed[0]["metrics"]["total_debt"].value == 500.0
     assert summed[0]["metrics"]["total_debt"].quality_flag == "ok"
+    assert [component["role"] for component in summed[0]["metrics"]["total_debt"].components] == [
+        "component_1",
+        "component_2",
+    ]
 
     fallback_facts = [
         make_fact(ticker="GOOGL", metric="total_debt", tag="LongTermDebt", start="", end="2025-03-31", period_type="instant", value=450.0),

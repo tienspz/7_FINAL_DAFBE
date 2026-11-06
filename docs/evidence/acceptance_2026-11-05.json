@@ -1,11 +1,11 @@
 {
   "schema_version": "1.0",
-  "checked_at": "2026-11-06T06:51:05Z",
-  "snapshot_version": "v20261105.4",
+  "checked_at": "2026-11-06T07:54:03Z",
+  "snapshot_version": "v20261105.5",
   "data_as_of": "2026-11-05",
   "environment": {
-    "python": "3.14.10",
-    "platform": "Linux-7.0.0-1019-azure-x86_64-with-glibc2.43"
+    "python": "3.14.7",
+    "platform": "Windows-11-10.0.26300-SP0"
   },
   "source_checks": {
     "total": 10,
@@ -36,7 +36,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "e3b7b0612986c02c0d846615a6675766013426a859e2d1fddb0d038042bf94c9",
-      "fetched_at": "2026-11-06T06:51:02Z",
+      "fetched_at": "2026-11-06T07:53:58Z",
       "id": "V01"
     },
     {
@@ -59,7 +59,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "3375e0a9a05ffe410d9d290b4b120e43ff93a87e013f6f27ec5052aa92779067",
-      "fetched_at": "2026-11-06T06:51:02Z",
+      "fetched_at": "2026-11-06T07:53:58Z",
       "id": "V02"
     },
     {
@@ -84,7 +84,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "a795727f74e61e9190e09e5a4333cee37d5b2db6c4933d8ce883b0f852e7009f",
-      "fetched_at": "2026-11-06T06:51:03Z",
+      "fetched_at": "2026-11-06T07:53:59Z",
       "id": "V03"
     },
     {
@@ -107,7 +107,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "baa3f1b8c8cb4c85e54a7990a70c0feeb834017658ca18525bca9768bffc7b8c",
-      "fetched_at": "2026-11-06T06:51:03Z",
+      "fetched_at": "2026-11-06T07:53:59Z",
       "id": "V04"
     },
     {
@@ -130,7 +130,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "796226022b0fc9c021465047021622fa00d33f3de1793484aa12474a0eef2cfb",
-      "fetched_at": "2026-11-06T06:51:03Z",
+      "fetched_at": "2026-11-06T07:54:00Z",
       "id": "V05"
     },
     {
@@ -155,7 +155,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "b22fef8d429677fc2c586ad00fc6cdca4b825dea1e1ab13991adbe881e31b7a3",
-      "fetched_at": "2026-11-06T06:51:03Z",
+      "fetched_at": "2026-11-06T07:54:00Z",
       "id": "V06"
     },
     {
@@ -178,7 +178,7 @@
       "source_value_display_unit": 15484.0,
       "http_status": 200,
       "response_sha256": "12c4dc9e8b1f6859dba65b3d0c4610dfdad224f249f2fd152505380b87bac761",
-      "fetched_at": "2026-11-06T06:51:04Z",
+      "fetched_at": "2026-11-06T07:54:01Z",
       "id": "V07"
     },
     {
@@ -201,7 +201,7 @@
       "source_value_display_unit": 285.0,
       "http_status": 200,
       "response_sha256": "6e24f5821676840346190a0f7e3bd67406ccd215b45b80764728dde85a8acc3d",
-      "fetched_at": "2026-11-06T06:51:04Z",
+      "fetched_at": "2026-11-06T07:54:02Z",
       "id": "V08"
     },
     {
@@ -219,8 +219,8 @@
       "difference": 0.0,
       "relative_difference": 0.0,
       "http_status": 200,
-      "response_sha256": "2655cf965c3a16555f674b017a0e5579288ec8262be759e1fa676bfa34108933",
-      "fetched_at": "2026-11-06T06:51:04Z",
+      "response_sha256": "ff12462a200009e68c715ec9acba94fcec741b797df5b8d825e6787db68dbf48",
+      "fetched_at": "2026-11-06T07:54:03Z",
       "id": "V09"
     },
     {
@@ -238,8 +238,8 @@
       "difference": 0.0,
       "relative_difference": 0.0,
       "http_status": 200,
-      "response_sha256": "c565ffbea4af122903e39bf26146b30786d89c16bd507e70146c1e86b51e87db",
-      "fetched_at": "2026-11-06T06:51:05Z",
+      "response_sha256": "6af5b39ed349e9f880b7c14ec0833a82d86a175dd63468af4c0e5f4ccb8d14ad",
+      "fetched_at": "2026-11-06T07:54:03Z",
       "id": "V10"
     }
   ],
@@ -258,7 +258,7 @@
     {
       "name": "json_metadata",
       "result": "ok",
-      "detail": "snapshot=v20261105.4"
+      "detail": "snapshot=v20261105.5"
     },
     {
       "name": "manifest_checksums",
@@ -383,12 +383,12 @@
     {
       "name": "run_audit_trail",
       "result": "ok",
-      "detail": "run_id=run_20261106T064930Z_272f93cd"
+      "detail": "run_id=run_20261106T075305Z_10dd44eb"
     },
     {
       "name": "response_cache_present",
       "result": "ok",
-      "detail": "/home/runner/work/7_FINAL_DAFBE/7_FINAL_DAFBE/data/raw/_cache/_index.jsonl"
+      "detail": "D:\\Learning\\DangHoc\\DAFBE\\7_FINAL\\data\\raw\\_cache\\_index.jsonl"
     },
     {
       "name": "googl_split_2022_07_18",
@@ -403,7 +403,7 @@
     {
       "name": "web_data_size_under_5mb",
       "result": "ok",
-      "detail": "2512310 bytes"
+      "detail": "3195853 bytes"
     },
     {
       "name": "no_future_market_data",

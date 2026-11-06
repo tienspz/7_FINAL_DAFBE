@@ -12,8 +12,10 @@ import argparse
 import csv
 import io
 import json
+import os
 import sqlite3
 import sys
+import tempfile
 import uuid
 from datetime import date, datetime, timedelta
 from pathlib import Path
@@ -94,7 +96,12 @@ def write_csv(path: Path, rows: list[dict[str, Any]], fieldnames: list[str] | No
                 if key not in names:
                     names.append(key)
     buffer = io.StringIO(newline="")
-    writer = csv.DictWriter(buffer, fieldnames=names, extrasaction="ignore")
+    writer = csv.DictWriter(
+        buffer,
+        fieldnames=names,
+        extrasaction="ignore",
+        lineterminator="\n",
+    )
     writer.writeheader()
     writer.writerows(rows)
     atomic_write_text(path, buffer.getvalue())
@@ -151,19 +158,32 @@ def build_sqlite(
     prices: pd.DataFrame,
 ) -> None:
     db_path.parent.mkdir(parents=True, exist_ok=True)
-    if db_path.exists():
-        db_path.unlink()
-    with sqlite3.connect(db_path) as connection:
-        if facts_rows:
-            pd.DataFrame(facts_rows).to_sql("facts", connection, index=False)
-        if filing_rows_data:
-            pd.DataFrame(filing_rows_data).to_sql("filings", connection, index=False)
-        if segment_rows:
-            pd.DataFrame(segment_rows).to_sql("segments", connection, index=False)
-        if financial_rows:
-            pd.DataFrame(financial_rows).to_sql("company_financials", connection, index=False)
-        if not prices.empty:
-            prices.to_sql("prices", connection, index=False)
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{db_path.name}.",
+        suffix=".tmp",
+        dir=db_path.parent,
+    )
+    os.close(descriptor)
+    temporary_path = Path(temporary_name)
+    try:
+        connection = sqlite3.connect(temporary_path)
+        try:
+            with connection:
+                if facts_rows:
+                    pd.DataFrame(facts_rows).to_sql("facts", connection, index=False)
+                if filing_rows_data:
+                    pd.DataFrame(filing_rows_data).to_sql("filings", connection, index=False)
+                if segment_rows:
+                    pd.DataFrame(segment_rows).to_sql("segments", connection, index=False)
+                if financial_rows:
+                    pd.DataFrame(financial_rows).to_sql("company_financials", connection, index=False)
+                if not prices.empty:
+                    prices.to_sql("prices", connection, index=False)
+        finally:
+            connection.close()
+        os.replace(temporary_path, db_path)
+    finally:
+        temporary_path.unlink(missing_ok=True)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -503,8 +523,15 @@ def main(argv: list[str] | None = None) -> int:
                 flat[metric_name] = to_million(metric.value) if metric.unit == "USD" else metric.value
                 flat[f"{metric_name}_quality"] = metric.quality_flag
                 flat[f"{metric_name}_source_url"] = metric.source_url
+                flat[f"{metric_name}_evidence_url"] = metric.evidence_url
                 flat[f"{metric_name}_accession_number"] = metric.accession_number
                 flat[f"{metric_name}_xbrl_tag"] = metric.xbrl_tag
+                flat[f"{metric_name}_fact_id"] = metric.fact_id
+                flat[f"{metric_name}_response_sha256"] = metric.response_sha256
+                flat[f"{metric_name}_fetched_at"] = metric.fetched_at
+                flat[f"{metric_name}_verified"] = metric.verified
+                flat[f"{metric_name}_derived"] = metric.derived
+                flat[f"{metric_name}_derivation_method"] = metric.derivation_method
                 if metric.reported_value is not None:
                     flat[f"{metric_name}_reported_value"] = (
                         to_million(metric.reported_value) if metric.unit == "USD" else metric.reported_value

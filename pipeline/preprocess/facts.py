@@ -15,7 +15,11 @@ from pipeline.util import fiscal_info, parse_date, quarter_end, quarter_key, saf
 class MetricValue:
     value: float | None
     unit: str
+    fact_id: str | None = None
     source_url: str | None = None
+    evidence_url: str | None = None
+    response_sha256: str | None = None
+    fetched_at: str | None = None
     accession_number: str | None = None
     xbrl_tag: str | None = None
     form: str | None = None
@@ -25,6 +29,7 @@ class MetricValue:
     verified: bool = False
     quality_flag: str = "missing"
     reason: str = ""
+    derivation_method: str | None = None
     tag_switch: bool = False
     reported_value: float | None = None
     split_adjustment: float | None = None
@@ -34,7 +39,11 @@ class MetricValue:
         return {
             "value": to_million(self.value) if self.unit == "USD" else self.value,
             "unit": "million USD" if self.unit == "USD" else self.unit,
+            "fact_id": self.fact_id,
             "source_url": self.source_url,
+            "evidence_url": self.evidence_url,
+            "response_sha256": self.response_sha256,
+            "fetched_at": self.fetched_at,
             "accession_number": self.accession_number,
             "xbrl_tag": self.xbrl_tag,
             "form": self.form,
@@ -44,11 +53,42 @@ class MetricValue:
             "verified": self.verified,
             "quality_flag": self.quality_flag,
             "reason": self.reason,
+            "derivation_method": self.derivation_method,
             "tag_switch": self.tag_switch,
             "reported_value": to_million(self.reported_value) if self.unit == "USD" else self.reported_value,
             "split_adjustment": self.split_adjustment,
             "components": self.components,
         }
+
+
+def _component_reference(metric: MetricValue, role: str) -> dict[str, Any]:
+    return {
+        "role": role,
+        "fact_id": metric.fact_id,
+        "value": to_million(metric.value) if metric.unit == "USD" else metric.value,
+        "unit": "million USD" if metric.unit == "USD" else metric.unit,
+        "source_url": metric.source_url,
+        "evidence_url": metric.evidence_url,
+        "response_sha256": metric.response_sha256,
+        "fetched_at": metric.fetched_at,
+        "accession_number": metric.accession_number,
+        "xbrl_tag": metric.xbrl_tag,
+        "form": metric.form,
+        "filed_date": metric.filed_date,
+        "period_end": metric.period_end,
+        "verified": metric.verified,
+        "derived": metric.derived,
+        "quality_flag": metric.quality_flag,
+        "reason": metric.reason,
+        "derivation_method": metric.derivation_method,
+        "reported_value": (
+            to_million(metric.reported_value)
+            if metric.unit == "USD"
+            else metric.reported_value
+        ),
+        "split_adjustment": metric.split_adjustment,
+        "components": metric.components,
+    }
 
 
 def _select_original(subset: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -102,7 +142,11 @@ def _fact_metadata(fact: dict[str, Any], *, derived: bool, quality: str, reason:
     return MetricValue(
         value=safe_float(fact.get("value_usd")) if verified else None,
         unit=fact.get("unit", "USD"),
+        fact_id=fact.get("fact_id"),
         source_url=fact.get("source_url"),
+        evidence_url=fact.get("evidence_url"),
+        response_sha256=fact.get("response_sha256"),
+        fetched_at=fact.get("fetched_at"),
         accession_number=fact.get("accession_number"),
         xbrl_tag=fact.get("xbrl_tag"),
         form=fact.get("form"),
@@ -155,6 +199,13 @@ def _flow_value(
         ytd = _ytd_quarter(facts, qkey)
         if ytd is not None:
             memo[qkey] = adjusted(_fact_metadata(ytd, derived=False, quality="ok", reason="Q1 YTD equals the quarter"))
+            memo[qkey].derivation_method = "Q1 YTD equals Q1"
+            memo[qkey].components = [
+                _component_reference(
+                    _fact_metadata(ytd, derived=False, quality="ok", reason=""),
+                    "ytd",
+                )
+            ]
             return memo[qkey]
         memo[qkey] = _missing("USD", "no Q1 fact")
         return memo[qkey]
@@ -173,6 +224,14 @@ def _flow_value(
                 value = safe_float(ytd.get("value_usd")) - q1.value
                 memo[qkey] = _fact_metadata(ytd, derived=True, quality="low", reason="YTD Q2 minus Q1")
                 memo[qkey].value = value
+                memo[qkey].derivation_method = "YTD Q2 - Q1"
+                memo[qkey].components = [
+                    _component_reference(
+                        _fact_metadata(ytd, derived=False, quality="ok", reason=""),
+                        "ytd",
+                    ),
+                    _component_reference(q1, "prior_quarter"),
+                ]
                 memo[qkey] = adjusted(memo[qkey])
             return memo[qkey]
         prev2 = _previous_quarter(prev1)
@@ -183,6 +242,15 @@ def _flow_value(
             value = safe_float(ytd.get("value_usd")) - q1.value - q2.value
             memo[qkey] = _fact_metadata(ytd, derived=True, quality="low", reason="YTD Q3 minus Q1 and Q2")
             memo[qkey].value = value
+            memo[qkey].derivation_method = "YTD Q3 - Q1 - Q2"
+            memo[qkey].components = [
+                _component_reference(
+                    _fact_metadata(ytd, derived=False, quality="ok", reason=""),
+                    "ytd",
+                ),
+                _component_reference(q1, "fiscal_q1"),
+                _component_reference(q2, "fiscal_q2"),
+            ]
             memo[qkey] = adjusted(memo[qkey])
         return memo[qkey]
 
@@ -217,12 +285,17 @@ def _flow_value(
         reason=f"Q4 = FY annual - Q1..Q3 (residual {residual:.4%})",
     )
     memo[qkey].value = derived_value
-    memo[qkey] = adjusted(memo[qkey])
+    memo[qkey].derivation_method = "FY - Q1 - Q2 - Q3"
     memo[qkey].components = [
-        {"fact_id": q1.xbrl_tag, "value": q1.value},
-        {"fact_id": q2.xbrl_tag, "value": q2.value},
-        {"fact_id": q3.xbrl_tag, "value": q3.value},
+        _component_reference(
+            _fact_metadata(annual, derived=False, quality="ok", reason=""),
+            "annual",
+        ),
+        _component_reference(q1, "fiscal_q1"),
+        _component_reference(q2, "fiscal_q2"),
+        _component_reference(q3, "fiscal_q3"),
     ]
+    memo[qkey] = adjusted(memo[qkey])
     return memo[qkey]
 
 
@@ -260,7 +333,11 @@ def _sum_values(values: list[MetricValue], *, unit: str = "USD") -> MetricValue 
     return MetricValue(
         value=total,
         unit=unit,
+        fact_id=None,
         source_url=first.source_url,
+        evidence_url=first.evidence_url,
+        response_sha256=first.response_sha256,
+        fetched_at=first.fetched_at,
         accession_number=first.accession_number,
         xbrl_tag="+".join(filter(None, [value.xbrl_tag for value in values])),
         form=first.form,
@@ -270,7 +347,11 @@ def _sum_values(values: list[MetricValue], *, unit: str = "USD") -> MetricValue 
         verified=all(value.verified for value in values),
         quality_flag="low" if any(value.quality_flag == "low" for value in values) else "ok",
         reason="sum of components",
-        components=[value.to_dict() for value in values],
+        derivation_method="sum of component values",
+        components=[
+            _component_reference(value, f"component_{index}")
+            for index, value in enumerate(values, start=1)
+        ],
     )
 
 

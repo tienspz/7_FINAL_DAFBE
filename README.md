@@ -29,7 +29,7 @@ pipeline/
   http.py               CachedHttpClient + enforce allowlist CR-13
   sync.py               Sync log theo nguồn + raw archive bất biến theo run
 scripts/
-  acceptance_check.py   10 nguồn trực tiếp + 31 contract dashboard
+  acceptance_check.py   10 nguồn trực tiếp + 32 contract dashboard
   ci_sync_data.py       Fingerprint ngữ nghĩa và commit dữ liệu có kiểm soát
 tests/                  Unit/regression tests
 data/
@@ -42,7 +42,7 @@ docs/                   Kế hoạch và bằng chứng nghiệm thu
 .github/workflows/      Crawl tự động hằng giờ
 ```
 
-Các thư mục sinh tự động như `data/raw/_cache`, `data/raw/runs`, `data/db`, `data/snapshots`, CSV giá theo ngày và `data/verified/prices_processed.csv` không được commit. Mỗi run lưu bản raw bất biến trong `data/raw/runs/<run_id>/` để audit tại môi trường chạy; `sync_log.jsonl` được giữ trong các commit dữ liệu định kỳ.
+Các thư mục sinh tự động như `data/raw/_cache`, `data/raw/runs`, `data/db`, `data/snapshots`, CSV giá theo ngày và `data/verified/prices_processed.csv` không được commit. Với GitHub Actions, mỗi crawl thành công upload `data/raw/runs/<run_id>/` thành artifact `aicor-raw-<run_id>` giữ trong 7 ngày; crawl local giữ archive tại môi trường chạy. `sync_log.jsonl` được giữ trong các commit dữ liệu định kỳ.
 
 ## Chạy local
 
@@ -52,12 +52,14 @@ Yêu cầu Python 3.14 (hoặc phiên bản tương thích) và Git.
 python -m pip install -r requirements.txt
 python -m pytest -q
 python -m pipeline.run --mode full
-python scripts/acceptance_check.py
+python -m scripts.acceptance_check
 ```
 
 `python -m pipeline.run --mode full` crawl raw rồi preprocess trong **cùng một lần chạy**: SEC filings/facts/segments, giá yfinance, close Nasdaq, adjusted close có điều kiện, sự kiện AI, reconcile, quality report, rồi ghi JSON dashboard + SQLite handoff. Dữ liệu mutable SEC/Yahoo/Nasdaq/Alpha Vantage có cache tối đa 55 phút; filing archive bất biến dùng cache lâu dài. SEC requests được giãn cách tối thiểu 0,2 giây (tối đa 5 requests/giây); yfinance lấy tuần tự, cách nhau ít nhất 1 giây. Mỗi fact XBRL được đối chiếu theo accession, kỳ, đơn vị và giá trị trước khi đưa vào số liệu đã xác minh. Raw artifact được archive theo `run_id`; `manifest.json` gắn `run_id` với handoff và sync log.
 
 Sau khi tạo JSON dashboard, pipeline tự xuất mỗi mảng bản ghi thành một CSV trong `DataProcessedView/` (ví dụ `financials__quarters.csv` và `prices/GOOGL__rows.csv`). Các object lồng nhau được trải thành cột có tên phân cấp như `metrics.revenue`; mỗi lần chạy cập nhật CSV và dọn các CSV sinh ra trước đó mà không còn nguồn tương ứng. CSV dùng UTF-8 có BOM để Excel hiển thị tiếng Việt đúng hơn; JSON dashboard vẫn được giữ nguyên.
+
+Mỗi financial metric trong `financials.json` và `quality_report.json` mang theo fact ID (hoặc danh sách component fact ID với metric tổng hợp), source/evidence URL, response SHA-256, thời điểm fetch, accession và trạng thái xác minh. Metric suy ra từ YTD/Q4 hoặc phép cộng component cũng ghi rõ phương pháp và các đầu vào để truy vết xuyên suốt preprocess. Wide CSV chứa cùng provenance cấp metric. SQLite được ghi vào file staging và chỉ thay thế handoff trước đó sau khi database mới ghi thành công; lỗi ghi không làm mất database đang dùng.
 
 Có thể đặt User-Agent riêng cho SEC (khuyến nghị khi chạy thường xuyên):
 
@@ -94,13 +96,13 @@ Workflow [`.github/workflows/hourly-crawl.yml`](.github/workflows/hourly-crawl.y
 
 ## Nghiệm thu
 
-Lần chạy gần nhất (snapshot `v20261105.3`, `data_as_of=2026-11-05`):
+Lần chạy gần nhất (snapshot `v20261105.5`, `data_as_of=2026-11-05`, run `run_20261106T075305Z_10dd44eb`):
 
 - **10/10** nguồn trực tiếp khớp; **32/32** contract dashboard pass.
 - **Secondary close**: 30/30 phiên khớp Nasdaq cho cả MSFT, GOOGL, SPY, QQQ; sai lệch lớn nhất 0,0015% (ngưỡng 0,1%).
 - **Adjusted close**: `unverified` khi chưa có key Alpha Vantage thật.
 - **AI events**: 6/6 sự kiện được kiểm chứng từ trang chính thức (3 Google, 3 Microsoft), 0 bị loại.
-- 38/38 quý, 0 missing metric cell, tỷ lệ verified `1.0`.
+- 38/38 quý, 4,427 facts, 48 filings, 5,960 price rows, 461 segment rows; 0 missing metric cell, tỷ lệ verified `1.0`.
 - 2,223/2,223 link và fact checks hợp lệ; 19 reconcile check (12 ok, 3 low, 0 fail, 4 unverified); 78 kết quả BT1–BT5.
 
 Bằng chứng: [`docs/evidence/acceptance_2026-11-05.json`](docs/evidence/acceptance_2026-11-05.json), [`docs/evidence/pending_completion_2026-11-05.json`](docs/evidence/pending_completion_2026-11-05.json). Bằng chứng điều chỉnh EPS GOOGL: [`docs/evidence/googl_eps_split_2026-11-05.json`](docs/evidence/googl_eps_split_2026-11-05.json).

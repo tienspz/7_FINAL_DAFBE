@@ -68,7 +68,11 @@ jobs:
         run: python -m pytest -q
 
       - name: Crawl and rebuild dashboard
-        run: python -m pipeline.run --mode full
+        id: crawl
+        run: |
+          python -m pipeline.run --mode full
+          run_id="$(python -c 'import json; print(json.load(open("web/public/data/manifest.json", encoding="utf-8"))["run_id"])')"
+          echo "run_id=$run_id" >> "$GITHUB_OUTPUT"
 
       - name: Acceptance check
         run: |
@@ -80,6 +84,15 @@ jobs:
             sleep 30
           done
           exit 1
+
+      - name: Preserve raw run archive
+        if: ${{ always() && steps.crawl.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: aicor-raw-${{ steps.crawl.outputs.run_id }}-attempt-${{ github.run_attempt }}
+          path: data/raw/runs/${{ steps.crawl.outputs.run_id }}/
+          retention-days: 7
+          if-no-files-found: error
 
       - name: Detect semantic data change
         id: fingerprint
