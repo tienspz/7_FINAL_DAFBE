@@ -470,6 +470,25 @@ def contract_checks() -> list[dict[str, Any]]:
     checks.append(check("segment_schemes", schemes == {("MSFT", "msft_legacy_3"), ("MSFT", "msft_new_2"), ("GOOGL", "goog_3")}, str(sorted(schemes))))
     msft_new = [row for row in segments if row["ticker"] == "MSFT" and row["segment_scheme"] == "msft_new_2"]
     checks.append(check("msft_segment_break_not_comparable", bool(msft_new) and all(row["comparable"] is False for row in msft_new), f"{len(msft_new)} rows"))
+    intelligent_cloud = [
+        row
+        for row in segments
+        if row["ticker"] == "MSFT"
+        and row["segment_scheme"] == "msft_legacy_3"
+        and row["segment_name"] == "Intelligent Cloud"
+        and row["metric"] == "revenue"
+    ]
+    derived_ic = [row for row in intelligent_cloud if row.get("derived")]
+    checks.append(
+        check(
+            "msft_intelligent_cloud_quarter_coverage",
+            len(intelligent_cloud) == 18
+            and len(derived_ic) >= 5
+            and all(row.get("comparable") is True for row in intelligent_cloud)
+            and all(row.get("annual_value_musd") is not None for row in derived_ic),
+            f"{len(intelligent_cloud)} legacy quarters, {len(derived_ic)} derived from 10-K annual",
+        )
+    )
 
     overview = load_json(DATA_DIR / "overview.json")
     checks.append(check("overview_contract", set(overview.get("kpis", {})) == {"MSFT", "GOOGL"} and overview.get("latest_quarter") == "2026-Q3" and set(overview.get("normalized_prices", {})) == {"MSFT", "GOOGL", "SPY", "QQQ"}, "kpis/normalized/latest_quarter"))
@@ -503,14 +522,118 @@ def contract_checks() -> list[dict[str, Any]]:
     checks.append(check("methodology_contract", methodology_ok, "formulas, sources, limitations"))
 
     tests = load_json(DATA_DIR / "tests.json")
-    codes = {result.get("bt_code") for result in tests.get("results", [])}
-    tests_ok = codes == {"BT1", "BT2", "BT3", "BT4", "BT5"} and len(tests.get("results", [])) == 78 and all(result.get("n") is not None and result.get("p_value") is not None and result.get("decision") for result in tests.get("results", [])) and all(result.get("p_adjusted") is not None for result in tests.get("results", []) if result.get("bt_code") in {"BT4", "BT5"})
-    checks.append(check("bt1_bt5_contract", tests_ok, f"{len(tests.get('results', []))} results, codes={sorted(codes)}"))
+    results = tests.get("results", [])
+    codes = {result.get("bt_code") for result in results}
+    statistical_ok = all(
+        result.get("n") is not None
+        and result.get("decision")
+        and (result.get("p_value") is not None or result.get("decision") == "insufficient_data")
+        for result in results
+    )
+    adf_ok = all(
+        result.get("adf")
+        for result in results
+        if result.get("bt_code") in {"BT3", "BT4", "BT5"}
+    )
+    holm_ok = all(
+        result.get("p_adjusted") is not None
+        for result in results
+        if result.get("bt_code") in {"BT4", "BT5"} and result.get("p_value") is not None
+    )
+    excluded_ok = all("excluded_quarters" in result for result in results)
+    tests_ok = (
+        codes == {"BT1", "BT2", "BT3", "BT4", "BT5"}
+        and len(results) == 79
+        and statistical_ok
+        and adf_ok
+        and holm_ok
+        and excluded_ok
+    )
+    checks.append(
+        check(
+            "bt1_bt5_contract",
+            tests_ok,
+            f"{len(results)} results, codes={sorted(codes)}, adf={adf_ok}, holm={holm_ok}, excluded={excluded_ok}",
+        )
+    )
+    bt2_ok = all(
+        result.get("shapiro_p_value") is not None and result.get("test_used")
+        for result in results
+        if result.get("bt_code") == "BT2" and result.get("decision") != "insufficient_data"
+    )
+    checks.append(check("bt2_normality_rule", bt2_ok, "Shapiro-Wilk p and chosen test reported"))
+    bt1 = [result for result in results if result.get("bt_code") == "BT1"]
+    bt1_ok = (
+        len(bt1) == 2
+        and all(result.get("n", 0) >= 30 for result in bt1)
+        and all(result.get("window_start", "") >= "2022-01-01" for result in bt1)
+        and all(result.get("window_end", "") <= "2026-10-31" for result in bt1)
+    )
+    checks.append(
+        check(
+            "bt1_analysis_window",
+            bt1_ok,
+            "; ".join(
+                f"{result.get('test_name')}: {result.get('window_start')}..{result.get('window_end')} n={result.get('n')}"
+                for result in bt1
+            ),
+        )
+    )
+    modes = tests.get("quality_mode_comparison", [])
+    quality_mode_ok = (
+        tests.get("quality_mode") == "exclude_low"
+        and any(item.get("quality_mode") == "label_low" and item.get("bt_code") == "BT3" for item in modes)
+        and any(item.get("quality_mode") == "label_low" and item.get("bt_code") == "BT4" for item in modes)
+    )
+    checks.append(check("stats_quality_mode_comparison", quality_mode_ok, f"{len(modes)} sensitivity rows"))
+    googl_capex = [
+        result
+        for result in results
+        if result.get("bt_code") == "BT3" and "GOOGL capex_intensity" in result.get("test_name", "")
+    ]
+    googl_capex_ok = bool(googl_capex) and all(
+        "non-stationary after first differencing" in result.get("note", "")
+        or result.get("decision") == "insufficient_data"
+        for result in googl_capex
+    )
+    checks.append(check("googl_capex_warning", googl_capex_ok, "ADF warning and effective n recorded"))
 
     quality = load_json(VERIFIED_DIR / "quality_report.json")
     qsummary = quality.get("summary", {})
-    quality_ok = qsummary.get("quarters_expected_total") == 38 and qsummary.get("quarters_present") == 38 and qsummary.get("missing_metric_cells") == 0 and qsummary.get("verified_ratio") == 1.0 and quality.get("tag_switch") and quality.get("segment_break")
+    quality_ok = qsummary.get("quarters_expected_total") == 38 and qsummary.get("quarters_present") == 38 and qsummary.get("missing_metric_cells") == 0 and qsummary.get("verified_ratio") == 1.0 and quality.get("tag_switch") and quality.get("segment_break") and bool(quality.get("excluded_quarters")) and bool(quality.get("net_income_bridge", {}).get("companies"))
     checks.append(check("quality_contract", quality_ok, json.dumps(qsummary, ensure_ascii=False)))
+    googl_exclusions = [
+        item
+        for item in quality.get("excluded_quarters", [])
+        if item.get("ticker") == "GOOGL"
+        and any(metric.get("metric") in {"capex", "cfo"} for metric in item.get("metrics", []))
+    ]
+    checks.append(
+        check(
+            "excluded_quarters_listed",
+            len(googl_exclusions) >= 10,
+            f"{len(googl_exclusions)} GOOGL quarters with low capex/CFO listed",
+        )
+    )
+    bridge_quarters = {
+        quarter["calendar_key"]: quarter
+        for company in quality.get("net_income_bridge", {}).get("companies", [])
+        if company.get("ticker") == "GOOGL"
+        for quarter in company.get("quarters", [])
+    }
+    bridge_ok = (
+        bridge_quarters.get("2026-Q1", {}).get("one_off_flag") is True
+        and bridge_quarters.get("2026-Q2", {}).get("one_off_flag") is True
+        and bridge_quarters.get("2026-Q1", {}).get("nonoperating_income_musd") is not None
+        and bridge_quarters.get("2026-Q1", {}).get("evidence")
+    )
+    checks.append(
+        check(
+            "googl_net_income_oneoff_bridge",
+            bridge_ok,
+            f"2026-Q1 non-operating share={bridge_quarters.get('2026-Q1', {}).get('nonoperating_share_of_pretax')}",
+        )
+    )
     checks.append(check("tag_switch_recorded", any(item.get("ticker") == "GOOGL" and item.get("calendar_key") == "2025-Q2" for item in quality.get("tag_switch", [])), "GOOGL 2025-Q2"))
     ai_report = load_json(VERIFIED_DIR / "ai_events_report.json")
     verified_events = ai_report.get("events", [])
@@ -523,6 +646,26 @@ def contract_checks() -> list[dict[str, Any]]:
         and all(event.get("checks", {}).get("published_date_matches") for event in verified_events)
     )
     checks.append(check("ai_event_evidence", ai_evidence_ok, f"verified={ai_report.get('verified')}, rejected={ai_report.get('rejected')}"))
+    ai_dates = [event.get("published_date", "") for event in verified_events]
+    ai_coverage_ok = (
+        bool(ai_dates)
+        and max(ai_dates) >= "2026-06-01"
+        and all(
+            any(
+                event.get("ticker") == ticker
+                and event.get("published_date", "") >= "2024-06-01"
+                for event in verified_events
+            )
+            for ticker in ("MSFT", "GOOGL")
+        )
+    )
+    checks.append(
+        check(
+            "ai_event_coverage_2024_06_to_2026_q3",
+            ai_coverage_ok,
+            f"events={len(verified_events)}, range={min(ai_dates) if ai_dates else None}..{max(ai_dates) if ai_dates else None}",
+        )
+    )
 
     link = load_json(VERIFIED_DIR / "link_report.json")
     link_ok = (
@@ -566,6 +709,24 @@ def contract_checks() -> list[dict[str, Any]]:
             item.get("status") == "unverified" for item in adjusted_checks
         )
     checks.append(check("adjusted_close_contract", adjusted_ok, "; ".join(f"{item.get('ticker')}={item.get('status')}" for item in adjusted_checks)))
+    selfchecks = [item for item in rchecks if item.get("check") == "adjusted_close_selfcheck"]
+    selfcheck_ok = (
+        len(selfchecks) == 2
+        and all(item.get("status") == "ok" for item in selfchecks)
+        and all(item.get("max_relative_difference", 1) <= 0.001 for item in selfchecks)
+        and all(item.get("split_continuity_ok") is True for item in selfchecks)
+    )
+    checks.append(
+        check(
+            "adjusted_close_selfcheck_contract",
+            selfcheck_ok,
+            "; ".join(
+                f"{item.get('ticker')}=max {item.get('max_relative_difference'):.6%}"
+                for item in selfchecks
+                if item.get("max_relative_difference") is not None
+            ),
+        )
+    )
     allowlist = yaml.safe_load((ROOT / "config" / "allowlist.yaml").read_text(encoding="utf-8"))
     allowlist_ok = {"api.nasdaq.com", "blog.google", "alphavantage.co"}.issubset(
         set(allowlist.get("allowed_domains", []))
@@ -741,6 +902,7 @@ def main() -> int:
         "environment": {
             "python": platform.python_version(),
             "platform": platform.platform(),
+            "sec_user_agent_configured": bool(os.environ.get("SEC_USER_AGENT", "").strip()),
         },
         "source_checks": source_summary,
         "samples": verified_samples,

@@ -62,6 +62,9 @@ def test_sec_user_agent_requires_project_contact(monkeypatch: pytest.MonkeyPatch
 
 
 def test_sec_user_agent_uses_configured_value(monkeypatch: pytest.MonkeyPatch):
-    monkeypatch.setenv("SEC_USER_AGENT", "AICOR research project (contact: owner@example.org)")
+    # Build the fixture at runtime so no literal address is stored in the repo.
+    contact = "@".join(["owner", "example.org"])
+    value = f"AICOR research project (contact: {contact})"
+    monkeypatch.setenv("SEC_USER_AGENT", value)
 
-    assert sec_user_agent() == "AICOR research project (contact: owner@example.org)"
+    assert sec_user_agent() == value

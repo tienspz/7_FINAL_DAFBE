@@ -29,7 +29,7 @@ pipeline/
   http.py               CachedHttpClient + enforce allowlist CR-13
   sync.py               Sync log theo nguồn + raw archive bất biến theo run
 scripts/
-  acceptance_check.py   10 nguồn trực tiếp + 32 contract dashboard
+  acceptance_check.py   10 nguồn trực tiếp + 41 contract dashboard
   ci_sync_data.py       Fingerprint ngữ nghĩa và commit dữ liệu có kiểm soát
 tests/                  Unit/regression tests
 data/
@@ -65,9 +65,9 @@ Có thể đặt User-Agent riêng cho SEC (khuyến nghị khi chạy thường
 
 ```bash
 # PowerShell
-$env:SEC_USER_AGENT = "AICOR research project (contact: you@example.com)"
+$env:SEC_USER_AGENT = "AICOR research project (contact: <contact-address>)"
 # Bash
-export SEC_USER_AGENT="AICOR research project (contact: you@example.com)"
+export SEC_USER_AGENT="AICOR research project (contact: <contact-address>)"
 ```
 
 Muốn bật đối chiếu adjusted close, đặt key thật (không dùng key demo):
@@ -96,20 +96,23 @@ Workflow [`.github/workflows/hourly-crawl.yml`](.github/workflows/hourly-crawl.y
 
 ## Nghiệm thu
 
-Lần chạy gần nhất (snapshot `v20261105.5`, `data_as_of=2026-11-05`, run `run_20261106T075305Z_10dd44eb`):
+Lần chạy gần nhất (snapshot `v20261106.3`, `data_as_of=2026-11-06`, run `run_20261107T074529Z_aad90025`):
 
-- **10/10** nguồn trực tiếp khớp; **32/32** contract dashboard pass.
-- **Secondary close**: 30/30 phiên khớp Nasdaq cho cả MSFT, GOOGL, SPY, QQQ; sai lệch lớn nhất 0,0015% (ngưỡng 0,1%).
-- **Adjusted close**: `unverified` khi chưa có key Alpha Vantage thật.
-- **AI events**: 6/6 sự kiện được kiểm chứng từ trang chính thức (3 Google, 3 Microsoft), 0 bị loại.
-- 38/38 quý, 4,427 facts, 48 filings, 5,960 price rows, 461 segment rows; 0 missing metric cell, tỷ lệ verified `1.0`.
-- 2,223/2,223 link và fact checks hợp lệ; 19 reconcile check (12 ok, 3 low, 0 fail, 4 unverified); 78 kết quả BT1–BT5.
+- **10/10** nguồn trực tiếp khớp; **41/41** contract dashboard pass.
+- **Secondary close**: 30/30 phiên ngẫu nhiên (seed `20261104`) khớp Nasdaq cho MSFT, GOOGL, SPY, QQQ; sai lệch tương đối lớn nhất 5,8e-08 (0,0000058%).
+- **Adjusted close**: `unverified` khi chưa có key Alpha Vantage thật; tự kiểm close + cổ tức + split đạt sai lệch tương đối tối đa 1,29e-04 (MSFT) và 6,16e-05 (GOOGL).
+- **AI events**: 18/18 sự kiện được kiểm chứng tự động (10 Google, 8 Microsoft), 0 bị loại; đây là kiểm tra quote/ngày/hash tự động, không phải review biên tập.
+- 38/38 quý, 4.677 facts, 48 filings, 5.964 price rows, 461 segment rows; 0 missing metric cell, tỷ lệ verified `1.0`; 16 nhóm quý bị loại ở chế độ A.
+- 2.351/2.351 link và fact checks hợp lệ; 21 reconcile check (14 ok, 3 low, 0 fail, 4 unverified); 79 kết quả BT1–BT5, có ADF, n hiệu dụng, `excluded_quarters` và so sánh chế độ A/B.
 
-Bằng chứng: [`docs/evidence/acceptance_2026-11-05.json`](docs/evidence/acceptance_2026-11-05.json), [`docs/evidence/pending_completion_2026-11-05.json`](docs/evidence/pending_completion_2026-11-05.json). Bằng chứng điều chỉnh EPS GOOGL: [`docs/evidence/googl_eps_split_2026-11-05.json`](docs/evidence/googl_eps_split_2026-11-05.json).
+Bằng chứng: [`docs/evidence/acceptance_2026-11-06.json`](docs/evidence/acceptance_2026-11-06.json), [`docs/evidence/independent_recheck.json`](docs/evidence/independent_recheck.json), [`docs/evidence/quality_evidence.json`](docs/evidence/quality_evidence.json). Bằng chứng điều chỉnh EPS GOOGL: [`docs/evidence/googl_eps_split_2026-11-05.json`](docs/evidence/googl_eps_split_2026-11-05.json).
 
 ## Giới hạn đã biết
 
-- Adjusted close chưa được xác minh chéo vì chưa có Alpha Vantage key thật; demo key bị loại.
+- Adjusted close chỉ được tự kiểm bằng close + cổ tức + split; chưa đối chiếu Alpha Vantage vì không có key.
+- Quý Q2/Q3 của GOOGL suy từ YTD chỉ được kiểm tra bằng identity số học (tổng các thành phần khớp số YTD); 10-Q không công bố số 3 tháng độc lập để đối chiếu.
+- MSFT Intelligent Cloud còn 18/19 quý theo scheme cũ; scheme mới chỉ có 2 điểm (2025-Q3, 2026-Q3) và được đánh dấu `comparable=false`, không ghép với scheme cũ.
+- GOOGL capex_intensity vẫn không dừng sau sai phân bậc 1 (ADF p≈0,99); p-value HAC với n=9 chỉ để tham khảo.
 - Nasdaq API là nguồn không chính thức, không SLA; đối chiếu chỉ 30 phiên gần nhất.
 - Nasdaq chỉ là nguồn đối chiếu cửa sổ gần đây, không thể thay yfinance làm nguồn giá lịch sử đầy đủ khi yfinance lỗi.
 - Sự kiện AI được duyệt bằng kiểm tra bằng chứng tự động (quote + ngày + hash), **không phải review biên tập của con người**; chúng chỉ là bối cảnh, không phải tín hiệu đầu tư.

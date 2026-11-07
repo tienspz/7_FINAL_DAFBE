@@ -8,7 +8,9 @@
     "content_type": "application/json",
     "bytes": 19485,
     "response_sha256": "b22fef8d429677fc2c586ad00fc6cdca4b825dea1e1ab13991adbe881e31b7a3",
-    "user_agent": "AICOR research project (student project; contact: aicor@example.com)"
+    "user_agent": "<redacted: contact address not stored>",
+    "user_agent_redacted": true,
+    "sec_user_agent_configured": true
   },
   "company": {
     "ticker": "GOOGL",
