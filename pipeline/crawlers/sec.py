@@ -288,7 +288,10 @@ def extract_facts(
     parser_version: str = "1.0.0",
 ) -> list[RawFact]:
     cik = CIKS[ticker]
-    metrics = settings.companies[ticker]
+    metrics = dict(settings.companies[ticker])
+    # Diagnostic tags stay out of the dashboard metric contract but are
+    # extracted for the net-income bridge and other evidence checks.
+    metrics.update(settings.concept_map.get("diagnostic_tags", {}).get(ticker, {}))
     gaap = companyfacts.get("facts", {}).get("us-gaap", {})
     out: list[RawFact] = []
     seen: set[tuple[Any, ...]] = set()

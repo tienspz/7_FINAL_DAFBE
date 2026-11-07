@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "snapshot_version": "v20261105.5",
-  "generated_at": "2026-11-06T07:53:57Z",
+  "snapshot_version": "v20261106.3",
+  "generated_at": "2026-11-07T07:45:34Z",
   "formulas": {
     "revenue_growth_yoy": "(Revenue_t - Revenue_t-4) / Revenue_t-4",
     "operating_margin": "Operating Income / Revenue",
@@ -213,11 +213,12 @@
     "quarters_present": 38,
     "missing_metric_cells": 0,
     "low_metric_cells": 34,
+    "excluded_quarters": 16,
     "verified_ratio": 1.0
   },
   "link_report_summary": {
-    "total": 2223,
-    "ok": 2223,
+    "total": 2351,
+    "ok": 2351,
     "broken": 0,
     "blocked": 0,
     "soft404": 0,
@@ -225,8 +226,8 @@
     "pending": 0
   },
   "reconcile_summary": {
-    "total": 19,
-    "ok": 12,
+    "total": 21,
+    "ok": 14,
     "low": 3,
     "fail": 0,
     "pending": 0,
@@ -236,9 +237,14 @@
     "yfinance is an unofficial source; version and output format must be pinned.",
     "Secondary unadjusted close is reconciled against the Nasdaq historical API over the last 30 trading days (api.nasdaq.com approved for CR-13 on 2026-11-05).",
     "Adjusted-close cross-source verification stays unverified until a real Alpha Vantage API key is set in ALPHAVANTAGE_API_KEY; the demo key is never accepted as data.",
-    "MSFT changed its segment structure in 2026-Q3; old and new segments are not directly comparable.",
+    "MSFT changed its segment structure in 2026-Q3; old and new segments are not directly comparable, and the break is marked comparable=false.",
     "GOOGL revenue changed XBRL tags at 2025-Q2; the switch is recorded in tag_switch.",
-    "n is small: 19 quarters; YoY leaves 15 and lag 4 leaves 11.",
+    "n is small: 19 quarters; YoY leaves 15 and lag 4 leaves 11 before quality filtering.",
+    "Every x and y series is ADF-tested; when either is non-stationary at level, both are first-differenced and the effective n is reported.",
+    "The default test quality mode (A, exclude_low) removes quarters whose underlying metrics are not quality_flag=ok and lists them in excluded_quarters; mode B (label_low) is reported as a sensitivity check.",
+    "GOOGL net income in 2026-Q1..Q3 is dominated by non-operating equity-investment gains/losses; BT2 keeps the reported series and adds an exclusion variant with the bridge evidence.",
+    "BT1 uses completed calendar months from 2022-01 to the last complete month; the partial current month and 2026-Q4 are excluded.",
+    "Adjusted close is self-checked by recomputing it from close plus dividends; Alpha Vantage cross-source verification stays unverified without a real key.",
     "AI events are only shown when the official page contains the recorded evidence quote and reports the expected publication date; the review is an automated evidence check, not human editorial review."
   ]
 }

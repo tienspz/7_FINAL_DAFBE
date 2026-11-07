@@ -13,6 +13,20 @@ split_adjustments:
       split_date: "2022-07-18"
       ratio: 20
       adjust_period_end_before: "2022-06-30"
+# Diagnostic tags are extracted into facts.csv for evidence and quality checks
+# only. They never become one of the dashboard's company metrics.
+diagnostic_tags:
+  GOOGL:
+    nonoperating_income:
+      kind: flow
+      unit: USD
+      tags:
+        - tag: NonoperatingIncomeExpense
+    unrealized_equity_gains:
+      kind: flow
+      unit: USD
+      tags:
+        - tag: EquitySecuritiesFvNiUnrealizedGainLoss
 companies:
   MSFT:
     revenue:

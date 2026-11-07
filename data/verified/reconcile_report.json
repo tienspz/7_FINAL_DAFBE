@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "checked_at": "2026-11-06T07:53:57Z",
+  "checked_at": "2026-11-07T07:45:34Z",
   "summary": {
-    "total": 19,
-    "ok": 12,
+    "total": 21,
+    "ok": 14,
     "low": 3,
     "fail": 0,
     "pending": 0,
@@ -101,15 +101,18 @@
     {
       "check": "secondary_close",
       "status": "ok",
-      "detail": "GOOGL: 30/30 Nasdaq closes within 0.100% (max 0.0015%)",
+      "detail": "GOOGL: 30/30 Nasdaq closes within 0.100% (max 0.0000%); seeded random sample from 64 available days",
       "ticker": "GOOGL",
       "compared_days": 30,
+      "available_days": 64,
       "matched_days": 30,
-      "max_relative_difference": 1.4690410100353355e-05,
-      "window_start": "2026-09-25",
+      "max_relative_difference": 4.508737576916009e-08,
+      "window_start": "2026-08-10",
       "window_end": "2026-11-05",
-      "source_url": "https://api.nasdaq.com/api/quote/GOOGL/historical?assetclass=stocks&fromdate=2026-08-07&todate=2026-11-05&limit=120",
-      "response_sha256": "94c7fe55d6e9e18ab6549d0395aa8f99661832028409c3e0af038492fa34c1a8",
+      "sample_method": "seeded_random",
+      "sample_seed": 20261104,
+      "source_url": "https://api.nasdaq.com/api/quote/GOOGL/historical?assetclass=stocks&fromdate=2026-08-08&todate=2026-11-06&limit=120",
+      "response_sha256": "846c8622fa20ac484d1e5c15fe8ed0dc2125abcbe6d457b04ec316a086f49571",
       "artifact": "data/raw/prices/nasdaq/GOOGL.json"
     },
     {
@@ -123,15 +126,18 @@
     {
       "check": "secondary_close",
       "status": "ok",
-      "detail": "MSFT: 30/30 Nasdaq closes within 0.100% (max 0.0000%)",
+      "detail": "MSFT: 30/30 Nasdaq closes within 0.100% (max 0.0000%); seeded random sample from 64 available days",
       "ticker": "MSFT",
       "compared_days": 30,
+      "available_days": 64,
       "matched_days": 30,
-      "max_relative_difference": 5.6609037209987524e-08,
-      "window_start": "2026-09-25",
+      "max_relative_difference": 5.7049977659114056e-08,
+      "window_start": "2026-08-10",
       "window_end": "2026-11-05",
-      "source_url": "https://api.nasdaq.com/api/quote/MSFT/historical?assetclass=stocks&fromdate=2026-08-07&todate=2026-11-05&limit=120",
-      "response_sha256": "82abbfd5949ecad79f1465f18ff970bcc358555e22fc8547499a311582b78475",
+      "sample_method": "seeded_random",
+      "sample_seed": 20261104,
+      "source_url": "https://api.nasdaq.com/api/quote/MSFT/historical?assetclass=stocks&fromdate=2026-08-08&todate=2026-11-06&limit=120",
+      "response_sha256": "27a360595a1a2cec3fd91a8de37a9a339db11f43f2282dc3f04ddd1ec9db7d0c",
       "artifact": "data/raw/prices/nasdaq/MSFT.json"
     },
     {
@@ -145,15 +151,18 @@
     {
       "check": "secondary_close",
       "status": "ok",
-      "detail": "QQQ: 30/30 Nasdaq closes within 0.100% (max 0.0000%)",
+      "detail": "QQQ: 30/30 Nasdaq closes within 0.100% (max 0.0000%); seeded random sample from 64 available days",
       "ticker": "QQQ",
       "compared_days": 30,
+      "available_days": 64,
       "matched_days": 30,
-      "max_relative_difference": 4.27516854822625e-08,
-      "window_start": "2026-09-25",
+      "max_relative_difference": 4.1572362111597285e-08,
+      "window_start": "2026-08-10",
       "window_end": "2026-11-05",
-      "source_url": "https://api.nasdaq.com/api/quote/QQQ/historical?assetclass=etf&fromdate=2026-08-07&todate=2026-11-05&limit=120",
-      "response_sha256": "076c76ad0ea1d43fd570a3cf20680f2e36d230106baae445664f24854477a5d4",
+      "sample_method": "seeded_random",
+      "sample_seed": 20261104,
+      "source_url": "https://api.nasdaq.com/api/quote/QQQ/historical?assetclass=etf&fromdate=2026-08-08&todate=2026-11-06&limit=120",
+      "response_sha256": "1c898f009d9e91a13d1bb6db4cb573ea07cb8072f760f036e419af45b6ac7084",
       "artifact": "data/raw/prices/nasdaq/QQQ.json"
     },
     {
@@ -167,15 +176,18 @@
     {
       "check": "secondary_close",
       "status": "ok",
-      "detail": "SPY: 30/30 Nasdaq closes within 0.100% (max 0.0000%)",
+      "detail": "SPY: 30/30 Nasdaq closes within 0.100% (max 0.0000%); seeded random sample from 64 available days",
       "ticker": "SPY",
       "compared_days": 30,
+      "available_days": 64,
       "matched_days": 30,
       "max_relative_difference": 3.876683828307421e-08,
-      "window_start": "2026-09-25",
+      "window_start": "2026-08-10",
       "window_end": "2026-11-05",
-      "source_url": "https://api.nasdaq.com/api/quote/SPY/historical?assetclass=etf&fromdate=2026-08-07&todate=2026-11-05&limit=120",
-      "response_sha256": "bd2f63e8dcc9a933c1a13615b5fb83fc21d3d64eafe20254a0b8dbc729a3f954",
+      "sample_method": "seeded_random",
+      "sample_seed": 20261104,
+      "source_url": "https://api.nasdaq.com/api/quote/SPY/historical?assetclass=etf&fromdate=2026-08-08&todate=2026-11-06&limit=120",
+      "response_sha256": "cd9990afe2283d293e40e1d072e63d4843f4627af455fb25e219edd365184767",
       "artifact": "data/raw/prices/nasdaq/SPY.json"
     },
     {
@@ -185,6 +197,37 @@
       "ticker": "SPY",
       "source_url": null,
       "response_sha256": null
+    },
+    {
+      "check": "adjusted_close_selfcheck",
+      "status": "ok",
+      "detail": "MSFT: adjusted close recomputed from close + dividends; max relative difference 0.012903% (tolerance 0.100%); split continuity=True",
+      "ticker": "MSFT",
+      "max_relative_difference": 0.00012902721472444234,
+      "mean_relative_difference": 6.277936487477924e-05,
+      "tolerance": 0.001,
+      "dividend_events": 23,
+      "split_events": [],
+      "split_continuity_ok": true,
+      "method": "recurrence adj_close_t = adj_close_(t-1) * (close_t + dividend_t) / close_(t-1)"
+    },
+    {
+      "check": "adjusted_close_selfcheck",
+      "status": "ok",
+      "detail": "GOOGL: adjusted close recomputed from close + dividends; max relative difference 0.006163% (tolerance 0.100%); split continuity=True",
+      "ticker": "GOOGL",
+      "max_relative_difference": 6.16326124913453e-05,
+      "mean_relative_difference": 1.5723213385173008e-05,
+      "tolerance": 0.001,
+      "dividend_events": 10,
+      "split_events": [
+        {
+          "trade_date": "2022-07-18",
+          "ratio": 20.0
+        }
+      ],
+      "split_continuity_ok": true,
+      "method": "recurrence adj_close_t = adj_close_(t-1) * (close_t + dividend_t) / close_(t-1)"
     }
   ]
 }

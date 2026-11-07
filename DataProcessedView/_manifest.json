@@ -28,6 +28,7 @@
     "prices/MSFT__rows.csv",
     "prices/QQQ__rows.csv",
     "prices/SPY__rows.csv",
+    "tests__quality_mode_comparison.csv",
     "tests__results.csv"
   ]
 }
