@@ -114,3 +114,51 @@ def test_segment_reconciliation_deduplicates_warning_per_group():
     checks = reconcile_segments(segment_rows=rows, settings=settings)
     assert len(checks) == 1
     assert checks[0]["status"] == "low"
+
+
+def test_msft_fiscal_q4_segment_is_derived_from_annual_fact():
+    settings = make_settings({})
+    quarters = [make_quarter(key) for key in ("2024-Q3", "2024-Q4", "2025-Q1", "2025-Q2")]
+    facts = [
+        segment_fact(
+            segment_name="Intelligent Cloud",
+            value=100_000_000.0,
+            calendar_key="2024-Q3",
+            ticker="MSFT",
+            scheme="msft_legacy_3",
+        ),
+        segment_fact(
+            segment_name="Intelligent Cloud",
+            value=110_000_000.0,
+            calendar_key="2024-Q4",
+            ticker="MSFT",
+            scheme="msft_legacy_3",
+        ),
+        segment_fact(
+            segment_name="Intelligent Cloud",
+            value=120_000_000.0,
+            calendar_key="2025-Q1",
+            ticker="MSFT",
+            scheme="msft_legacy_3",
+        ),
+        segment_fact(
+            segment_name="Intelligent Cloud",
+            value=500_000_000.0,
+            calendar_key="2025-Q2",
+            period_type="annual",
+            ticker="MSFT",
+            scheme="msft_legacy_3",
+        ),
+    ]
+    rows = build_segment_table(
+        segment_facts=facts,
+        quarters=quarters,
+        consolidated_rows=[consolidated_row("2025-Q2", 170_000_000.0, ticker="MSFT")],
+        settings=settings,
+    )
+    q4 = next(row for row in rows if row["calendar_key"] == "2025-Q2")
+    assert q4["value_musd"] == 170.0
+    assert q4["derived"] is True
+    assert q4["fiscal_quarter"] == "Q4"
+    assert q4["comparable"] is True
+    assert q4["annual_value_musd"] == 500.0

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import random
 from datetime import date
 from typing import Any
 
@@ -188,8 +189,10 @@ def _compare_close_series(
     secondary_field: str,
     tolerance: float,
     min_days: int,
+    sample_size: int | None = None,
+    seed: int = 0,
 ) -> dict[str, Any] | None:
-    """Compare two close series by trading date over the most recent window."""
+    """Compare two close series on a seeded random sample of trading days."""
     prices: dict[str, float] = {}
     for row in frame.itertuples():
         trade_date = getattr(row, "trade_date", None)
@@ -206,22 +209,66 @@ def _compare_close_series(
         if trade_date in prices and source_value is not None:
             pairs.append((trade_date, prices[trade_date], float(source_value)))
     pairs.sort()
-    pairs = pairs[-min_days:]
+    available = len(pairs)
+    target = sample_size or min_days
+    if available > target:
+        pairs = sorted(random.Random(seed).sample(pairs, target))
     if not pairs:
         return None
 
     differences = [abs(price - source) / max(abs(source), 1e-9) for _, price, source in pairs]
     matched = sum(1 for difference in differences if difference <= tolerance)
     ratio = matched / len(differences)
-    status = "ok" if matched == len(differences) else ("low" if ratio >= 0.9 else "fail")
+    status = "ok" if matched == len(differences) and len(differences) >= min_days else (
+        "low" if ratio >= 0.9 else "fail"
+    )
     return {
         "status": status,
         "compared_days": len(differences),
+        "available_days": available,
         "matched_days": matched,
         "max_relative_difference": max(differences),
         "window_start": pairs[0][0],
         "window_end": pairs[-1][0],
+        "sample_method": "seeded_random" if available > target else "all_available",
+        "sample_seed": seed,
     }
+
+
+def reconcile_adjusted_selfcheck(
+    *,
+    selfchecks: dict[str, dict[str, Any]],
+    settings: Settings,
+) -> list[dict[str, Any]]:
+    """Recompute adjusted close from close plus dividends and report deviation."""
+    tolerance = float(
+        settings.thresholds["quality"].get("adjusted_close_selfcheck_tolerance", 0.001)
+    )
+    checks: list[dict[str, Any]] = []
+    for ticker, result in selfchecks.items():
+        maximum = result.get("max_relative_difference")
+        split_ok = result.get("split_continuity_ok") is not False
+        status = "ok" if maximum is not None and maximum <= tolerance and split_ok else "fail"
+        checks.append(
+            _check(
+                "adjusted_close_selfcheck",
+                status,
+                (
+                    f"{ticker}: adjusted close recomputed from close + dividends; "
+                    f"max relative difference {maximum:.6%} (tolerance {tolerance:.3%}); "
+                    f"split continuity={result.get('split_continuity_ok')}"
+                ),
+                ticker=ticker,
+                max_relative_difference=maximum,
+                mean_relative_difference=result.get("mean_relative_difference"),
+                tolerance=tolerance,
+                dividend_events=result.get("dividend_events"),
+                split_events=result.get("split_events"),
+                split_continuity_ok=result.get("split_continuity_ok"),
+                method=result.get("method"),
+            )
+        )
+    return checks
 
 
 def reconcile_prices(
@@ -236,6 +283,8 @@ def reconcile_prices(
     tolerance = float(quality["price_diff_tolerance"])
     adjusted_tolerance = float(quality.get("adjusted_close_diff_tolerance", tolerance))
     min_days = int(quality.get("min_price_days_for_reconciliation", 30))
+    sample_size = int(quality.get("price_reconciliation_sample_size", min_days))
+    seed = int(quality.get("price_sample_seed", 0))
     secondary = secondary or {}
     adjusted = adjusted or {}
     checks: list[dict[str, Any]] = []
@@ -256,6 +305,8 @@ def reconcile_prices(
                 secondary_field="close",
                 tolerance=tolerance,
                 min_days=min_days,
+                sample_size=sample_size,
+                seed=seed,
             )
             if frame is not None and secondary_rows
             else None
@@ -267,14 +318,18 @@ def reconcile_prices(
                     comparison["status"],
                     (
                         f"{ticker}: {comparison['matched_days']}/{comparison['compared_days']} Nasdaq closes "
-                        f"within {tolerance:.3%} (max {comparison['max_relative_difference']:.4%})"
+                        f"within {tolerance:.3%} (max {comparison['max_relative_difference']:.4%}); "
+                        f"seeded random sample from {comparison['available_days']} available days"
                     ),
                     ticker=ticker,
                     compared_days=comparison["compared_days"],
+                    available_days=comparison["available_days"],
                     matched_days=comparison["matched_days"],
                     max_relative_difference=comparison["max_relative_difference"],
                     window_start=comparison["window_start"],
                     window_end=comparison["window_end"],
+                    sample_method=comparison["sample_method"],
+                    sample_seed=comparison["sample_seed"],
                     source_url=artifact.get("source_url"),
                     response_sha256=artifact.get("response_sha256"),
                     artifact=artifact.get("path"),
@@ -303,6 +358,8 @@ def reconcile_prices(
                 secondary_field="adjusted_close",
                 tolerance=adjusted_tolerance,
                 min_days=min_days,
+                sample_size=sample_size,
+                seed=seed,
             )
             if frame is not None and adjusted.get("available") and adjusted_rows
             else None

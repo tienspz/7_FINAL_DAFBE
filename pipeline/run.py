@@ -64,9 +64,13 @@ from pipeline.preprocess.build_outputs import (
 from pipeline.preprocess.export_csv import export_json_tables_to_csv
 from pipeline.preprocess.calendar import analysis_quarters
 from pipeline.preprocess.facts import build_company_quarters
-from pipeline.preprocess.prices import build_price_analytics, normalize_prices
+from pipeline.preprocess.prices import (
+    adjusted_close_selfcheck,
+    build_price_analytics,
+    normalize_prices,
+)
 from pipeline.preprocess.segments import build_segment_table
-from pipeline.stats.tests import run_all_tests
+from pipeline.stats.tests import present_p_values, run_all_tests
 from pipeline.sync import SyncLog, archive_raw_file, raw_file_manifest
 from pipeline.util import atomic_write_text, to_million, utc_now_iso, write_json
 from pipeline.verify.links import (
@@ -76,7 +80,12 @@ from pipeline.verify.links import (
     verify_price_evidence,
 )
 from pipeline.verify.quality import build_quality_report
-from pipeline.verify.reconcile import reconcile_financials, reconcile_prices, reconcile_segments
+from pipeline.verify.reconcile import (
+    reconcile_adjusted_selfcheck,
+    reconcile_financials,
+    reconcile_prices,
+    reconcile_segments,
+)
 
 
 def log(message: str) -> None:
@@ -485,6 +494,11 @@ def main(argv: list[str] | None = None) -> int:
 
     # 6) Price analytics and derived metrics.
     log("price analytics")
+    analysis_start = date(
+        int(analysis["start_year"]),
+        (int(analysis["start_quarter"]) - 1) * 3 + 1,
+        1,
+    )
     price_analytics: dict[str, Any] = {}
     for ticker, frame in prices_by_ticker.items():
         price_analytics[ticker] = build_price_analytics(
@@ -493,6 +507,8 @@ def main(argv: list[str] | None = None) -> int:
             quarters=[quarter.key for quarter in quarters],
             price_start=price_start,
             price_end=price_end_date,
+            analysis_start=analysis_start,
+            as_of=price_end_date,
         )
     for ticker, rows in rows_by_ticker.items():
         enrich_company_rows(ticker=ticker, rows=rows, price_analytics=price_analytics[ticker])
@@ -546,14 +562,41 @@ def main(argv: list[str] | None = None) -> int:
     stats_payload: dict[str, Any] = {"schema_version": "1.0", "results": [], "warnings": ["not run"]}
     if not args.skip_stats:
         log("statistical tests BT1-BT5")
+        stats_config = settings.thresholds["stats"]
+        quality_config = settings.thresholds["quality"]
+        quality_letter = str(quality_config.get("quality_mode_primary", "B")).upper()
+        quality_mode = "label_low" if quality_letter == "B" else "exclude_low"
+        one_off_quarters = {
+            ticker: {
+                item["calendar_key"]: item.get("reason", "one-off quarter")
+                for item in items
+            }
+            for ticker, items in quality_config.get("net_income_one_off_quarters", {}).items()
+        }
         stats_payload = run_all_tests(
             rows_by_ticker=rows_by_ticker,
             price_analytics=price_analytics,
             tickers=["MSFT", "GOOGL"],
-            alpha=settings.thresholds["stats"]["alpha"],
-            max_lag=settings.thresholds["stats"]["max_lag"],
+            alpha=stats_config["alpha"],
+            max_lag=stats_config["max_lag"],
+            quality_mode=quality_mode,
+            quality_mode_primary=quality_letter,
+            bt1_start=stats_config.get("bt1_start", analysis_start.isoformat()),
+            bt1_end=data_as_of,
+            one_off_quarters=one_off_quarters or None,
+            comparison_modes=tuple(quality_config.get("stats_quality_modes", ["exclude_low", "label_low"])),
+            holm_primary=stats_config.get("holm_primary", "bt"),
+            fragility_max_n=int(stats_config.get("fragility_max_n", 15)),
+            permutation_iterations=int(stats_config.get("permutation_iterations", 10000)),
+            permutation_seed=int(stats_config.get("permutation_seed", 20261107)),
+            bt3_bootstrap_iterations=int(stats_config.get("bt3_bootstrap_iterations", 1000)),
+            bt3_block_length=int(stats_config.get("bt3_block_length", 4)),
+            bt3_bootstrap_seed=int(stats_config.get("bt3_bootstrap_seed", 20261107)),
         )
-        log(f"  {len(stats_payload.get('results', []))} test results")
+        stats_payload = present_p_values(stats_payload)
+        log(
+            f"  {len(stats_payload.get('results', []))} test results, quality_mode={quality_mode}"
+        )
 
     # 10) Verification reports.
     log("verify links")
@@ -604,6 +647,14 @@ def main(argv: list[str] | None = None) -> int:
             adjusted=adjusted,
         )
     )
+    adjusted_selfchecks = {
+        ticker: adjusted_close_selfcheck(prices_by_ticker[ticker])
+        for ticker in ("MSFT", "GOOGL")
+        if ticker in prices_by_ticker
+    }
+    checks.extend(
+        reconcile_adjusted_selfcheck(selfchecks=adjusted_selfchecks, settings=settings)
+    )
     reconcile_report = {
         "schema_version": "1.0",
         "checked_at": utc_now_iso(),
@@ -631,6 +682,21 @@ def main(argv: list[str] | None = None) -> int:
         snapshot_version=snapshot_version,
     )
     write_json(settings.verified_dir / "quality_report.json", quality_report)
+    evidence_dir = settings.project_root / "docs" / "evidence"
+    evidence_dir.mkdir(parents=True, exist_ok=True)
+    write_json(
+        evidence_dir / "quality_evidence.json",
+        {
+            "generated_at": utc_now_iso(),
+            "run_id": run_id,
+            "snapshot_version": snapshot_version,
+            "data_as_of": data_as_of,
+            "quality_mode": quality_report["quality_mode"],
+            "excluded_quarters": quality_report["excluded_quarters"],
+            "derived_quarters": quality_report["derived_quarters"],
+            "net_income_bridge": quality_report["net_income_bridge"],
+        },
+    )
 
     # 12) Dashboard JSON.
     log(f"build outputs snapshot={snapshot_version}")
@@ -761,6 +827,13 @@ def main(argv: list[str] | None = None) -> int:
                 "quality": quality_report["summary"],
                 "reconcile": reconcile_report["summary"],
                 "tests": len(stats_payload.get("results", [])),
+                "quality_mode": stats_payload.get("quality_mode"),
+                "excluded_quarter_groups": len(quality_report.get("excluded_quarters", [])),
+                "derived_quarters": len(quality_report.get("derived_quarters", [])),
+                "adjusted_close_selfcheck": {
+                    ticker: result.get("max_relative_difference")
+                    for ticker, result in adjusted_selfchecks.items()
+                },
                 "secondary_close": {
                     ticker: next(
                         (check["status"] for check in checks if check["check"] == "secondary_close" and check.get("ticker") == ticker),

@@ -18,9 +18,14 @@ def make_settings(
     thresholds: dict[str, Any] | None = None,
     segment_map: dict[str, Any] | None = None,
     split_adjustments: dict[str, Any] | None = None,
+    diagnostic_tags: dict[str, Any] | None = None,
 ) -> Settings:
     return Settings(
-        concept_map={"companies": companies, "split_adjustments": split_adjustments or {}},
+        concept_map={
+            "companies": companies,
+            "split_adjustments": split_adjustments or {},
+            "diagnostic_tags": diagnostic_tags or {},
+        },
         segment_map=segment_map or {"companies": {}},
         source_registry={},
         allowlist={},

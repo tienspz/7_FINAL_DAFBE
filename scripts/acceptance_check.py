@@ -536,7 +536,9 @@ def contract_checks() -> list[dict[str, Any]]:
         if result.get("bt_code") in {"BT3", "BT4", "BT5"}
     )
     holm_ok = all(
-        result.get("p_adjusted") is not None
+        result.get("p_adj_lag_family") is not None
+        and result.get("p_adj_bt_family") is not None
+        and result.get("p_adjusted") is not None
         for result in results
         if result.get("bt_code") in {"BT4", "BT5"} and result.get("p_value") is not None
     )
@@ -581,11 +583,25 @@ def contract_checks() -> list[dict[str, Any]]:
     )
     modes = tests.get("quality_mode_comparison", [])
     quality_mode_ok = (
-        tests.get("quality_mode") == "exclude_low"
-        and any(item.get("quality_mode") == "label_low" and item.get("bt_code") == "BT3" for item in modes)
-        and any(item.get("quality_mode") == "label_low" and item.get("bt_code") == "BT4" for item in modes)
+        tests.get("quality_mode") == "label_low"
+        and tests.get("quality_mode_primary") == "B"
+        and any(item.get("quality_mode") == "exclude_low" and item.get("bt_code") == "BT3" for item in modes)
+        and any(item.get("quality_mode") == "exclude_low" and item.get("bt_code") == "BT4" for item in modes)
+        and all(
+            result.get("mode_A_n") is not None and result.get("mode_B_n") is not None
+            for result in results
+            if result.get("bt_code") in {"BT2", "BT3", "BT4", "BT5"}
+        )
     )
     checks.append(check("stats_quality_mode_comparison", quality_mode_ok, f"{len(modes)} sensitivity rows"))
+    p_display_ok = all(
+        result.get("p_value_raw") is not None
+        and result.get("p_value_display") is not None
+        and not (isinstance(result.get("p_value"), (int, float)) and result.get("p_value") < 0.001)
+        for result in results
+        if result.get("p_value") is not None
+    )
+    checks.append(check("p_value_display_contract", p_display_ok, "raw and display p-values separated"))
     googl_capex = [
         result
         for result in results
@@ -850,6 +866,13 @@ def contract_checks() -> list[dict[str, Any]]:
 
 
 def main() -> int:
+    if not os.environ.get("SEC_USER_AGENT", "").strip():
+        print(
+            "SEC_USER_AGENT is not configured; live SEC/Yahoo source checks cannot run. "
+            "Set it to a project name plus a real contact address, then rerun.",
+            file=sys.stderr,
+        )
+        return 2
     for directory in (DATA_DIR, VERIFIED_DIR, RAW_DIR, EVIDENCE_DIR):
         if not directory.exists():
             print(f"Missing required directory: {directory}", file=sys.stderr)

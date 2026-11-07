@@ -6,7 +6,13 @@ from typing import Any
 
 from pipeline.config import Settings
 from pipeline.preprocess.calendar import CalendarQuarter
-from pipeline.util import to_million
+from pipeline.util import fiscal_info, to_million
+
+
+def _shift_quarter(key: str, offset: int) -> str:
+    year, quarter = key.split("-Q")
+    total = int(year) * 4 + (int(quarter) - 1) + offset
+    return f"{total // 4}-Q{total % 4 + 1}"
 
 
 def _segments_by_key(facts: list[dict[str, Any]]) -> dict[tuple[str, str, str, str], list[dict[str, Any]]]:
@@ -29,27 +35,42 @@ def build_segment_table(
     consolidated_by_quarter = {(row["ticker"], row["calendar_key"]): row for row in consolidated_rows}
 
     for (ticker, scheme, segment_name, metric), facts in grouped.items():
+        # Prefer the earliest filing for a period so restatements and duplicates
+        # cannot silently replace the originally reported segment value.
+        ordered_facts = sorted(
+            facts,
+            key=lambda fact: (fact.get("filed_date", ""), fact.get("accession_number", "")),
+        )
         by_quarter: dict[str, dict[str, Any]] = {}
-        for fact in facts:
+        for fact in ordered_facts:
             if fact.get("period_type") == "quarter":
-                by_quarter[fact["calendar_key"]] = fact
-        annual_by_quarter = {
-            fact["calendar_key"]: fact
-            for fact in facts
-            if fact.get("period_type") == "annual"
-        }
+                by_quarter.setdefault(fact["calendar_key"], fact)
+        annual_by_quarter: dict[str, dict[str, Any]] = {}
+        for fact in ordered_facts:
+            if fact.get("period_type") == "annual":
+                annual_by_quarter.setdefault(fact["calendar_key"], fact)
         for quarter in quarters:
             fact = by_quarter.get(quarter.key)
             derived = False
             value = fact.get("value_usd") if fact else None
             source = fact
-            if fact is None and quarter.key.endswith("Q4") and quarter.key in annual_by_quarter:
+            derivation_method = None
+            annual_value = None
+            fiscal_quarter = fiscal_info(ticker, quarter.end)[1]
+            # CR-04: fiscal Q4 has no 10-Q. Derive it from the 10-K annual fact
+            # minus the three preceding fiscal quarters. MSFT's fiscal Q4 ends
+            # on 30 June, which is calendar Q2, so the calendar suffix cannot
+            # be used to detect it.
+            if fact is None and fiscal_quarter == "Q4" and quarter.key in annual_by_quarter:
                 annual = annual_by_quarter[quarter.key]
-                components = [by_quarter.get(f"{quarter.key[:4]}-Q{q}") for q in (1, 2, 3)]
+                component_keys = [_shift_quarter(quarter.key, offset) for offset in (-3, -2, -1)]
+                components = [by_quarter.get(key) for key in component_keys]
                 if all(component is not None for component in components):
-                    value = annual["value_usd"] - sum(component["value_usd"] for component in components if component)
+                    annual_value = annual["value_usd"]
+                    value = annual_value - sum(component["value_usd"] for component in components if component)
                     derived = True
                     source = annual
+                    derivation_method = f"FY annual - fiscal Q1..Q3 ({', '.join(component_keys)})"
             if value is None or source is None:
                 continue
             output.append(
@@ -57,12 +78,15 @@ def build_segment_table(
                     "ticker": ticker,
                     "calendar_key": quarter.key,
                     "period_end": source["period_end"],
+                    "fiscal_quarter": fiscal_quarter,
                     "segment_scheme": scheme,
                     "segment_name": segment_name,
                     "segment_member": source["segment_member"],
                     "metric": metric,
                     "value_musd": to_million(value),
                     "derived": derived,
+                    "derivation_method": derivation_method,
+                    "annual_value_musd": to_million(annual_value),
                     "comparable": not (ticker == "MSFT" and scheme == "msft_new_2"),
                     "quality_flag": "low" if derived else "ok",
                     "source_url": source["source_url"],
