@@ -32,6 +32,17 @@ def load(name: str) -> Any:
     return json.loads((DATA / name).read_text(encoding="utf-8"))
 
 
+def raw_p_value(result: dict[str, Any], schema_version: str | None) -> float | None:
+    value = result.get("p_value_raw")
+    if isinstance(value, (int, float)):
+        return float(value)
+    if schema_version == "1.1":
+        value = result.get("p_value")
+        if isinstance(value, (int, float)):
+            return float(value)
+    return None
+
+
 def quarter_shift(key: str, offset: int) -> str:
     year, quarter = key.split("-Q")
     total = int(year) * 4 + int(quarter) - 1 + offset
@@ -160,7 +171,12 @@ def adf_level(values: np.ndarray) -> float:
 def correlation_check() -> dict[str, Any]:
     financials = load("financials.json")
     tests = load("tests.json")
-    result = next(item for item in tests["results"] if item["bt_code"] == "BT4" and item.get("p_value_raw") is not None)
+    schema_version = tests.get("schema_version")
+    result = next(
+        item
+        for item in tests["results"]
+        if item["bt_code"] == "BT4" and raw_p_value(item, schema_version) is not None
+    )
     ticker, x_field, y_field, lag = result["ticker"], result["x"], result["y"], result["lag"]
     rows = rows_for(financials, ticker)
     x_map = series(rows, x_field)
@@ -191,7 +207,7 @@ def correlation_check() -> dict[str, Any]:
         "n_independent": len(pairs),
         "rho_pipeline": result["statistic"],
         "rho_independent": float(rho),
-        "p_pipeline": result.get("p_value_raw"),
+        "p_pipeline": raw_p_value(result, schema_version),
         "p_independent": float(p_value),
         "adf_level_p_x": adf_level(np.array([x_map.get(key, np.nan) for key in sorted(x_map)])),
     }
@@ -200,6 +216,7 @@ def correlation_check() -> dict[str, Any]:
 def check_bt3() -> dict[str, Any]:
     financials = load("financials.json")
     tests = load("tests.json")
+    schema_version = tests.get("schema_version")
     result = next(
         item
         for item in tests["results"]
@@ -217,7 +234,7 @@ def check_bt3() -> dict[str, Any]:
         "n_independent": len(values),
         "coefficient_pipeline": result["coefficient"],
         "coefficient_independent": float(model.params[1]),
-        "p_pipeline": result.get("p_value_raw"),
+        "p_pipeline": raw_p_value(result, schema_version),
         "p_independent": float(model.pvalues[1]),
     }
 
