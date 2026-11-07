@@ -105,7 +105,7 @@ Workflow [`.github/workflows/hourly-crawl.yml`](.github/workflows/hourly-crawl.y
 
 Lần chạy gần nhất (snapshot `v20261106.3`, `data_as_of=2026-11-06`, run `run_20261107T074529Z_aad90025`):
 
-- **10/10** nguồn trực tiếp khớp; **42/42** contract dashboard pass.
+- **10/10** nguồn trực tiếp khớp; **41/41** contract dashboard pass (lần chạy trước; contract mới chưa chạy lại vì thiếu `SEC_USER_AGENT`).
 - **Secondary close**: 30/30 phiên ngẫu nhiên (seed `20261104`) khớp Nasdaq cho MSFT, GOOGL, SPY, QQQ; sai lệch tương đối lớn nhất 5,8e-08 (0,0000058%).
 - **Adjusted close**: `unverified` khi chưa có key Alpha Vantage thật; tự kiểm close + cổ tức + split đạt sai lệch tương đối tối đa 1,29e-04 (MSFT) và 6,16e-05 (GOOGL).
 - **AI events**: 18/18 sự kiện được kiểm chứng tự động (10 Google, 8 Microsoft), 0 bị loại; đây là kiểm tra quote/ngày/hash tự động, không phải review biên tập.
