@@ -94,11 +94,18 @@ Workflow [`.github/workflows/hourly-crawl.yml`](.github/workflows/hourly-crawl.y
 - Secret: `SEC_USER_AGENT` phải có tên dự án và email liên hệ thật; workflow dừng rõ ràng nếu chưa cấu hình bằng GitHub Secret. Tạo **repository secret** tại **Settings → Secrets and variables → Actions → New repository secret**, đặt tên chính xác `SEC_USER_AGENT` và giá trị theo dạng `AICOR research project (contact: email-liên-hệ-thật)`. Không commit giá trị này vào mã nguồn; pipeline không dùng địa chỉ liên hệ giả. Sau khi thêm secret, push tiếp theo hoặc chạy thủ công **Actions → Hourly data crawl → Run workflow** sẽ kích hoạt lại crawler. `ALPHAVANTAGE_API_KEY` là tùy chọn; khi thiếu key, adjusted-close check được ghi `unverified`.
 - `data/verified/sync_log.jsonl` lưu thời gian, nguồn, trạng thái, số dòng và thông tin lỗi; acceptance kiểm tra sync log và checksum raw archive theo `run_id`.
 
+## Kiểm định thống kê
+
+- Chế độ chất lượng chính là **B** (`label_low`): giữ các quý suy ra có `identity_ok=true` và gắn nhãn; quý `low` vì lý do khác vẫn bị loại. Chế độ **A** (`exclude_low`) là phân tích độ nhạy. Đây là lựa chọn phân tích có thể đổi, không phải thay đổi dữ liệu gốc (CR-04, DR-04.8, FR-52).
+- BT4/BT5 lưu hai họ Holm: họ theo lag (m=5) và họ toàn bộ BT của công ty (BT4 m=30, BT5 m=5). Quyết định dùng họ nghiêm hơn; kết quả không bền qua level/sai phân/hoán vị được ghi `fragile=true` và `exploratory=true`, không gọi là bác bỏ.
+- BT3 tách `trend_on_level` (HAC) và `drift_on_difference`, thêm bootstrap khối; p hiển thị dưới 0,001 là `< 0.001`, còn `p_value_raw` giữ số thô. GOOGL `capex_intensity` không dừng sau sai phân được đánh dấu `unreliable_nonstationary=true` và không dùng để kết luận.
+- Không có kết luận nhân quả; mọi kết quả có n nhỏ chỉ mang tính tham khảo, không phải khuyến nghị đầu tư.
+
 ## Nghiệm thu
 
 Lần chạy gần nhất (snapshot `v20261106.3`, `data_as_of=2026-11-06`, run `run_20261107T074529Z_aad90025`):
 
-- **10/10** nguồn trực tiếp khớp; **41/41** contract dashboard pass.
+- **10/10** nguồn trực tiếp khớp; **42/42** contract dashboard pass.
 - **Secondary close**: 30/30 phiên ngẫu nhiên (seed `20261104`) khớp Nasdaq cho MSFT, GOOGL, SPY, QQQ; sai lệch tương đối lớn nhất 5,8e-08 (0,0000058%).
 - **Adjusted close**: `unverified` khi chưa có key Alpha Vantage thật; tự kiểm close + cổ tức + split đạt sai lệch tương đối tối đa 1,29e-04 (MSFT) và 6,16e-05 (GOOGL).
 - **AI events**: 18/18 sự kiện được kiểm chứng tự động (10 Google, 8 Microsoft), 0 bị loại; đây là kiểm tra quote/ngày/hash tự động, không phải review biên tập.
