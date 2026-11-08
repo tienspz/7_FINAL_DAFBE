@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "snapshot_version": "v20261106.9",
-  "generated_at": "2026-11-08T06:51:43Z",
+  "snapshot_version": "v20261106.10",
+  "generated_at": "2026-11-08T18:20:42Z",
   "formulas": {
     "revenue_growth_yoy": "(Revenue_t - Revenue_t-4) / Revenue_t-4",
     "operating_margin": "Operating Income / Revenue",
@@ -241,11 +241,11 @@
   },
   "reconcile_summary": {
     "total": 21,
-    "ok": 14,
+    "ok": 18,
     "low": 3,
     "fail": 0,
     "pending": 0,
-    "unverified": 4
+    "unverified": 0
   },
   "limitations": [
     "yfinance is an unofficial source; version and output format must be pinned.",
