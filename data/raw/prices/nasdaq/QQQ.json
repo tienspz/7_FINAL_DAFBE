@@ -2,7 +2,7 @@
   "ticker": "QQQ",
   "source_url": "https://api.nasdaq.com/api/quote/QQQ/historical?assetclass=etf&fromdate=2026-08-08&todate=2026-11-06&limit=120",
   "http_status": 200,
-  "fetched_at": "2026-11-08T18:19:40Z",
+  "fetched_at": "2026-11-08T21:10:50Z",
   "response_sha256": "1c898f009d9e91a13d1bb6db4cb573ea07cb8072f760f036e419af45b6ac7084",
   "window": {
     "start": "2026-08-08",
