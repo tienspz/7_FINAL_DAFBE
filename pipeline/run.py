@@ -497,7 +497,7 @@ def main(argv: list[str] | None = None) -> int:
     with sync_log.source("tiingo_adjusted_close") as source_sync:
         adjusted = fetch_adjusted_closes(
             client=browser_client,
-            tickers=["MSFT", "GOOGL"],
+            tickers=PRICE_TICKERS,
             raw_dir=settings.raw_dir,
             as_of=data_as_of,
             refresh=args.refresh,

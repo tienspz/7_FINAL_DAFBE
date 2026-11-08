@@ -7,11 +7,13 @@ from pathlib import Path
 import pytest
 
 from pipeline.crawlers.tiingo import (
+    DEFAULT_TICKERS,
     ENV_KEY,
     fetch_adjusted_closes,
     parse_daily_prices,
     prices_url,
 )
+from pipeline.crawlers.prices import PRICE_TICKERS
 from pipeline.http import HttpError
 
 
@@ -96,6 +98,23 @@ def test_fetch_uses_token_header_and_writes_no_token(tmp_path: Path, monkeypatch
     artifact = raw_dir / "prices" / "tiingo" / "MSFT.json"
     assert token not in artifact.read_text(encoding="utf-8")
     assert result["artifacts"]["MSFT"]["response_sha256"] == "a" * 64
+
+
+def test_default_tickers_cover_all_pipeline_price_tickers(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    monkeypatch.setenv(ENV_KEY, "temporary-token-value")
+    client = StubClient()
+
+    result = fetch_adjusted_closes(
+        client=client,
+        raw_dir=tmp_path / "data" / "raw",
+        as_of="2026-11-06",
+    )
+
+    assert DEFAULT_TICKERS == PRICE_TICKERS
+    assert set(result["rows_by_ticker"]) == set(PRICE_TICKERS)
+    assert len(client.calls) == len(PRICE_TICKERS)
 
 
 def test_fetch_without_token_is_unverified_and_does_not_call_provider(

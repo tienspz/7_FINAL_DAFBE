@@ -9,7 +9,7 @@ Pipeline dữ liệu và bộ artifact dashboard cho hai công ty Microsoft (MSF
 - Cửa sổ phân tích: **2022-Q1 → 2026-Q3**, 19 quý cho mỗi công ty (38 quý).
 - Báo cáo tài chính: SEC `companyfacts`/`companyconcept` và XBRL instance của 10-Q/10-K.
 - Giá: Yahoo Finance chart API qua `yfinance` (nguồn chính); **Nasdaq historical API** đối chiếu close chưa điều chỉnh cho 30 phiên gần nhất của MSFT, GOOGL, SPY, QQQ.
-- Adjusted close: đối chiếu Tiingo **chỉ khi có token thật** trong `TIINGO_API_KEY`; thiếu token/rows vẫn là `unverified`.
+- Adjusted close: đối chiếu Tiingo cho MSFT, GOOGL, SPY và QQQ **chỉ khi có token thật** trong `TIINGO_API_KEY`; thiếu token/rows vẫn là `unverified`.
 - Mỗi fact tài chính lưu `source_url`, `accession_number`, `response_sha256`, `fetched_at`.
 - EPS GOOGL trước split 20:1 (kỳ kết thúc trước 2022-06-30) được điều chỉnh về hệ giá sau split; giá trị gốc vẫn được giữ trong `reported_value` và `split_adjustment`.
 - Sự kiện AI (CR-14) chỉ lấy từ trang chính thức của Google/Microsoft; mỗi sự kiện phải có `evidence_quote` xuất hiện nguyên văn trong trang, đúng ngày công bố, kèm `content_sha256`, `entered_by`, `reviewed_by`. Sự kiện không vượt kiểm tra sẽ bị loại và dashboard hiển thị empty state.

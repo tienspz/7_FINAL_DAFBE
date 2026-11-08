@@ -12,7 +12,7 @@ from pipeline.http import CachedHttpClient, HttpError, MUTABLE_DATA_CACHE_MAX_AG
 from pipeline.util import safe_float, write_json
 
 ENV_KEY = "TIINGO_API_KEY"
-DEFAULT_TICKERS = ["MSFT", "GOOGL"]
+DEFAULT_TICKERS = ["MSFT", "GOOGL", "SPY", "QQQ"]
 LOOKBACK_DAYS = 90
 MIN_ROWS = 30
 
