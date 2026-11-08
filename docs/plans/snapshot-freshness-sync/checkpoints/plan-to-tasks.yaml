@@ -1,0 +1,90 @@
+# Plan-to-Tasks Traceability Checkpoint
+metadata:
+  generated: "2026-11-09"
+  source_plan: "docs/plans/snapshot-freshness-sync/plan.md"
+  target_tasks: "Tasks embedded in docs/plans/snapshot-freshness-sync/plan.md"
+
+summary:
+  total_plan_items: 5
+  covered_plan_items: 5
+  missing_plan_items: 0
+  coverage_percentage: 100.0
+  total_tasks_generated: 8
+  orphan_tasks: 0
+
+phases:
+  - phase_id: "Phase-1"
+    phase_name: "Foundational sync and freshness rules"
+    items:
+      - item_id: "1.1"
+        description: "Make semantic fingerprint stable."
+        tasks:
+          - task_id: "T001"
+            description: "Remove volatile fingerprint input and same-day commit throttle."
+          - task_id: "T005"
+            description: "Test changed and unchanged same-day publication."
+      - item_id: "1.2"
+        description: "Prefer newest health/SSE freshness."
+        tasks:
+          - task_id: "T002"
+            description: "Implement and wire freshness selector."
+          - task_id: "T003"
+            description: "Bypass browser cache for health and manifest."
+          - task_id: "T006"
+            description: "Test freshness selection and stale behavior."
+  - phase_id: "Phase-2"
+    phase_name: "User Story 1: Show and publish the latest verified snapshot"
+    items:
+      - item_id: "2.1"
+        description: "Set accurate reload feedback."
+        tasks:
+          - task_id: "T004"
+            description: "Clarify revalidation wording and snapshot age details."
+          - task_id: "T006"
+            description: "Test that UI refresh doesn't mask stale data."
+      - item_id: "2.2"
+        description: "Add regression tests."
+        tasks:
+          - task_id: "T005"
+            description: "Add script fingerprint/publish tests."
+          - task_id: "T006"
+            description: "Add freshness and browser regression coverage."
+  - phase_id: "Phase-3"
+    phase_name: "Release and deployment validation"
+    items:
+      - item_id: "3.1"
+        description: "Validate and synchronize."
+        tasks:
+          - task_id: "T007"
+            description: "Run tests/build/E2E and review the diff."
+          - task_id: "T008"
+            description: "Push and verify workflow, snapshot, Vercel, and live age."
+
+missing_plan_items: []
+orphan_tasks: []
+upstream_trace:
+  - plan_item: "1.1"
+    source_requirements: ["REQ-001", "REQ-002"]
+    tasks: ["T001", "T005"]
+    full_trace: "REQ-001,REQ-002 → Phase-1.1 → T001,T005"
+  - plan_item: "1.2"
+    source_requirements: ["REQ-003"]
+    tasks: ["T002", "T003", "T006"]
+    full_trace: "REQ-003 → Phase-1.2 → T002,T003,T006"
+  - plan_item: "2.1"
+    source_requirements: ["REQ-003", "REQ-004"]
+    tasks: ["T004", "T006"]
+    full_trace: "REQ-003,REQ-004 → Phase-2.1 → T004,T006"
+  - plan_item: "2.2"
+    source_requirements: ["REQ-001", "REQ-003"]
+    tasks: ["T005", "T006"]
+    full_trace: "REQ-001,REQ-003 → Phase-2.2 → T005,T006"
+  - plan_item: "3.1"
+    source_requirements: ["REQ-002"]
+    tasks: ["T007", "T008"]
+    full_trace: "REQ-002 → Phase-3.1 → T007,T008"
+
+validation:
+  passed: true
+  errors: []
+  warnings: []

@@ -115,7 +115,7 @@ test.describe('Resilience and Data Layer Fallback', () => {
 
     await expect.poll(() => overviewRequests).toBeGreaterThan(requestsBeforeReload);
     await expect(page.getByText('+22,2%', { exact: true })).toBeVisible();
-    await expect(page.getByRole('status').filter({ hasText: 'Đã kiểm tra dữ liệu mới nhất.' })).toBeVisible();
+    await expect(page.getByRole('status').filter({ hasText: 'Đã tải lại snapshot đang phát hành.' })).toBeVisible();
     await expect(reloadButton).toBeEnabled();
   });
 });

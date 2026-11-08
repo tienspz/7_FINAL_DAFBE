@@ -6,6 +6,7 @@ import { Popover } from '../ui/Popover';
 import { Info, AlertCircle } from 'lucide-react';
 import { useSnapshotStream } from '../../api/sse';
 import { prepareSnapshotRevalidation } from '../../api/client';
+import { selectLatestFreshness } from '../../api/freshness';
 import { useHealth } from '../../data/hooks';
 import { reloadMountedData } from '../../data/reload';
 import { i18n } from '../../i18n/vi';
@@ -37,7 +38,7 @@ export const Layout: React.FC<LayoutProps> = ({
 
   const { health } = useHealth();
   const { freshness: sseFreshness, hasNewData, resetNewDataNotice } = useSnapshotStream();
-  const currentFreshness = sseFreshness || health?.snapshot || null;
+  const currentFreshness = selectLatestFreshness(sseFreshness, health?.snapshot);
   const closeDrawer = useCallback(() => setDrawerOpen(false), []);
 
   const handleReload = useCallback(async () => {
@@ -59,7 +60,7 @@ export const Layout: React.FC<LayoutProps> = ({
       resetNewDataNotice();
       setReloadFeedback({
         type: 'success',
-        message: 'Đã kiểm tra dữ liệu mới nhất.',
+        message: 'Đã tải lại snapshot đang phát hành.',
       });
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);

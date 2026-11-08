@@ -52,6 +52,11 @@ with `status=unavailable` when no manifest can be read.
 A frontend should show the dashboard with a freshness warning rather than
 treating `degraded` as a hard failure.
 
+The dashboard's manual reload revalidates the currently published snapshot and
+health response; it does not start a crawl. Keep showing the snapshot's actual
+age until a newer verified snapshot is published and its `generated_at` is
+observed.
+
 ### Caching, ETag, and compression
 
 - JSON bodies of at least 1024 bytes are gzip-compressed when the request

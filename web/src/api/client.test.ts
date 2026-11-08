@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { fetchDataset, prepareSnapshotRevalidation } from './client';
+import { fetchDataset, fetchHealth, prepareSnapshotRevalidation } from './client';
 
 const validDataset = {
   schema_version: '1.0',
@@ -26,6 +26,31 @@ describe('fetchDataset', () => {
       data: validDataset,
       source: 'api',
       snapshotVersion: 'snapshot-test',
+    });
+  });
+
+  describe('fetchHealth', () => {
+    afterEach(() => {
+      vi.unstubAllGlobals();
+    });
+
+    it('revalidates health and static manifest freshness', async () => {
+      const fetchMock = vi.fn()
+        .mockResolvedValueOnce(new Response('{}', { status: 503 }))
+        .mockResolvedValueOnce(new Response(JSON.stringify({
+          snapshot_version: 'snapshot-current',
+          generated_at: '2026-11-08T18:00:00Z',
+          data_as_of: '2026-11-08',
+          run_id: 'run-current',
+          files: {},
+        })));
+      vi.stubGlobal('fetch', fetchMock);
+
+      await expect(fetchHealth()).resolves.toMatchObject({
+        snapshot: { snapshot_version: 'snapshot-current' },
+      });
+      expect(fetchMock).toHaveBeenNthCalledWith(1, '/api/health', { cache: 'no-store' });
+      expect(fetchMock).toHaveBeenNthCalledWith(2, '/data/manifest.json', { cache: 'no-cache' });
     });
   });
 

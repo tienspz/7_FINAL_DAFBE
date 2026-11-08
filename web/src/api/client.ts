@@ -204,7 +204,7 @@ async function fetchDatasetUncached<T>(key: string): Promise<FetchResult<T>> {
  */
 export async function fetchHealth(): Promise<HealthResponse | null> {
   try {
-    const res = await fetch('/api/health');
+    const res = await fetch('/api/health', { cache: 'no-store' });
     if (res.ok) {
       return (await res.json()) as HealthResponse;
     }
@@ -214,7 +214,7 @@ export async function fetchHealth(): Promise<HealthResponse | null> {
 
   // Simulated fallback health from manifest
   try {
-    const manifestRes = await fetch('/data/manifest.json');
+    const manifestRes = await fetch('/data/manifest.json', { cache: 'no-cache' });
     if (manifestRes.ok) {
       const m = (await manifestRes.json()) as Manifest;
       const generatedAt = Date.parse(m.generated_at);

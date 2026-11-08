@@ -4,7 +4,7 @@
 The pipeline writes a fresh ``generated_at`` and snapshot version on every run.
 Committing those fields every hour would create noisy, large history. This
 helper fingerprints only semantic inputs (CSV rows without fetch metadata plus
-pipeline/config code) and commits at most once per UTC day.
+pipeline/config code) and commits whenever those inputs change.
 """
 
 from __future__ import annotations
@@ -37,9 +37,6 @@ FINGERPRINT_GLOBS = [
     "pipeline/**/*.py",
     "scripts/acceptance_check.py",
     "requirements.txt",
-]
-FINGERPRINT_FILES = [
-    "data/verified/sync_log.jsonl",
 ]
 COMMIT_PATHS = [
     "data/raw/sec",
@@ -110,12 +107,6 @@ def compute_fingerprint() -> str:
     for path in _iter_code_files():
         relative = path.relative_to(ROOT).as_posix()
         digest.update(f"code:{relative}:{_file_digest(path)}\n".encode("utf-8"))
-    for relative in FINGERPRINT_FILES:
-        path = ROOT / relative
-        if path.exists():
-            digest.update(f"file:{relative}:{_file_digest(path)}\n".encode("utf-8"))
-        else:
-            digest.update(f"file:{relative}:missing\n".encode("utf-8"))
     return digest.hexdigest()
 
 
@@ -175,11 +166,6 @@ def commit(*, force: bool) -> int:
         return 0
 
     today = datetime.now(timezone.utc).date().isoformat()
-    last_commit = _read_text(LAST_COMMIT_PATH)
-    if last_commit == today and not force:
-        print(f"a data commit already happened on {today}; waiting for the next UTC day")
-        return 0
-
     _write_text(FINGERPRINT_PATH, current)
     _write_text(LAST_COMMIT_PATH, today)
 
@@ -217,8 +203,8 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--check", action="store_true", help="Report whether semantic data changed")
-    mode.add_argument("--commit", action="store_true", help="Commit and push if changed and due")
-    parser.add_argument("--force", action="store_true", help="Ignore the once-per-UTC-day gate")
+    mode.add_argument("--commit", action="store_true", help="Commit and push if semantic data changed")
+    parser.add_argument("--force", action="store_true", help="Commit and push even if semantic data is unchanged")
     args = parser.parse_args(argv)
     if args.check:
         return check()

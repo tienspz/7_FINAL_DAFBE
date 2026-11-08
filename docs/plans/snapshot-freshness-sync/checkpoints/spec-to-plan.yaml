@@ -1,0 +1,66 @@
+# Spec-to-Plan Traceability Checkpoint
+metadata:
+  generated: "2026-11-09"
+  source_spec: "User request; SPEC.md (FR-39, FR-47, SI-08, DP-07)"
+  target_plan: "docs/plans/snapshot-freshness-sync/plan.md"
+
+summary:
+  total_requirements: 4
+  covered_requirements: 4
+  missing_requirements: 0
+  coverage_percentage: 100.0
+
+requirements:
+  - req_id: "REQ-001"
+    req_description: "Publish every semantically changed accepted snapshot without a daily delay; ignore volatile run metadata."
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-1"
+      phase_name: "Foundational sync and freshness rules"
+      items:
+        - item_id: "1.1"
+          description: "Make the semantic fingerprint stable and remove the UTC-day publish gate."
+    notes: "Root-cause fix based on the 11-hour generated_at and a successful same-day crawl."
+  - req_id: "REQ-002"
+    req_description: "Keep unchanged data quiet and synchronize verified changes to GitHub/Vercel."
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-1/Phase-3"
+      phase_name: "Publish changed data and verify deployment"
+      items:
+        - item_id: "1.1"
+          description: "Make the semantic fingerprint stable and remove the UTC-day publish gate."
+        - item_id: "3.1"
+          description: "Validate and synchronize."
+    notes: "No-op workflow remains a no-op; only accepted semantic changes publish."
+  - req_id: "REQ-003"
+    req_description: "Display the newest health/SSE freshness and true snapshot age after reload."
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-1/Phase-2"
+      phase_name: "Freshness rules and current snapshot display"
+      items:
+        - item_id: "1.2"
+          description: "Prefer the newest health/SSE freshness."
+        - item_id: "2.1"
+          description: "Set accurate reload feedback."
+        - item_id: "2.2"
+          description: "Add regression tests."
+    notes: "Keeps backend-generated age authoritative."
+  - req_id: "REQ-004"
+    req_description: "Describe manual reload as revalidating published data, not running the crawler."
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2"
+      phase_name: "User Story 1: Show and publish the latest verified snapshot"
+      items:
+        - item_id: "2.1"
+          description: "Set accurate reload feedback."
+    notes: "The browser cannot safely use CRON_SECRET."
+
+missing_requirements: []
+orphan_plan_items: []
+validation:
+  passed: true
+  errors: []
+  warnings: []
