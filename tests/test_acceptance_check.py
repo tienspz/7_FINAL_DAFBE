@@ -4,11 +4,39 @@ from datetime import date
 import pytest
 
 from scripts.acceptance_check import (
+    adjusted_close_contract_passed,
     check_sqlite_handoff,
     latest_completed_price_row,
     manifest_checksum,
     sha256_bytes,
 )
+
+
+def test_adjusted_close_contract_requires_tiingo_provenance_for_all_tickers():
+    checks = [
+        {
+            "ticker": ticker,
+            "status": "ok",
+            "response_sha256": f"{index:064x}",
+        }
+        for index, ticker in enumerate(("MSFT", "GOOGL", "SPY", "QQQ"), start=1)
+    ]
+
+    assert adjusted_close_contract_passed(checks, "tiingo-key")
+    assert not adjusted_close_contract_passed(checks[:-1], "tiingo-key")
+    assert not adjusted_close_contract_passed(
+        [{**checks[-1], "response_sha256": ""}, *checks[:-1]], "tiingo-key"
+    )
+
+
+def test_adjusted_close_contract_allows_unverified_only_without_tiingo_key():
+    checks = [
+        {"ticker": ticker, "status": "unverified"}
+        for ticker in ("MSFT", "GOOGL", "SPY", "QQQ")
+    ]
+
+    assert adjusted_close_contract_passed(checks, "")
+    assert not adjusted_close_contract_passed(checks[:-1], "")
 
 
 def test_latest_completed_price_row_skips_the_current_incomplete_session():

@@ -423,6 +423,21 @@ def check(name: str, passed: bool, detail: str = "") -> dict[str, Any]:
     return {"name": name, "result": "ok" if passed else "fail", "detail": detail}
 
 
+def adjusted_close_contract_passed(
+    adjusted_checks: list[dict[str, Any]], api_key: str
+) -> bool:
+    adjusted_by_ticker = {item.get("ticker"): item for item in adjusted_checks}
+    if api_key.strip():
+        return all(
+            adjusted_by_ticker.get(ticker, {}).get("status") in {"ok", "low"}
+            and adjusted_by_ticker.get(ticker, {}).get("response_sha256")
+            for ticker in ("MSFT", "GOOGL", "SPY", "QQQ")
+        )
+    return len(adjusted_checks) == 4 and all(
+        item.get("status") == "unverified" for item in adjusted_checks
+    )
+
+
 def contract_checks() -> list[dict[str, Any]]:
     checks: list[dict[str, Any]] = []
     required = [
@@ -789,19 +804,10 @@ def contract_checks() -> list[dict[str, Any]]:
     checks.append(check("secondary_close_contract", secondary_ok, "; ".join(f"{item.get('ticker')}={item.get('status')}" for item in secondary_checks)))
 
     adjusted_checks = [item for item in rchecks if item.get("check") == "secondary_adjusted_close"]
-    adjusted_by_ticker = {item.get("ticker"): item for item in adjusted_checks}
-    env_key = os.environ.get("ALPHAVANTAGE_API_KEY", "").strip()
-    key_present = bool(env_key) and env_key.lower() != "demo"
-    if key_present:
-        adjusted_ok = all(
-            adjusted_by_ticker.get(ticker, {}).get("status") in {"ok", "low"}
-            and adjusted_by_ticker.get(ticker, {}).get("response_sha256")
-            for ticker in ("MSFT", "GOOGL")
-        )
-    else:
-        adjusted_ok = len(adjusted_checks) == 4 and all(
-            item.get("status") == "unverified" for item in adjusted_checks
-        )
+    adjusted_ok = adjusted_close_contract_passed(
+        adjusted_checks,
+        os.environ.get("TIINGO_API_KEY", ""),
+    )
     checks.append(check("adjusted_close_contract", adjusted_ok, "; ".join(f"{item.get('ticker')}={item.get('status')}" for item in adjusted_checks)))
     selfchecks = [item for item in rchecks if item.get("check") == "adjusted_close_selfcheck"]
     selfcheck_ok = (
