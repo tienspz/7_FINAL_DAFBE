@@ -46,13 +46,22 @@ jobs:
           persist-credentials: true
 
       - name: Validate SEC contact user agent
+        id: validate
         run: |
           if [ -z "$SEC_USER_AGENT" ]; then
+            if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+              echo "run_crawl=false" >> "$GITHUB_OUTPUT"
+              echo "::warning::Skipping data crawl on push: configure the SEC_USER_AGENT repository secret to enable it."
+              echo "Data crawl was skipped because the SEC_USER_AGENT repository secret is not configured. Scheduled and manual runs require this secret." >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
             echo "::error::Configure the SEC_USER_AGENT secret with the project name and a real contact address."
             exit 1
           fi
+          echo "run_crawl=true" >> "$GITHUB_OUTPUT"
 
       - name: Set up Python
+        if: steps.validate.outputs.run_crawl == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: "3.14"
@@ -60,14 +69,17 @@ jobs:
           cache-dependency-path: requirements.txt
 
       - name: Install dependencies
+        if: steps.validate.outputs.run_crawl == 'true'
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
 
       - name: Run unit tests
+        if: steps.validate.outputs.run_crawl == 'true'
         run: python -m pytest -q
 
       - name: Crawl and rebuild dashboard
+        if: steps.validate.outputs.run_crawl == 'true'
         id: crawl
         run: |
           python -m pipeline.run --mode full
@@ -75,6 +87,7 @@ jobs:
           echo "run_id=$run_id" >> "$GITHUB_OUTPUT"
 
       - name: Acceptance check
+        if: steps.validate.outputs.run_crawl == 'true'
         run: |
           for attempt in 1 2 3; do
             if python -m scripts.acceptance_check; then
@@ -86,7 +99,7 @@ jobs:
           exit 1
 
       - name: Preserve raw run archive
-        if: ${{ always() && steps.crawl.outcome == 'success' }}
+        if: ${{ always() && steps.validate.outputs.run_crawl == 'true' && steps.crawl.outcome == 'success' }}
         uses: actions/upload-artifact@v4
         with:
           name: aicor-raw-${{ steps.crawl.outputs.run_id }}-attempt-${{ github.run_attempt }}
@@ -95,10 +108,11 @@ jobs:
           if-no-files-found: error
 
       - name: Detect semantic data change
+        if: steps.validate.outputs.run_crawl == 'true'
         id: fingerprint
         run: python scripts/ci_sync_data.py --check
 
       - name: Commit and push data
-        if: ${{ steps.fingerprint.outputs.changed == 'true' || (github.event_name == 'workflow_dispatch' && inputs.force_commit) }}
+        if: ${{ steps.validate.outputs.run_crawl == 'true' && (steps.fingerprint.outputs.changed == 'true' || (github.event_name == 'workflow_dispatch' && inputs.force_commit)) }}
         run: |
           python scripts/ci_sync_data.py --commit ${{ (github.event_name == 'workflow_dispatch' && inputs.force_commit) && '--force' || '' }}
