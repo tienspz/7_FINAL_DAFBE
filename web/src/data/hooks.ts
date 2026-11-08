@@ -1,27 +1,34 @@
 import { useState, useEffect, useCallback } from 'react';
 import { fetchDataset, fetchHealth, FetchResult } from '../api/client';
 import { HealthResponse } from '../api/types';
+import { registerDataReloader } from './reload';
 
 export function useDataset<T>(key: string) {
   const [result, setResult] = useState<FetchResult<T> | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(async (forceRevalidate = false) => {
     setLoading(true);
     try {
-      const res = await fetchDataset<T>(key);
+      const res = await fetchDataset<T>(key, { forceRevalidate });
       setResult(res);
-      setError(res.warning ? new Error(res.warning) : null);
+      const warning = res.warning ? new Error(res.warning) : null;
+      setError(warning);
+      return warning;
     } catch (err) {
-      setError(err instanceof Error ? err : new Error(String(err)));
+      const loadError = err instanceof Error ? err : new Error(String(err));
+      setError(loadError);
+      return loadError;
     } finally {
       setLoading(false);
     }
   }, [key]);
 
   useEffect(() => {
-    loadData();
+    const unregister = registerDataReloader(loadData);
+    void loadData();
+    return unregister;
   }, [loadData]);
 
   return {
@@ -40,24 +47,33 @@ export function useHealth() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  useEffect(() => {
-    let mounted = true;
-    fetchHealth().then((h) => {
-      if (mounted) {
-        setHealth(h);
-        if (!h) setError(new Error('Không thể kiểm tra trạng thái backend hoặc manifest dữ liệu.'));
-        setLoading(false);
+  const loadHealth = useCallback(async () => {
+    try {
+      const result = await fetchHealth();
+      if (!result) {
+        const healthError = new Error('Không thể kiểm tra trạng thái backend hoặc manifest dữ liệu.');
+        setHealth(null);
+        setError(healthError);
+        return healthError;
       }
-    }).catch((err: unknown) => {
-      if (mounted) {
-        setError(err instanceof Error ? err : new Error(String(err)));
-        setLoading(false);
-      }
-    });
-    return () => {
-      mounted = false;
-    };
+
+      setHealth(result);
+      setError(null);
+      return null;
+    } catch (err) {
+      const healthError = err instanceof Error ? err : new Error(String(err));
+      setError(healthError);
+      return healthError;
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    const unregister = registerDataReloader(loadHealth);
+    void loadHealth();
+    return unregister;
+  }, [loadHealth]);
 
   return { health, loading, error };
 }

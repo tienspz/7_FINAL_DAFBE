@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Freshness } from './types';
 
 export interface SnapshotStreamState {
@@ -14,6 +14,7 @@ export function useSnapshotStream(): SnapshotStreamState {
   const [freshness, setFreshness] = useState<Freshness | null>(null);
   const [hasNewData, setHasNewData] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const resetNewDataNotice = useCallback(() => setHasNewData(false), []);
 
   useEffect(() => {
     // Only connect if EventSource is supported
@@ -91,6 +92,6 @@ export function useSnapshotStream(): SnapshotStreamState {
     freshness,
     hasNewData,
     error,
-    resetNewDataNotice: () => setHasNewData(false),
+    resetNewDataNotice,
   };
 }

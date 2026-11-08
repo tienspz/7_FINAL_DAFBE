@@ -14,6 +14,8 @@ export interface TopbarProps {
   freshness: Freshness | null;
   hasNewData?: boolean;
   onReload?: () => void;
+  isReloading?: boolean;
+  reloadFeedback?: { type: 'success' | 'error'; message: string } | null;
   showCompanyFilter?: boolean;
   showBenchmarkFilter?: boolean;
 }
@@ -26,6 +28,8 @@ export const Topbar: React.FC<TopbarProps> = ({
   freshness,
   hasNewData = false,
   onReload,
+  isReloading = false,
+  reloadFeedback = null,
   showCompanyFilter = false,
   showBenchmarkFilter = false,
 }) => {
@@ -246,26 +250,45 @@ export const Topbar: React.FC<TopbarProps> = ({
 
       {/* Right: Sync Status & Theme Switch */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        {hasNewData && (
-          <button
-            onClick={onReload}
+        {reloadFeedback && (
+          <span
+            role={reloadFeedback.type === 'error' ? 'alert' : 'status'}
+            aria-live={reloadFeedback.type === 'error' ? 'assertive' : 'polite'}
+            title={reloadFeedback.message}
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              padding: '3px 8px',
-              backgroundColor: 'var(--pos-bg)',
-              color: 'var(--pos)',
-              border: '1px solid var(--pos)',
-              borderRadius: 'var(--radius-sm)',
+              maxWidth: '220px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
               fontSize: '11px',
-              cursor: 'pointer',
+              color: reloadFeedback.type === 'error' ? 'var(--neg)' : 'var(--pos)',
             }}
           >
-            <RefreshCw size={12} />
-            <span>Có dữ liệu mới</span>
-          </button>
+            {reloadFeedback.message}
+          </span>
         )}
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <IconButton
+            aria-label={hasNewData ? 'Có dữ liệu mới' : isReloading ? 'Đang cập nhật dữ liệu' : 'Tải lại dữ liệu'}
+            aria-busy={isReloading}
+            title={isReloading ? 'Đang cập nhật dữ liệu' : 'Tải lại dữ liệu'}
+            variant={hasNewData ? 'secondary' : 'ghost'}
+            size="sm"
+            disabled={isReloading}
+            onClick={onReload}
+          >
+            <RefreshCw size={16} aria-hidden="true" />
+          </IconButton>
+          {hasNewData && (
+            <span
+              role="status"
+              style={{ fontSize: '11px', color: 'var(--pos)', whiteSpace: 'nowrap' }}
+            >
+              Có dữ liệu mới
+            </span>
+          )}
+        </div>
 
         <Tooltip
           content={`Snapshot: ${freshness?.snapshot_version || '—'} · As of: ${freshness?.data_as_of || '—'} · Checksum: ${freshness?.checksum_ok === true ? 'OK' : freshness?.checksum_ok === false ? 'chưa xác nhận' : '—'}`}

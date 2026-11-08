@@ -1,11 +1,13 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Topbar } from './Topbar';
 import { QuarterRuler } from './QuarterRuler';
 import { NavigationDrawer } from './NavigationDrawer';
 import { Popover } from '../ui/Popover';
 import { Info, AlertCircle } from 'lucide-react';
 import { useSnapshotStream } from '../../api/sse';
+import { prepareSnapshotRevalidation } from '../../api/client';
 import { useHealth } from '../../data/hooks';
+import { reloadMountedData } from '../../data/reload';
 import { i18n } from '../../i18n/vi';
 
 export interface LayoutProps {
@@ -26,6 +28,11 @@ export const Layout: React.FC<LayoutProps> = ({
   showQuarterRuler = false,
 }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isReloading, setIsReloading] = useState(false);
+  const [reloadFeedback, setReloadFeedback] = useState<{
+    type: 'success' | 'error';
+    message: string;
+  } | null>(null);
   const hamburgerRef = useRef<HTMLButtonElement>(null);
 
   const { health } = useHealth();
@@ -33,10 +40,40 @@ export const Layout: React.FC<LayoutProps> = ({
   const currentFreshness = sseFreshness || health?.snapshot || null;
   const closeDrawer = useCallback(() => setDrawerOpen(false), []);
 
-  const handleReload = () => {
-    resetNewDataNotice();
-    window.location.reload();
-  };
+  const handleReload = useCallback(async () => {
+    if (isReloading) return;
+    setIsReloading(true);
+    setReloadFeedback(null);
+    try {
+      await prepareSnapshotRevalidation();
+      const result = await reloadMountedData(true);
+      if (result.errors.length > 0) {
+        const detail = result.errors.map((error) => error.message).join(' · ');
+        setReloadFeedback({
+          type: 'error',
+          message: `Không thể cập nhật đầy đủ dữ liệu: ${detail}`,
+        });
+        return;
+      }
+
+      resetNewDataNotice();
+      setReloadFeedback({
+        type: 'success',
+        message: 'Đã kiểm tra dữ liệu mới nhất.',
+      });
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      setReloadFeedback({ type: 'error', message: `Không thể cập nhật dữ liệu: ${detail}` });
+    } finally {
+      setIsReloading(false);
+    }
+  }, [isReloading, resetNewDataNotice]);
+
+  useEffect(() => {
+    if (!reloadFeedback || reloadFeedback.type !== 'success') return;
+    const timeout = window.setTimeout(() => setReloadFeedback(null), 4000);
+    return () => window.clearTimeout(timeout);
+  }, [reloadFeedback]);
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--bg)' }}>
@@ -49,6 +86,8 @@ export const Layout: React.FC<LayoutProps> = ({
         freshness={currentFreshness}
         hasNewData={hasNewData}
         onReload={handleReload}
+        isReloading={isReloading}
+        reloadFeedback={reloadFeedback}
         showCompanyFilter={showCompanyFilter}
         showBenchmarkFilter={showBenchmarkFilter}
       />

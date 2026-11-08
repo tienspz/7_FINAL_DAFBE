@@ -1,0 +1,75 @@
+# Plan-to-Tasks Traceability Checkpoint
+metadata:
+  generated: "2026-11-09"
+  source_plan: "docs/plans/manual-data-reload/plan.md"
+  target_tasks: "Tasks embedded in docs/plans/manual-data-reload/plan.md"
+
+summary:
+  total_plan_items: 4
+  covered_plan_items: 4
+  missing_plan_items: 0
+  coverage_percentage: 100.0
+  total_tasks_generated: 6
+  orphan_tasks: 0
+
+phases:
+  - phase_id: "Phase-1"
+    phase_name: "Foundational refresh behavior"
+    items:
+      - item_id: "1.1"
+        description: "Register mounted data loaders."
+        tasks:
+          - task_id: "T001"
+            description: "Add mounted dataset/health refresh coordination."
+          - task_id: "T002"
+            description: "Test refresh coordination and ETag/304 handling."
+  - phase_id: "Phase-2"
+    phase_name: "User Story 1: Manually refresh the current dashboard"
+    items:
+      - item_id: "2.1"
+        description: "Add persistent reload control and feedback."
+        tasks:
+          - task_id: "T003"
+            description: "Add persistent icon and accessible feedback."
+          - task_id: "T004"
+            description: "Test click behavior and refresh feedback."
+      - item_id: "2.2"
+        description: "Verify realtime notice and failure handling."
+        tasks:
+          - task_id: "T004"
+            description: "Test new-snapshot notice, successful refresh, and failure handling."
+  - phase_id: "Phase-3"
+    phase_name: "Release and deployment validation"
+    items:
+      - item_id: "3.1"
+        description: "Validate and publish."
+        tasks:
+          - task_id: "T005"
+            description: "Run frontend and relevant backend validation."
+          - task_id: "T006"
+            description: "Publish to the approved Git branch and verify GitHub/Vercel."
+
+missing_plan_items: []
+orphan_tasks: []
+upstream_trace:
+  - plan_item: "1.1"
+    source_requirements: ["REQ-002"]
+    tasks: ["T001", "T002"]
+    full_trace: "REQ-002 → Phase-1.1 → T001,T002"
+  - plan_item: "2.1"
+    source_requirements: ["REQ-001", "REQ-002"]
+    tasks: ["T003", "T004"]
+    full_trace: "REQ-001,REQ-002 → Phase-2.1 → T003,T004"
+  - plan_item: "2.2"
+    source_requirements: ["REQ-002", "REQ-003"]
+    tasks: ["T004"]
+    full_trace: "REQ-002,REQ-003 → Phase-2.2 → T004"
+  - plan_item: "3.1"
+    source_requirements: ["REQ-003", "REQ-004"]
+    tasks: ["T005", "T006"]
+    full_trace: "REQ-003,REQ-004 → Phase-3.1 → T005,T006"
+validation:
+  passed: true
+  errors: []
+  warnings:
+    - "T006 requires resolution of the checkout/workspace mismatch before publishing."

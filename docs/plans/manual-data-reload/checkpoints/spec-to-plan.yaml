@@ -1,0 +1,66 @@
+# Spec-to-Plan Traceability Checkpoint
+metadata:
+  generated: "2026-11-09"
+  source_spec: "User request; SPEC.md (FR-39, FR-47, SI-08, DP-07)"
+  target_plan: "docs/plans/manual-data-reload/plan.md"
+
+summary:
+  total_requirements: 4
+  covered_requirements: 4
+  missing_requirements: 0
+  coverage_percentage: 100.0
+
+requirements:
+  - req_id: "REQ-001"
+    req_description: "Keep an accessible reload icon visible in the top bar with progress feedback."
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2"
+      phase_name: "User Story 1: Manually refresh the current dashboard"
+      items:
+        - item_id: "2.1"
+          description: "Add persistent reload control and feedback."
+    notes: "Derived from the user's request."
+  - req_id: "REQ-002"
+    req_description: "Revalidate currently mounted datasets and freshness without a page reload, and surface failures."
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-1/Phase-2"
+      phase_name: "Refresh behavior and manual refresh journey"
+      items:
+        - item_id: "1.1"
+          description: "Register mounted data loaders."
+        - item_id: "2.1"
+          description: "Add persistent reload control and feedback."
+        - item_id: "2.2"
+          description: "Verify realtime notice and failure handling."
+    notes: "Uses the existing backend ETag/checksum and static-fallback contracts."
+  - req_id: "REQ-003"
+    req_description: "Preserve SSE snapshot notices and never expose protected refresh credentials in browser code."
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2"
+      phase_name: "User Story 1: Manually refresh the current dashboard"
+      items:
+        - item_id: "2.2"
+          description: "Verify realtime notice and failure handling."
+    notes: "Aligned with SI-08/SI-09 and existing backend API contract."
+  - req_id: "REQ-004"
+    req_description: "Validate, publish, and confirm GitHub/Vercel synchronization."
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-3"
+      phase_name: "Release and deployment validation"
+      items:
+        - item_id: "3.1"
+          description: "Validate and publish."
+    notes: "Deployment must be verified; local build alone is insufficient."
+
+missing_requirements: []
+orphan_plan_items: []
+validation:
+  passed: true
+  errors: []
+  warnings:
+    - "The workspace has no constitution.md."
+    - "Vercel Git integration/deployment credentials are not present in the workspace."

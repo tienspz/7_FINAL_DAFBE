@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { fetchDataset } from './client';
+import { fetchDataset, prepareSnapshotRevalidation } from './client';
 
 const validDataset = {
   schema_version: '1.0',
@@ -70,5 +70,39 @@ describe('fetchDataset', () => {
     expect(result.source).toBe('cache');
     expect(result.data).toEqual(validDataset);
     expect(result.warning).toContain('không khớp');
+  });
+
+  it('accepts a new snapshot after preparing a manual revalidation', async () => {
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify(validDataset), {
+        headers: {
+          ETag: '"dataset-old"',
+          'X-AICOR-Snapshot': 'snapshot-test',
+        },
+      }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({
+        ...validDataset,
+        snapshot_version: 'snapshot-new',
+        value: 84,
+      }), {
+        headers: {
+          ETag: '"dataset-new"',
+          'X-AICOR-Snapshot': 'snapshot-new',
+        },
+      }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    await fetchDataset<typeof validDataset>('manual-refresh-snapshot-test');
+    await prepareSnapshotRevalidation();
+    const result = await fetchDataset<typeof validDataset>(
+      'manual-refresh-snapshot-test',
+      { forceRevalidate: true }
+    );
+
+    expect(result.data).toMatchObject({
+      snapshot_version: 'snapshot-new',
+      value: 84,
+    });
+    expect(result.source).toBe('api');
   });
 });

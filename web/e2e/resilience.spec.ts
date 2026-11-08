@@ -76,4 +76,46 @@ test.describe('Resilience and Data Layer Fallback', () => {
     await page.goto('/');
     await expect(page.getByRole('button', { name: 'Có dữ liệu mới' })).toBeVisible();
   });
+
+  test('always shows a reload icon and revalidates the current dataset', async ({ page }) => {
+    let overviewRequests = 0;
+    await page.route('**/api/data/overview', async (route) => {
+      overviewRequests += 1;
+      if (overviewRequests === 1) {
+        return route.fulfill({
+          status: 503,
+          contentType: 'application/json',
+          body: JSON.stringify({ error: 'backend_unavailable' }),
+        });
+      }
+
+      const staticResponse = await route.fetch({ url: 'http://localhost:5173/data/overview.json' });
+      const dataset = await staticResponse.json();
+      dataset.snapshot_version = 'manual-refresh-test';
+      dataset.kpis.MSFT.stock_return_1y = 0.222;
+      return route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        headers: {
+          ETag: '"manual-refresh-test"',
+          'X-AICOR-Snapshot': 'manual-refresh-test',
+        },
+        body: JSON.stringify(dataset),
+      });
+    });
+
+    await page.goto('/');
+    const reloadButton = page.getByRole('button', { name: 'Tải lại dữ liệu' });
+    await expect(reloadButton).toBeVisible();
+    await expect(page.getByText('Microsoft (MSFT)')).toBeVisible();
+    await expect(page.getByText('+7,6%', { exact: true })).toBeVisible();
+    const requestsBeforeReload = overviewRequests;
+
+    await reloadButton.click();
+
+    await expect.poll(() => overviewRequests).toBeGreaterThan(requestsBeforeReload);
+    await expect(page.getByText('+22,2%', { exact: true })).toBeVisible();
+    await expect(page.getByRole('status').filter({ hasText: 'Đã kiểm tra dữ liệu mới nhất.' })).toBeVisible();
+    await expect(reloadButton).toBeEnabled();
+  });
 });

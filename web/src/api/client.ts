@@ -30,6 +30,10 @@ export interface FetchResult<T> {
   warning?: string;
 }
 
+export interface FetchDatasetOptions {
+  forceRevalidate?: boolean;
+}
+
 /**
  * Normalizes dataset key to static path
  * e.g. 'prices/MSFT' -> '/data/prices/MSFT.json'
@@ -69,8 +73,16 @@ function validateDatasetEnvelope(data: unknown, key: string, headerSnapshotVersi
 /**
  * Fetches dataset with ETag support and static fallback.
  */
-export async function fetchDataset<T>(key: string): Promise<FetchResult<T>> {
-  const pending = inFlightRequests.get(key);
+export async function fetchDataset<T>(
+  key: string,
+  options: FetchDatasetOptions = {}
+): Promise<FetchResult<T>> {
+  let pending = inFlightRequests.get(key);
+  if (pending && options.forceRevalidate) {
+    await pending.catch(() => undefined);
+    if (inFlightRequests.get(key) === pending) inFlightRequests.delete(key);
+    pending = inFlightRequests.get(key);
+  }
   if (pending) return pending as Promise<FetchResult<T>>;
 
   const request = fetchDatasetUncached<T>(key);
@@ -80,6 +92,12 @@ export async function fetchDataset<T>(key: string): Promise<FetchResult<T>> {
   };
   void request.then(cleanup, cleanup);
   return request;
+}
+
+export async function prepareSnapshotRevalidation(): Promise<void> {
+  const pending = [...inFlightRequests.values()];
+  await Promise.all(pending.map((request) => request.catch(() => undefined)));
+  activeSnapshotVersion = null;
 }
 
 async function fetchDatasetUncached<T>(key: string): Promise<FetchResult<T>> {
@@ -94,7 +112,7 @@ async function fetchDatasetUncached<T>(key: string): Promise<FetchResult<T>> {
 
   // 1. Try Backend API
   try {
-    const response = await fetch(`/api/data/${key}`, { headers });
+    const response = await fetch(`/api/data/${key}`, { headers, cache: 'no-cache' });
     
     // 304 Not Modified -> return cached data
     if (response.status === 304 && cached) {
@@ -134,7 +152,7 @@ async function fetchDatasetUncached<T>(key: string): Promise<FetchResult<T>> {
   // 2. Fallback to static public JSON
   try {
     const staticUrl = toStaticPath(key);
-    const staticRes = await fetch(staticUrl);
+    const staticRes = await fetch(staticUrl, { cache: 'no-cache' });
     if (staticRes.ok) {
       const data: unknown = await staticRes.json();
       validateDatasetEnvelope(data, key);
