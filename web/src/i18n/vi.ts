@@ -1,0 +1,80 @@
+/**
+ * Vietnamese dictionary and term tooltips for AICOR dashboard.
+ */
+
+export const i18n = {
+  app: {
+    title: 'AICOR',
+    subtitle: 'Phân tích tài chính & Đầu tư AI: Microsoft vs Alphabet',
+  },
+  nav: {
+    overview: 'Tổng quan',
+    investor: 'Lợi suất cổ đông',
+    financials: 'Tài chính',
+    ai: 'Đầu tư AI',
+    decision: 'Quyết định',
+    methodology: 'Phương pháp & Nguồn',
+  },
+  companies: {
+    MSFT: 'Microsoft',
+    GOOGL: 'Alphabet',
+    SPY: 'S&P 500 (SPY)',
+    QQQ: 'Nasdaq 100 (QQQ)',
+  },
+  status: {
+    positive: 'Tích cực',
+    neutral: 'Trung lập',
+    caution: 'Cần thận trọng',
+    reject_h0: 'Bác bỏ H0',
+    fail_to_reject_h0: 'Không bác bỏ H0',
+    exploratory: 'Tham khảo (chưa kết luận)',
+  },
+  metrics: {
+    stock_return_1y: 'Lợi suất 1 năm',
+    revenue_growth_latest: 'Tăng trưởng doanh thu',
+    operating_margin_latest: 'Biên lợi nhuận HĐ',
+    fcf_margin_latest: 'Biên dòng tiền tự do',
+    revenue: 'Doanh thu',
+    operating_income: 'Lợi nhuận hoạt động',
+    net_income: 'Lợi nhuận ròng',
+    fcf: 'Dòng tiền tự do (FCF)',
+    rd_intensity: 'Tỷ trọng R&D / Doanh thu',
+    capex_intensity: 'Tỷ trọng CapEx / Doanh thu',
+    roe: 'Lợi nhuận trên vốn CSH (ROE)',
+    roic: 'Lợi nhuận trên vốn đầu tư (ROIC)',
+    pe_trailing: 'P/E trượt (12 tháng)',
+    eps_trailing_4q: 'EPS trượt (12 tháng)',
+    annualized_volatility: 'Biến động quy năm',
+    max_drawdown: 'Mức sụt giảm tối đa',
+  },
+  tooltips: {
+    fcf: 'Dòng tiền hoạt động trừ chi phí đầu tư tài sản cố định (CapEx).',
+    operating_margin: 'Tỷ lệ lợi nhuận hoạt động trên tổng doanh thu.',
+    rd_intensity: 'Chi tiêu nghiên cứu và phát triển trên doanh thu quý.',
+    capex_intensity: 'Chi tiêu vốn mua sắm tài sản trên doanh thu quý.',
+    roe: 'Hiệu quả sử dụng vốn chủ sở hữu sinh lời.',
+    roic: 'Hiệu quả phân bổ vốn vào các hoạt động sinh lời.',
+    p_value: 'Xác suất quan sát thấy kết quả nếu giả thuyết không (H0) là đúng.',
+    low_quality: 'Số liệu sơ bộ hoặc khác biệt phân loại XBRL; cần đối chiếu.',
+    non_trading_day: 'Ngày chọn không phải phiên giao dịch; tự động lấy phiên kế tiếp.',
+    not_investment_advice: 'Chỉ cung cấp số liệu thống kê khách quan, không phải khuyến nghị đầu tư.',
+  },
+  disclaimer: {
+    statutory: 'Tương quan ≠ nhân quả · Không phải khuyến nghị đầu tư',
+    full: 'Toàn bộ nội dung phân tích mang tính khách quan thống kê và nghiên cứu học thuật. Hiệu suất quá khứ không bảo đảm kết quả tương lai. Người dùng tự chịu trách nhiệm về quyết định tài chính cá nhân.',
+  },
+  labels: {
+    reported: 'Công bố chính thức',
+    proxy: 'Chỉ số đại diện',
+    estimated: 'Ước lượng học thuật',
+    source: 'Xem nguồn',
+    save_scenario: 'Lưu kịch bản',
+    export_csv: 'Xuất CSV',
+    export_png: 'Xuất PNG',
+    data_freshness: 'Cập nhật',
+    snapshot: 'Phiên bản snapshot',
+    quarter_ruler: 'Thước quý',
+    illustration_tag: 'Minh họa',
+  },
+};
+

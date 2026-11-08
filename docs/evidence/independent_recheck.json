@@ -1,0 +1,48 @@
+{
+  "tolerance": 1e-06,
+  "checks": [
+    {
+      "test": "BT1 MSFT monthly excess return vs SPY",
+      "n_pipeline": 58,
+      "n_independent": 58,
+      "p_pipeline": 0.8996728305129631,
+      "p_independent": 0.8996728305129631,
+      "statistic_pipeline": 0.1266376919383292,
+      "statistic_independent": 0.1266376919383292,
+      "window_start": "2022-01-31"
+    },
+    {
+      "test": "BT2 revenue growth MSFT vs GOOGL",
+      "n_pipeline": 13,
+      "n_independent": 13,
+      "t_p_pipeline": 0.3778837048850899,
+      "t_p_independent": 0.3778837048850899,
+      "shapiro_p_pipeline": 0.08954751267051957,
+      "shapiro_p_independent": 0.08954751267051957,
+      "wilcoxon_p_pipeline": 0.21630859375,
+      "wilcoxon_p_independent": 0.21630859375
+    },
+    {
+      "test": "BT4 MSFT rd_growth_yoy vs revenue_growth_yoy lag 0",
+      "transformation": "first_difference",
+      "n_pipeline": 14,
+      "n_independent": 14,
+      "rho_pipeline": -0.06373626373626373,
+      "rho_independent": -0.06373626373626373,
+      "p_pipeline": 0.8286264229286121,
+      "p_independent": 0.8286264229286121,
+      "adf_level_p_x": 1.3137751456851812e-06
+    },
+    {
+      "test": "BT3 MSFT rd_intensity linear trend (HAC)",
+      "n_pipeline": 19,
+      "n_independent": 19,
+      "coefficient_pipeline": -0.00162606170417476,
+      "coefficient_independent": -0.00162606170417476,
+      "p_pipeline": 2.3768641906376577e-60,
+      "p_independent": 2.3768641906376577e-60
+    }
+  ],
+  "failures": [],
+  "result": "ok"
+}

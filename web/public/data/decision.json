@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "snapshot_version": "v20261106.9",
+  "generated_at": "2026-11-08T06:51:43Z",
+  "thresholds_version": "1.1",
+  "comparison": [
+    {
+      "ticker": "MSFT",
+      "calendar_key": "2026-Q3",
+      "period_end": "2026-09-30",
+      "stock_return_quarter": 0.37758185307855174,
+      "revenue_growth_yoy": 0.18804475171552526,
+      "operating_margin": 0.4975671604590427,
+      "fcf_growth_yoy": -0.2739352375014612,
+      "rd_intensity": 0.09803964065497026,
+      "capex_intensity": 0.4266084374559759,
+      "eps_trailing_4q": 19.15,
+      "pe_trailing": 26.783291092118148,
+      "annualized_volatility": 0.27271168374998905,
+      "max_drawdown": -0.37148495053137465,
+      "status": "Tích cực",
+      "reasons": [
+        "Revenue growth above threshold",
+        "CapEx intensity is high"
+      ],
+      "not_investment_advice": true
+    },
+    {
+      "ticker": "GOOGL",
+      "calendar_key": "2026-Q3",
+      "period_end": "2026-09-30",
+      "stock_return_quarter": -0.03656952221088017,
+      "revenue_growth_yoy": 0.246526488577961,
+      "operating_margin": 0.3180510593602295,
+      "fcf_growth_yoy": -1.370589918646008,
+      "rd_intensity": 0.16178464770295586,
+      "capex_intensity": 0.40254121040626445,
+      "eps_trailing_4q": 19.16,
+      "pe_trailing": 17.958245645734113,
+      "annualized_volatility": 0.3143073076238434,
+      "max_drawdown": -0.443200574057121,
+      "status": "Tích cực",
+      "reasons": [
+        "Revenue growth above threshold",
+        "CapEx intensity is high"
+      ],
+      "not_investment_advice": true
+    }
+  ],
+  "disclaimer": "Không phải khuyến nghị đầu tư. Chỉ hiển thị dữ liệu và tiêu chí định lượng."
+}

@@ -1,0 +1,178 @@
+"""Test helpers for constructing pipeline inputs."""
+
+from __future__ import annotations
+
+from datetime import date
+import hashlib
+import json
+from pathlib import Path
+from typing import Any
+
+from pipeline.config import Settings
+from pipeline.preprocess.calendar import CalendarQuarter
+from pipeline.preprocess.facts import MetricValue
+from pipeline.util import quarter_key
+
+
+def write_dashboard_snapshot(
+    root: Path,
+    *,
+    generated_at: str,
+    data_as_of: str = "2026-11-06",
+    snapshot_version: str = "v20261106.5",
+    run_id: str = "run_20261107T122003Z_test",
+    documents: dict[str, Any] | None = None,
+) -> Path:
+    """Write a synthetic dashboard directory with a matching manifest.
+
+    The contents are placeholders only: no production financial value is used
+    or asserted in backend tests.
+    """
+    contents = documents or {
+        "financials.json": {"schema_version": "1.0", "quarters": []},
+        "overview.json": {"schema_version": "1.0", "kpis": []},
+        "decision.json": {"schema_version": "1.0", "companies": {}},
+        "prices/MSFT.json": {"schema_version": "1.0", "rows": []},
+    }
+    root.mkdir(parents=True, exist_ok=True)
+    files: dict[str, str] = {}
+    checksums: dict[str, str] = {}
+    for name, payload in contents.items():
+        body = (json.dumps(payload, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+        path = root / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(body)
+        key = name[:-5] if name.endswith(".json") else name
+        files[key] = name
+        checksums[name] = "sha256:" + hashlib.sha256(body).hexdigest()
+
+    manifest = {
+        "schema_version": "1.0",
+        "snapshot_version": snapshot_version,
+        "generated_at": generated_at,
+        "data_as_of": data_as_of,
+        "latest_quarter": "2026-Q3",
+        "run_id": run_id,
+        "files": files,
+        "checksums": checksums,
+        "row_counts": {"financial_quarters": 38},
+    }
+    (root / "manifest.json").write_bytes(
+        (json.dumps(manifest, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+    )
+    return root
+
+
+def make_settings(
+    companies: dict[str, Any],
+    *,
+    thresholds: dict[str, Any] | None = None,
+    segment_map: dict[str, Any] | None = None,
+    split_adjustments: dict[str, Any] | None = None,
+    diagnostic_tags: dict[str, Any] | None = None,
+) -> Settings:
+    return Settings(
+        concept_map={
+            "companies": companies,
+            "split_adjustments": split_adjustments or {},
+            "diagnostic_tags": diagnostic_tags or {},
+        },
+        segment_map=segment_map or {"companies": {}},
+        source_registry={},
+        allowlist={},
+        thresholds=thresholds
+        or {
+            "quality": {
+                "segment_sum_tolerance": 0.005,
+                "filing_lag_days": 120,
+                "q4_residual_ok": 0.005,
+                "q4_residual_low": 0.02,
+            }
+        },
+    )
+
+
+def make_fact(
+    *,
+    ticker: str,
+    metric: str,
+    tag: str,
+    start: str,
+    end: str,
+    period_type: str,
+    value: float,
+    filed: str = "2025-01-01",
+    accession: str = "0000000000-25-000001",
+    form: str = "10-Q",
+    calendar_key: str | None = None,
+    is_original: bool = True,
+    verified: bool = True,
+    unit: str = "USD",
+    fact_id: str | None = None,
+) -> dict[str, Any]:
+    identifier = fact_id or f"{ticker}-{metric}-{start}-{end}"
+    return {
+        "fact_id": identifier,
+        "ticker": ticker,
+        "metric": metric,
+        "xbrl_tag": tag,
+        "unit": unit,
+        "period_start": start,
+        "period_end": end,
+        "period_type": period_type,
+        "calendar_key": calendar_key or quarter_key(date.fromisoformat(end)),
+        "value_usd": value,
+        "value_raw": value,
+        "filed_date": filed,
+        "accession_number": accession,
+        "form": form,
+        "source_url": f"https://www.sec.gov/Archives/edgar/data/1/{accession}/",
+        "evidence_url": f"https://data.sec.gov/api/xbrl/companyconcept/CIK0000000001/us-gaap/{tag}.json",
+        "fetched_at": "2025-01-02T00:00:00Z",
+        "response_sha256": hashlib.sha256(identifier.encode("utf-8")).hexdigest(),
+        "is_original": is_original,
+        "verified": verified,
+    }
+
+
+def make_metric(
+    value: float | None,
+    *,
+    quality: str = "ok",
+    unit: str = "USD",
+    verified: bool = True,
+    tag: str = "TestTag",
+    source_url: str = "https://www.sec.gov/example",
+    accession: str = "0000000000-25-000001",
+    derived: bool = False,
+    reason: str = "",
+) -> MetricValue:
+    return MetricValue(
+        value=value,
+        unit=unit,
+        source_url=source_url,
+        accession_number=accession,
+        xbrl_tag=tag,
+        form="10-Q",
+        filed_date="2025-01-01",
+        period_end="2025-03-31",
+        derived=derived,
+        verified=verified,
+        quality_flag=quality,
+        reason=reason,
+    )
+
+
+def make_quarter(key: str) -> CalendarQuarter:
+    year, q = key.split("-Q")
+    month = (int(q) - 1) * 3 + 1
+    start = date(int(year), month, 1)
+    if month == 10:
+        end = date(int(year), 12, 31)
+    elif month == 7:
+        end = date(int(year), 9, 30)
+    elif month == 4:
+        end = date(int(year), 6, 30)
+    else:
+        end = date(int(year), 3, 31)
+    return CalendarQuarter(key=key, start=start, end=end)

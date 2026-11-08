@@ -1,0 +1,146 @@
+version: "1.1"
+# CR-14 AI event seeds.
+#
+# Rules enforced by pipeline/crawlers/ai_events.py:
+#   * source_url must be an official company page on an allowlisted domain;
+#   * evidence_quote must appear verbatim (after whitespace/typography
+#     normalization) in the fetched page text;
+#   * published_date must match the page's own machine-readable date;
+#   * the response hash is stored with the event.
+# An event failing any check is rejected and never reaches the dashboard.
+#
+# Coverage: 2023-01 .. 2026-09. The 2024-06..2026-09 additions below were taken
+# from blog.google and blogs.microsoft.com only. The cross-check is still the
+# automated evidence check (quote + page date + hash), not human editorial
+# review; that limitation is shown on the dashboard.
+review_method: automated_evidence_check
+reviewer: pipeline.ai_events.autoverify@1.0
+events:
+  - id: googl-bard-announced
+    ticker: GOOGL
+    title: "Google AI updates: Bard and new AI features in Search"
+    category: model_launch
+    published_date: "2023-02-06"
+    source_url: "https://blog.google/innovation-and-ai/technology/ai/bard-google-ai-search-updates/"
+    evidence_quote: "We've been working on an experimental conversational AI service, powered by LaMDA, that we're calling Bard."
+  - id: msft-openai-partnership-extended
+    ticker: MSFT
+    title: "Microsoft and OpenAI extend partnership"
+    category: partnership
+    published_date: "2023-01-23"
+    source_url: "https://blogs.microsoft.com/blog/2023/01/23/microsoftandopenaiextendpartnership/"
+    evidence_quote: "It extends our ongoing collaboration across AI supercomputing and research and enables each of us to independently commercialize the resulting advanced AI technologies."
+  - id: msft-microsoft-365-copilot
+    ticker: MSFT
+    title: "Introducing Microsoft 365 Copilot - your copilot for work"
+    category: product_launch
+    published_date: "2023-03-16"
+    source_url: "https://blogs.microsoft.com/blog/2023/03/16/introducing-microsoft-365-copilot-your-copilot-for-work/"
+    evidence_quote: "Today, we are bringing the power of next-generation AI to work."
+  - id: googl-gemini-1-0
+    ticker: GOOGL
+    title: "Introducing Gemini: Google's most capable AI model yet"
+    category: model_launch
+    published_date: "2023-12-06"
+    source_url: "https://blog.google/innovation-and-ai/technology/ai/google-gemini-ai/"
+    evidence_quote: "Today, we're a step closer to this vision as we introduce Gemini, the most capable and general model we've ever built."
+  - id: googl-gemini-1-5
+    ticker: GOOGL
+    title: "Introducing Gemini 1.5, Google's next-generation AI model"
+    category: model_launch
+    published_date: "2024-02-15"
+    source_url: "https://blog.google/innovation-and-ai/products/google-gemini-next-generation-model-february-2024/"
+    evidence_quote: "Today, we're announcing our next-generation model: Gemini 1.5."
+  - id: msft-copilot-plus-pcs
+    ticker: MSFT
+    title: "Introducing Copilot+ PCs"
+    category: product_launch
+    published_date: "2024-05-20"
+    source_url: "https://blogs.microsoft.com/blog/2024/05/20/introducing-copilot-pcs/"
+    evidence_quote: "Today, at a special event on our new Microsoft campus, we introduced the world to a new category of Windows PCs designed for AI, Copilot+ PCs."
+
+  # 2024-06 .. 2026-09 additions, official pages only.
+  - id: googl-gemini-2-0
+    ticker: GOOGL
+    title: "Google introduces Gemini 2.0: A new AI model for the agentic era"
+    category: model_launch
+    published_date: "2024-12-11"
+    source_url: "https://blog.google/innovation-and-ai/models-and-research/google-deepmind/google-gemini-ai-update-december-2024/"
+    evidence_quote: "Today we're excited to launch our next era of models built for this new agentic era: introducing Gemini 2.0, our most capable model yet."
+  - id: googl-gemini-2-5-pro-update
+    ticker: GOOGL
+    title: "Gemini 2.5 Pro update: Coding, web apps with Gemini"
+    category: model_launch
+    published_date: "2025-05-06"
+    source_url: "https://blog.google/products-and-platforms/products/gemini/gemini-2-5-pro-updates/"
+    evidence_quote: "This builds on the overwhelmingly positive feedback to Gemini 2.5 Pro's coding and multimodal reasoning capabilities."
+  - id: msft-build-2025-agentic-web
+    ticker: MSFT
+    title: "Microsoft Build 2025: The age of AI agents and building the open agentic web"
+    category: platform_launch
+    published_date: "2025-05-19"
+    source_url: "https://blogs.microsoft.com/blog/2025/05/19/microsoft-build-2025-the-age-of-ai-agents-and-building-the-open-agentic-web/"
+    evidence_quote: "We've entered the era of AI agents."
+  - id: msft-openai-next-chapter
+    ticker: MSFT
+    title: "The next chapter of the Microsoft-OpenAI partnership"
+    category: partnership
+    published_date: "2025-10-28"
+    source_url: "https://blogs.microsoft.com/blog/2025/10/28/the-next-chapter-of-the-microsoft-openai-partnership/"
+    evidence_quote: "As we enter the next phase of this partnership, we've signed a new definitive agreement that builds on our foundation, strengthens our partnership, and sets the stage for long-term success for both organizations."
+  - id: googl-gemini-3
+    ticker: GOOGL
+    title: "Gemini 3: Introducing the latest Gemini AI model from Google"
+    category: model_launch
+    published_date: "2025-11-18"
+    source_url: "https://blog.google/products-and-platforms/products/gemini/gemini-3/"
+    evidence_quote: "Google introduces Gemini 3, its most intelligent AI model, enhancing reasoning and multimodal capabilities."
+  - id: msft-maia-200
+    ticker: MSFT
+    title: "Maia 200: The AI accelerator built for inference"
+    category: infrastructure
+    published_date: "2026-01-26"
+    source_url: "https://blogs.microsoft.com/blog/2026/01/26/maia-200-the-ai-accelerator-built-for-inference/"
+    evidence_quote: "Maia 200 is also the most efficient inference system Microsoft has ever deployed, with 30% better performance per dollar than the latest generation hardware in our fleet today."
+  - id: googl-gemini-3-5
+    ticker: GOOGL
+    title: "Gemini 3.5: frontier intelligence with action"
+    category: model_launch
+    published_date: "2026-05-19"
+    source_url: "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-5/"
+    evidence_quote: "This represents a major leap forward in building more capable, intelligent agents."
+  - id: googl-io-2026-gemini-3-5-flash
+    ticker: GOOGL
+    title: "100 things we announced at Google I/O 2026"
+    category: model_launch
+    published_date: "2026-05-20"
+    source_url: "https://blog.google/innovation-and-ai/technology/ai/google-io-2026-all-our-announcements/"
+    evidence_quote: "We launched Gemini 3.5 Flash: the first in our latest series of models combining frontier intelligence with action."
+  - id: msft-pecos-datacenter
+    ticker: MSFT
+    title: "Powering the next wave of AI: Expanding capacity with our new datacenter in Pecos"
+    category: infrastructure
+    published_date: "2026-06-22"
+    source_url: "https://blogs.microsoft.com/blog/2026/06/22/powering-the-next-wave-of-ai-expanding-capacity-with-our-new-datacenter-in-pecos/"
+    evidence_quote: "Today, Microsoft is announcing one of the largest single capacity additions in our history."
+  - id: msft-azure-amd-infrastructure
+    ticker: MSFT
+    title: "Microsoft expands Azure AI and HPC infrastructure with AMD"
+    category: infrastructure
+    published_date: "2026-07-20"
+    source_url: "https://blogs.microsoft.com/blog/2026/07/20/microsoft-expands-azure-ai-and-hpc-infrastructure-with-amd/"
+    evidence_quote: "Building on our close collaboration with AMD, Microsoft is bringing AMD's latest Helios AI platform and next-generation EPYC datacenter processors to Azure."
+  - id: googl-gemini-3-7-flash
+    ticker: GOOGL
+    title: "Gemini 3.7 Flash: our most intelligent workhorse model"
+    category: model_launch
+    published_date: "2026-08-13"
+    source_url: "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-3-7-flash/"
+    evidence_quote: "Today, we're building on the progress of our widely used Flash series by introducing Gemini 3.7 Flash, our most intelligent workhorse model yet for coding and agents."
+  - id: googl-gemini-3-8-live
+    ticker: GOOGL
+    title: "Gemini 3.8 Live & Gemini 3.8 Live Extended Thinking"
+    category: model_launch
+    published_date: "2026-09-15"
+    source_url: "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-8-live-gemini-3-8-live-extended-thinking/"
+    evidence_quote: "We are launching Gemini 3.8 Live and Gemini 3.8 Live Extended Thinking to make voice interactions more natural, fluid, and intelligent."

@@ -1,0 +1,176 @@
+version: "1.0"
+# Period-aware XBRL concept map.
+# Flow metrics are converted to quarterly values; instant metrics use the
+# balance-sheet value at period_end. Tags are tried in order. valid_from and
+# valid_to are compared against the fact period_end.
+split_adjustments:
+  # Alphabet's 20:1 split began trading on 2022-07-18. Periods ending before
+  # 2022-06-30 were reported on a pre-split share basis and must be divided by
+  # 20 to be comparable with post-split EPS. The source value is preserved in
+  # reported_value, and the metric is marked quality_flag=low.
+  GOOGL:
+    eps_diluted:
+      split_date: "2022-07-18"
+      ratio: 20
+      adjust_period_end_before: "2022-06-30"
+# Diagnostic tags are extracted into facts.csv for evidence and quality checks
+# only. They never become one of the dashboard's company metrics.
+diagnostic_tags:
+  GOOGL:
+    nonoperating_income:
+      kind: flow
+      unit: USD
+      tags:
+        - tag: NonoperatingIncomeExpense
+    unrealized_equity_gains:
+      kind: flow
+      unit: USD
+      tags:
+        - tag: EquitySecuritiesFvNiUnrealizedGainLoss
+companies:
+  MSFT:
+    revenue:
+      kind: flow
+      unit: USD
+      tags:
+        - tag: RevenueFromContractWithCustomerExcludingAssessedTax
+    operating_income:
+      kind: flow
+      unit: USD
+      tags:
+        - tag: OperatingIncomeLoss
+    net_income:
+      kind: flow
+      unit: USD
+      tags:
+        - tag: NetIncomeLoss
+    rd_expense:
+      kind: flow
+      unit: USD
+      tags:
+        - tag: ResearchAndDevelopmentExpense
+    capex:
+      kind: flow
+      unit: USD
+      tags:
+        - tag: PaymentsToAcquirePropertyPlantAndEquipment
+    cfo:
+      kind: flow
+      unit: USD
+      tags:
+        - tag: NetCashProvidedByUsedInOperatingActivities
+    income_tax_expense:
+      kind: flow
+      unit: USD
+      tags:
+        - tag: IncomeTaxExpenseBenefit
+    pretax_income:
+      kind: flow
+      unit: USD
+      tags:
+        - tag: IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest
+    eps_diluted:
+      kind: flow
+      unit: USD/shares
+      tags:
+        - tag: EarningsPerShareDiluted
+    total_assets:
+      kind: instant
+      unit: USD
+      tags:
+        - tag: Assets
+    total_equity:
+      kind: instant
+      unit: USD
+      tags:
+        - tag: StockholdersEquity
+    total_debt:
+      kind: instant
+      unit: USD
+      aggregation: sum
+      tags:
+        - tag: LongTermDebtCurrent
+        - tag: LongTermDebtNoncurrent
+      fallback_tags:
+        - tag: LongTermDebtAndCapitalLeaseObligationsIncludingCurrentMaturities
+        - tag: LongTermDebt
+    cash_and_st_investments:
+      kind: instant
+      unit: USD
+      tags:
+        - tag: CashCashEquivalentsAndShortTermInvestments
+
+  GOOGL:
+    revenue:
+      kind: flow
+      unit: USD
+      tags:
+        - tag: Revenues
+          valid_from: "2025-04-01"
+        - tag: RevenueFromContractWithCustomerExcludingAssessedTax
+          valid_to: "2025-03-31"
+    operating_income:
+      kind: flow
+      unit: USD
+      tags:
+        - tag: OperatingIncomeLoss
+    net_income:
+      kind: flow
+      unit: USD
+      tags:
+        - tag: NetIncomeLoss
+    rd_expense:
+      kind: flow
+      unit: USD
+      tags:
+        - tag: ResearchAndDevelopmentExpense
+    capex:
+      kind: flow
+      unit: USD
+      tags:
+        - tag: PaymentsToAcquirePropertyPlantAndEquipment
+    cfo:
+      kind: flow
+      unit: USD
+      tags:
+        - tag: NetCashProvidedByUsedInOperatingActivities
+    income_tax_expense:
+      kind: flow
+      unit: USD
+      tags:
+        - tag: IncomeTaxExpenseBenefit
+    pretax_income:
+      kind: flow
+      unit: USD
+      tags:
+        - tag: IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest
+    eps_diluted:
+      kind: flow
+      unit: USD/shares
+      tags:
+        - tag: EarningsPerShareDiluted
+    total_assets:
+      kind: instant
+      unit: USD
+      tags:
+        - tag: Assets
+    total_equity:
+      kind: instant
+      unit: USD
+      tags:
+        - tag: StockholdersEquity
+    total_debt:
+      kind: instant
+      unit: USD
+      aggregation: sum
+      tags:
+        - tag: LongTermDebtCurrent
+        - tag: LongTermDebtNoncurrent
+      fallback_tags:
+        - tag: LongTermDebtAndCapitalLeaseObligationsIncludingCurrentMaturities
+        - tag: LongTermDebt
+    cash_and_st_investments:
+      kind: instant
+      unit: USD
+      tags:
+        - tag: CashCashEquivalentsAndShortTermInvestments

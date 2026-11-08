@@ -1,0 +1,625 @@
+openapi: 3.1.0
+info:
+  title: AICOR Backend API
+  version: 1.0.0
+  description: |
+    Read-only dashboard API plus refresh orchestration and a Server-Sent Events
+    stream. The backend serves the snapshot published by the pipeline; it never
+    writes pipeline data itself.
+
+    Caching and compression:
+
+    - JSON bodies of at least 1024 bytes are gzip-compressed when the request
+      accepts gzip.
+    - Compressible responses send `Vary: Accept-Encoding`.
+    - Dataset and manifest responses use a weak ETag (`W/"<sha256>"`) derived
+      from the identity body. Send it back with `If-None-Match` to receive
+      `304 Not Modified`.
+    - Dataset and manifest responses are `Cache-Control: no-cache,
+      must-revalidate`; other JSON responses are `no-store`.
+
+    The SSE contract is also described by `docs/api/sse-events.schema.json` and
+    `docs/api/types.ts`.
+servers:
+  - url: http://127.0.0.1:8000
+    description: Local development
+  - url: https://aicor.example.com
+    description: Production placeholder (operator-provided host)
+
+tags:
+  - name: system
+  - name: snapshot
+  - name: refresh
+  - name: events
+
+paths:
+  /:
+    get:
+      tags: [system]
+      summary: Service index
+      operationId: getIndex
+      responses:
+        "200":
+          description: Endpoint and dataset discovery
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IndexResponse"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /api/health:
+    get:
+      tags: [system]
+      summary: Health and freshness
+      operationId: getHealth
+      description: |
+        Returns `200` with `status=ok|degraded`, or `503` with
+        `status=unavailable` when no manifest can be read. `degraded` means the
+        snapshot is stale, its checksum verification failed, or its
+        `generated_at` is missing/unparseable.
+      responses:
+        "200":
+          description: Service reachable; inspect `status`
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+        "503":
+          description: Manifest unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+
+  /api/manifest:
+    get:
+      tags: [snapshot]
+      summary: Published manifest
+      operationId: getManifest
+      responses:
+        "200":
+          description: Manifest bytes as published by the pipeline
+          headers:
+            ETag:
+              $ref: "#/components/headers/ETag"
+            X-AICOR-Snapshot:
+              $ref: "#/components/headers/X-AICOR-Snapshot"
+            Cache-Control:
+              $ref: "#/components/headers/Cache-Control-Revalidate"
+            Vary:
+              $ref: "#/components/headers/Vary"
+            Content-Encoding:
+              $ref: "#/components/headers/Content-Encoding"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Manifest"
+        "304":
+          $ref: "#/components/responses/NotModified"
+        "503":
+          description: Manifest unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/latest:
+    get:
+      tags: [snapshot]
+      summary: Freshness, manifest, and first-screen documents
+      operationId: getLatest
+      description: |
+        Returns freshness plus the manifest and, when their checksums verify,
+        the `overview` and `decision` documents. A tampered document is omitted
+        and `freshness.checksum_ok` becomes `false`.
+      responses:
+        "200":
+          description: Latest snapshot bundle
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LatestResponse"
+        "503":
+          description: Snapshot unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/data/{key}:
+    get:
+      tags: [snapshot]
+      summary: A checksum-verified dataset
+      operationId: getDataset
+      description: |
+        `key` is a manifest dataset key such as `financials`, `overview`, or
+        `prices/MSFT`. Keys may contain slashes. The response is refused with
+        `502 checksum_mismatch` when the file no longer matches the manifest.
+      parameters:
+        - name: key
+          in: path
+          required: true
+          description: Manifest dataset key; may contain `/` (for example `prices/MSFT`).
+          schema:
+            type: string
+          example: financials
+      responses:
+        "200":
+          description: Dataset bytes
+          headers:
+            ETag:
+              $ref: "#/components/headers/ETag"
+            X-AICOR-Snapshot:
+              $ref: "#/components/headers/X-AICOR-Snapshot"
+            Cache-Control:
+              $ref: "#/components/headers/Cache-Control-Revalidate"
+            Vary:
+              $ref: "#/components/headers/Vary"
+            Content-Encoding:
+              $ref: "#/components/headers/Content-Encoding"
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        "304":
+          $ref: "#/components/responses/NotModified"
+        "404":
+          description: Unknown or unsafe dataset key
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "502":
+          description: Served bytes do not match the manifest checksum
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: Dataset listed in the manifest but unreadable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/events:
+    get:
+      tags: [events]
+      summary: Server-Sent Events stream
+      operationId: getEvents
+      description: |
+        Opens a long-lived `text/event-stream`. The first event is `ready`, then
+        `snapshot`, `refresh`, `refresh_finished`, and `scheduler_error` events
+        follow. If no message arrives within `heartbeat_seconds`, the server
+        sends a `snapshot` event with `changed=false` so a slow client can
+        resynchronize. Event payloads are defined by
+        `docs/api/sse-events.schema.json`.
+
+        The stream is closed with `503 sse_capacity` when the configured
+        subscriber limit is reached.
+      responses:
+        "200":
+          description: SSE stream
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                const: no-store
+            X-Accel-Buffering:
+              description: Set to `no` so reverse proxies flush events.
+              schema:
+                type: string
+                const: "no"
+          content:
+            text/event-stream:
+              schema:
+                type: string
+              example: |
+                retry: 3000
+
+                event: ready
+                data: {"snapshot":{"available":true,"snapshot_version":"v20261106.9","stale":false},"refresh":{"status":"idle"},"heartbeat_seconds":15}
+
+                event: snapshot
+                data: {"snapshot":{"available":true,"snapshot_version":"v20261106.9","stale":false},"changed":false}
+        "503":
+          description: SSE subscriber capacity reached
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/refresh:
+    get:
+      tags: [refresh]
+      summary: Trigger a refresh (GET for cron callers)
+      operationId: triggerRefreshGet
+      security:
+        - CronBearer: []
+        - CronHeader: []
+      description: |
+        Same behavior as POST; provided so an external cron can call a plain
+        URL. Requires `CRON_SECRET` via a Bearer authorization header or
+        `X-Cron-Secret`.
+        resulting state from `/api/health` → `refresh` or the SSE stream.
+      parameters:
+        - $ref: "#/components/parameters/RefreshReason"
+      responses:
+        "202":
+          description: Refresh accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RefreshAccepted"
+        "401":
+          description: Missing or wrong secret
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: A refresh is already running
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RefreshConflict"
+        "503":
+          description: Refresh endpoint disabled (`CRON_SECRET` unset)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      tags: [refresh]
+      summary: Trigger a refresh
+      operationId: triggerRefresh
+      security:
+        - CronBearer: []
+        - CronHeader: []
+      description: |
+        Requires `CRON_SECRET` via a Bearer authorization header or
+        `X-Cron-Secret`.
+      parameters:
+        - $ref: "#/components/parameters/RefreshReason"
+      responses:
+        "202":
+          description: Refresh accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RefreshAccepted"
+        "401":
+          description: Missing or wrong secret
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: A refresh is already running
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RefreshConflict"
+        "503":
+          description: Refresh endpoint disabled (`CRON_SECRET` unset)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  securitySchemes:
+    CronBearer:
+      type: http
+      scheme: bearer
+      description: CRON_SECRET sent as a Bearer authorization header.
+    CronHeader:
+      type: apiKey
+      in: header
+      name: X-Cron-Secret
+      description: CRON_SECRET sent in the X-Cron-Secret header.
+
+  parameters:
+    RefreshReason:
+      name: reason
+      in: query
+      required: false
+      description: Free-form reason recorded in `RefreshState.reason`.
+      schema:
+        type: string
+        default: api
+
+  headers:
+    ETag:
+      description: Weak validator derived from the identity response body.
+      schema:
+        type: string
+        pattern: '^W/"[0-9a-f]{64}"$'
+    X-AICOR-Snapshot:
+      description: Snapshot version that produced this response.
+      schema:
+        type: string
+    Cache-Control-Revalidate:
+      schema:
+        type: string
+        const: no-cache, must-revalidate
+    Vary:
+      description: May contain `Accept-Encoding` and/or `Origin`.
+      schema:
+        type: string
+    Content-Encoding:
+      description: Present when the response body is gzip-compressed.
+      schema:
+        type: string
+        const: gzip
+
+  responses:
+    NotFound:
+      description: Unknown route
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    NotModified:
+      description: The client's `If-None-Match` matches the current weak ETag.
+      headers:
+        ETag:
+          $ref: "#/components/headers/ETag"
+        Cache-Control:
+          $ref: "#/components/headers/Cache-Control-Revalidate"
+        Vary:
+          $ref: "#/components/headers/Vary"
+
+  schemas:
+    Freshness:
+      type: object
+      required:
+        - available
+        - snapshot_version
+        - data_as_of
+        - generated_at
+        - run_id
+        - age_seconds
+        - stale
+        - stale_after_seconds
+        - checksum_ok
+        - file_count
+        - problems
+      properties:
+        available:
+          type: boolean
+        snapshot_version:
+          type: [string, "null"]
+        data_as_of:
+          type: [string, "null"]
+        generated_at:
+          type: [string, "null"]
+        run_id:
+          type: [string, "null"]
+        age_seconds:
+          type: [integer, "null"]
+          description: Seconds since `generated_at`; `null` when unknown.
+        stale:
+          type: boolean
+          description: |
+            `true` when the snapshot is stale or when `generated_at` is
+            missing/unparseable. An unknown age is never treated as fresh.
+        stale_after_seconds:
+          type: integer
+        checksum_ok:
+          type: boolean
+        file_count:
+          type: integer
+        problems:
+          type: array
+          items:
+            type: string
+
+    RefreshState:
+      type: object
+      required:
+        - status
+        - job_id
+        - reason
+        - started_at
+        - finished_at
+        - detail
+        - exit_code
+        - target
+        - log_path
+        - run_id
+        - snapshot_version
+        - snapshot_changed
+      properties:
+        status:
+          type: string
+          enum: [idle, running, succeeded, failed]
+        job_id:
+          type: [string, "null"]
+        reason:
+          type: string
+        started_at:
+          type: [string, "null"]
+        finished_at:
+          type: [string, "null"]
+        detail:
+          type: string
+        exit_code:
+          type: [integer, "null"]
+        target:
+          type: string
+          enum: [local, github]
+        log_path:
+          type: [string, "null"]
+        run_id:
+          type: [integer, "null"]
+        snapshot_version:
+          type: [string, "null"]
+        snapshot_changed:
+          type: [boolean, "null"]
+          description: |
+            `true` when the post-refresh snapshot version differs from the
+            pre-refresh version; `null` when no post-refresh snapshot exists.
+
+    Manifest:
+      type: object
+      required: [snapshot_version, generated_at, data_as_of, files, checksums]
+      properties:
+        schema_version:
+          type: string
+        snapshot_version:
+          type: string
+        generated_at:
+          type: string
+        data_as_of:
+          type: string
+        latest_quarter:
+          type: string
+        run_id:
+          type: string
+        files:
+          type: object
+          additionalProperties:
+            type: string
+        checksums:
+          type: object
+          additionalProperties:
+            type: string
+        row_counts:
+          type: object
+          additionalProperties:
+            type: integer
+      additionalProperties: true
+
+    Uptime:
+      type: object
+      required: [started_at, uptime_seconds]
+      properties:
+        started_at:
+          type: string
+        uptime_seconds:
+          type: integer
+
+    EventCapacity:
+      type: object
+      required: [subscribers, capacity]
+      properties:
+        subscribers:
+          type: integer
+        capacity:
+          type: integer
+
+    PublicConfig:
+      type: object
+      required:
+        - refresh_mode
+        - stale_after_seconds
+        - refresh_interval_seconds
+        - refresh_endpoint_enabled
+        - post_refresh_configured
+      properties:
+        refresh_mode:
+          type: string
+          enum: [local, github]
+        stale_after_seconds:
+          type: integer
+        refresh_interval_seconds:
+          type: integer
+        refresh_endpoint_enabled:
+          type: boolean
+        post_refresh_configured:
+          type: boolean
+          description: |
+            Whether `AICOR_POST_REFRESH_COMMAND` is configured. GitHub dispatch
+            mode does not update the served snapshot without this hook (or an
+            external sync).
+
+    HealthResponse:
+      type: object
+      required: [status, service, time, uptime, snapshot, refresh, events, config]
+      properties:
+        status:
+          type: string
+          enum: [ok, degraded, unavailable]
+        service:
+          type: string
+          const: aicor-backend
+        time:
+          type: string
+        uptime:
+          $ref: "#/components/schemas/Uptime"
+        snapshot:
+          $ref: "#/components/schemas/Freshness"
+        refresh:
+          $ref: "#/components/schemas/RefreshState"
+        events:
+          $ref: "#/components/schemas/EventCapacity"
+        config:
+          $ref: "#/components/schemas/PublicConfig"
+        scheduler:
+          type: object
+          additionalProperties: true
+
+    LatestResponse:
+      type: object
+      required: [freshness, manifest]
+      properties:
+        freshness:
+          $ref: "#/components/schemas/Freshness"
+        manifest:
+          $ref: "#/components/schemas/Manifest"
+        overview:
+          type: object
+          additionalProperties: true
+        decision:
+          type: object
+          additionalProperties: true
+
+    IndexResponse:
+      type: object
+      required: [service, time, snapshot_version, endpoints, datasets]
+      properties:
+        service:
+          type: string
+        time:
+          type: string
+        snapshot_version:
+          type: [string, "null"]
+        endpoints:
+          type: object
+          additionalProperties:
+            type: string
+        datasets:
+          type: array
+          items:
+            type: string
+
+    RefreshAccepted:
+      type: object
+      required: [status, refresh]
+      properties:
+        status:
+          type: string
+          const: accepted
+        refresh:
+          $ref: "#/components/schemas/RefreshState"
+
+    RefreshConflict:
+      type: object
+      required: [status, refresh]
+      properties:
+        status:
+          type: string
+          const: conflict
+        refresh:
+          $ref: "#/components/schemas/RefreshState"
+
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+      additionalProperties: true

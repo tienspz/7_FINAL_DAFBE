@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "checked_at": "2026-11-07T12:38:19Z",
+  "snapshot_version": "v20261106.5",
+  "data_as_of": "2026-11-06",
+  "provider": "Tiingo",
+  "checks": [
+    {
+      "check": "secondary_adjusted_close",
+      "status": "ok",
+      "detail": "MSFT: 30/30 Tiingo adjusted closes within 0.100%",
+      "ticker": "MSFT",
+      "compared_days": 30,
+      "matched_days": 30,
+      "max_relative_difference": 8.783175099876392e-06,
+      "source_url": "https://api.tiingo.com/tiingo/daily/MSFT/prices?startDate=2026-08-08&endDate=2026-11-06&format=json",
+      "response_sha256": "cfb4f7cae253aa1b0fa3b58c810fc82d6f34059607f9dd7895cbd1900d3cb035"
+    },
+    {
+      "check": "secondary_adjusted_close",
+      "status": "ok",
+      "detail": "GOOGL: 30/30 Tiingo adjusted closes within 0.100%",
+      "ticker": "GOOGL",
+      "compared_days": 30,
+      "matched_days": 30,
+      "max_relative_difference": 7.243197117537765e-06,
+      "source_url": "https://api.tiingo.com/tiingo/daily/GOOGL/prices?startDate=2026-08-08&endDate=2026-11-06&format=json",
+      "response_sha256": "d2a53d2123013abd37dd0564e5301bbb4aaf57152dfd2aedce48a507720e6323"
+    }
+  ],
+  "artifacts": {
+    "MSFT": {
+      "path": "data/raw/prices/tiingo/MSFT.json",
+      "provider": "Tiingo",
+      "source_url": "https://api.tiingo.com/tiingo/daily/MSFT/prices?startDate=2026-08-08&endDate=2026-11-06&format=json",
+      "http_status": 200,
+      "response_sha256": "cfb4f7cae253aa1b0fa3b58c810fc82d6f34059607f9dd7895cbd1900d3cb035",
+      "fetched_at": "2026-11-07T12:38:18Z"
+    },
+    "GOOGL": {
+      "path": "data/raw/prices/tiingo/GOOGL.json",
+      "provider": "Tiingo",
+      "source_url": "https://api.tiingo.com/tiingo/daily/GOOGL/prices?startDate=2026-08-08&endDate=2026-11-06&format=json",
+      "http_status": 200,
+      "response_sha256": "d2a53d2123013abd37dd0564e5301bbb4aaf57152dfd2aedce48a507720e6323",
+      "fetched_at": "2026-11-07T12:38:19Z"
+    }
+  },
+  "errors": {}
+}

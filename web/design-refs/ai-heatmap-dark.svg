@@ -1,0 +1,40 @@
+<svg width="1000" height="600" viewBox="0 0 1000 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1000" height="600" fill="#07090C"/>
+  <rect x="40" y="40" width="920" height="520" rx="8" fill="#0D1116" stroke="#1F2933"/>
+
+  <text x="64" y="80" fill="#E8EDF2" font-family="Geist Sans" font-size="16" font-weight="600">Ma trận tương quan độ trễ đầu tư AI</text>
+  
+  <!-- Slider k=0..4 -->
+  <text x="64" y="120" fill="#8A97A6" font-family="Geist Sans" font-size="13">Độ trễ (k):</text>
+  <rect x="140" y="108" width="160" height="6" rx="3" fill="#1F2933"/>
+  <circle cx="200" cy="111" r="8" fill="#22E5FF"/>
+  <text x="320" y="120" fill="#22E5FF" font-family="Geist Mono" font-size="13" font-weight="600">k = 2 quý</text>
+
+  <!-- Heatmap Matrix Cells -->
+  <g transform="translate(180, 160)">
+    <!-- Column Headers -->
+    <text x="60" y="-12" fill="#8A97A6" font-family="Geist Sans" font-size="11" text-anchor="middle">Tăng trưởng DT</text>
+    <text x="200" y="-12" fill="#8A97A6" font-family="Geist Sans" font-size="11" text-anchor="middle">Tăng trưởng FCF</text>
+    <text x="340" y="-12" fill="#8A97A6" font-family="Geist Sans" font-size="11" text-anchor="middle">Biên HĐ</text>
+    <text x="480" y="-12" fill="#8A97A6" font-family="Geist Sans" font-size="11" text-anchor="middle">Lợi suất CP</text>
+
+    <!-- Row 1: CapEx Growth -->
+    <text x="-16" y="55" fill="#8A97A6" font-family="Geist Sans" font-size="12" text-anchor="end">CapEx Growth</text>
+    <rect x="0" y="10" width="120" height="80" rx="4" fill="rgba(34, 229, 255, 0.28)" stroke="#1F2933"/>
+    <text x="60" y="44" fill="#E8EDF2" font-family="Geist Mono" font-size="14" font-weight="600" text-anchor="middle">r = 0,64</text>
+    <text x="60" y="64" fill="#8A97A6" font-family="Geist Mono" font-size="11" text-anchor="middle">p = 0,004 · n=19*</text>
+
+    <rect x="140" y="10" width="120" height="80" rx="4" fill="rgba(255, 107, 107, 0.22)" stroke="#1F2933"/>
+    <text x="200" y="44" fill="#E8EDF2" font-family="Geist Mono" font-size="14" font-weight="600" text-anchor="middle">r = -0,42</text>
+    <text x="200" y="64" fill="#8A97A6" font-family="Geist Mono" font-size="11" text-anchor="middle">p = 0,082 · n=19*</text>
+
+    <rect x="280" y="10" width="120" height="80" rx="4" fill="rgba(34, 229, 255, 0.15)" stroke="#1F2933"/>
+    <text x="340" y="44" fill="#E8EDF2" font-family="Geist Mono" font-size="14" font-weight="600" text-anchor="middle">r = 0,31</text>
+    <text x="340" y="64" fill="#8A97A6" font-family="Geist Mono" font-size="11" text-anchor="middle">p = 0,195 · n=19*</text>
+
+    <rect x="420" y="10" width="120" height="80" rx="4" fill="rgba(34, 229, 255, 0.08)" stroke="#1F2933"/>
+    <text x="480" y="44" fill="#E8EDF2" font-family="Geist Mono" font-size="14" font-weight="600" text-anchor="middle">r = 0,15</text>
+    <text x="480" y="64" fill="#8A97A6" font-family="Geist Mono" font-size="11" text-anchor="middle">p = 0,520 · n=19*</text>
+  </g>
+</svg>
+

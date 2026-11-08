@@ -1,0 +1,233 @@
+{
+  "schema_version": "1.0",
+  "checked_at": "2026-11-08T06:51:43Z",
+  "summary": {
+    "total": 21,
+    "ok": 14,
+    "low": 3,
+    "fail": 0,
+    "pending": 0,
+    "unverified": 4
+  },
+  "checks": [
+    {
+      "check": "q4_residual",
+      "status": "ok",
+      "detail": "MSFT 2023-Q2 Q4 residual 0.0000%",
+      "ticker": "MSFT",
+      "quarter": "2023-Q2",
+      "residual": 0.0
+    },
+    {
+      "check": "q4_residual",
+      "status": "ok",
+      "detail": "MSFT 2024-Q2 Q4 residual 0.0000%",
+      "ticker": "MSFT",
+      "quarter": "2024-Q2",
+      "residual": 0.0
+    },
+    {
+      "check": "q4_residual",
+      "status": "ok",
+      "detail": "MSFT 2025-Q2 Q4 residual 0.0000%",
+      "ticker": "MSFT",
+      "quarter": "2025-Q2",
+      "residual": 0.0
+    },
+    {
+      "check": "q4_residual",
+      "status": "ok",
+      "detail": "MSFT 2026-Q2 Q4 residual 0.0000%",
+      "ticker": "MSFT",
+      "quarter": "2026-Q2",
+      "residual": 0.0
+    },
+    {
+      "check": "q4_residual",
+      "status": "ok",
+      "detail": "GOOGL 2022-Q4 Q4 residual 0.0000%",
+      "ticker": "GOOGL",
+      "quarter": "2022-Q4",
+      "residual": 0.0
+    },
+    {
+      "check": "q4_residual",
+      "status": "ok",
+      "detail": "GOOGL 2023-Q4 Q4 residual 0.0000%",
+      "ticker": "GOOGL",
+      "quarter": "2023-Q4",
+      "residual": 0.0
+    },
+    {
+      "check": "q4_residual",
+      "status": "ok",
+      "detail": "GOOGL 2024-Q4 Q4 residual 0.0000%",
+      "ticker": "GOOGL",
+      "quarter": "2024-Q4",
+      "residual": 0.0
+    },
+    {
+      "check": "q4_residual",
+      "status": "ok",
+      "detail": "GOOGL 2025-Q4 Q4 residual 0.0000%",
+      "ticker": "GOOGL",
+      "quarter": "2025-Q4",
+      "residual": 0.0
+    },
+    {
+      "check": "segment_sum",
+      "status": "low",
+      "detail": "GOOGL 2022-Q2 goog_3 revenue sum diff 0.5381%",
+      "ticker": "GOOGL",
+      "quarter": "2022-Q2",
+      "scheme": "goog_3"
+    },
+    {
+      "check": "segment_sum",
+      "status": "low",
+      "detail": "GOOGL 2022-Q3 goog_3 revenue sum diff 0.9234%",
+      "ticker": "GOOGL",
+      "quarter": "2022-Q3",
+      "scheme": "goog_3"
+    },
+    {
+      "check": "segment_sum",
+      "status": "low",
+      "detail": "GOOGL 2022-Q4 goog_3 revenue sum diff 0.8797%",
+      "ticker": "GOOGL",
+      "quarter": "2022-Q4",
+      "scheme": "goog_3"
+    },
+    {
+      "check": "secondary_close",
+      "status": "ok",
+      "detail": "GOOGL: 30/30 Nasdaq closes within 0.100% (max 0.0000%); seeded random sample from 64 available days",
+      "ticker": "GOOGL",
+      "compared_days": 30,
+      "available_days": 64,
+      "matched_days": 30,
+      "max_relative_difference": 4.508737576916009e-08,
+      "window_start": "2026-08-10",
+      "window_end": "2026-11-05",
+      "sample_method": "seeded_random",
+      "sample_seed": 20261104,
+      "source_url": "https://api.nasdaq.com/api/quote/GOOGL/historical?assetclass=stocks&fromdate=2026-08-08&todate=2026-11-06&limit=120",
+      "response_sha256": "846c8622fa20ac484d1e5c15fe8ed0dc2125abcbe6d457b04ec316a086f49571",
+      "artifact": "data/raw/prices/nasdaq/GOOGL.json"
+    },
+    {
+      "check": "secondary_adjusted_close",
+      "status": "unverified",
+      "detail": "GOOGL: TIINGO_API_KEY is not set; adjusted-close cross-check was not run.",
+      "ticker": "GOOGL",
+      "source_url": null,
+      "response_sha256": null
+    },
+    {
+      "check": "secondary_close",
+      "status": "ok",
+      "detail": "MSFT: 30/30 Nasdaq closes within 0.100% (max 0.0000%); seeded random sample from 64 available days",
+      "ticker": "MSFT",
+      "compared_days": 30,
+      "available_days": 64,
+      "matched_days": 30,
+      "max_relative_difference": 5.7049977659114056e-08,
+      "window_start": "2026-08-10",
+      "window_end": "2026-11-05",
+      "sample_method": "seeded_random",
+      "sample_seed": 20261104,
+      "source_url": "https://api.nasdaq.com/api/quote/MSFT/historical?assetclass=stocks&fromdate=2026-08-08&todate=2026-11-06&limit=120",
+      "response_sha256": "27a360595a1a2cec3fd91a8de37a9a339db11f43f2282dc3f04ddd1ec9db7d0c",
+      "artifact": "data/raw/prices/nasdaq/MSFT.json"
+    },
+    {
+      "check": "secondary_adjusted_close",
+      "status": "unverified",
+      "detail": "MSFT: TIINGO_API_KEY is not set; adjusted-close cross-check was not run.",
+      "ticker": "MSFT",
+      "source_url": null,
+      "response_sha256": null
+    },
+    {
+      "check": "secondary_close",
+      "status": "ok",
+      "detail": "QQQ: 30/30 Nasdaq closes within 0.100% (max 0.0000%); seeded random sample from 64 available days",
+      "ticker": "QQQ",
+      "compared_days": 30,
+      "available_days": 64,
+      "matched_days": 30,
+      "max_relative_difference": 4.1572362111597285e-08,
+      "window_start": "2026-08-10",
+      "window_end": "2026-11-05",
+      "sample_method": "seeded_random",
+      "sample_seed": 20261104,
+      "source_url": "https://api.nasdaq.com/api/quote/QQQ/historical?assetclass=etf&fromdate=2026-08-08&todate=2026-11-06&limit=120",
+      "response_sha256": "1c898f009d9e91a13d1bb6db4cb573ea07cb8072f760f036e419af45b6ac7084",
+      "artifact": "data/raw/prices/nasdaq/QQQ.json"
+    },
+    {
+      "check": "secondary_adjusted_close",
+      "status": "unverified",
+      "detail": "QQQ: TIINGO_API_KEY is not set; adjusted-close cross-check was not run.",
+      "ticker": "QQQ",
+      "source_url": null,
+      "response_sha256": null
+    },
+    {
+      "check": "secondary_close",
+      "status": "ok",
+      "detail": "SPY: 30/30 Nasdaq closes within 0.100% (max 0.0000%); seeded random sample from 64 available days",
+      "ticker": "SPY",
+      "compared_days": 30,
+      "available_days": 64,
+      "matched_days": 30,
+      "max_relative_difference": 3.876683828307421e-08,
+      "window_start": "2026-08-10",
+      "window_end": "2026-11-05",
+      "sample_method": "seeded_random",
+      "sample_seed": 20261104,
+      "source_url": "https://api.nasdaq.com/api/quote/SPY/historical?assetclass=etf&fromdate=2026-08-08&todate=2026-11-06&limit=120",
+      "response_sha256": "cd9990afe2283d293e40e1d072e63d4843f4627af455fb25e219edd365184767",
+      "artifact": "data/raw/prices/nasdaq/SPY.json"
+    },
+    {
+      "check": "secondary_adjusted_close",
+      "status": "unverified",
+      "detail": "SPY: TIINGO_API_KEY is not set; adjusted-close cross-check was not run.",
+      "ticker": "SPY",
+      "source_url": null,
+      "response_sha256": null
+    },
+    {
+      "check": "adjusted_close_selfcheck",
+      "status": "ok",
+      "detail": "MSFT: adjusted close recomputed from close + dividends; max relative difference 0.012910% (tolerance 0.100%); split continuity=True",
+      "ticker": "MSFT",
+      "max_relative_difference": 0.00012910375697737736,
+      "mean_relative_difference": 6.278238569301482e-05,
+      "tolerance": 0.001,
+      "dividend_events": 23,
+      "split_events": [],
+      "split_continuity_ok": true,
+      "method": "recurrence adj_close_t = adj_close_(t-1) * (close_t + dividend_t) / close_(t-1)"
+    },
+    {
+      "check": "adjusted_close_selfcheck",
+      "status": "ok",
+      "detail": "GOOGL: adjusted close recomputed from close + dividends; max relative difference 0.006155% (tolerance 0.100%); split continuity=True",
+      "ticker": "GOOGL",
+      "max_relative_difference": 6.154680832641383e-05,
+      "mean_relative_difference": 1.571739807732522e-05,
+      "tolerance": 0.001,
+      "dividend_events": 10,
+      "split_events": [
+        {
+          "trade_date": "2022-07-18",
+          "ratio": 20.0
+        }
+      ],
+      "split_continuity_ok": true,
+      "method": "recurrence adj_close_t = adj_close_(t-1) * (close_t + dividend_t) / close_(t-1)"
+    }
+  ]
+}

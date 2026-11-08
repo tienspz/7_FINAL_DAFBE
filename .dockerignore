@@ -1,0 +1,29 @@
+# Version control and CI metadata
+.git
+.github
+.gitignore
+
+# Local secrets and configuration
+.env
+.env.*
+secrets/
+*.pem
+*.key
+
+# Tests, docs and agent tooling
+tests/
+docs/
+.agents/
+.freebuff/
+.pytest_cache/
+__pycache__/
+*.py[cod]
+.mypy_cache/
+.ruff_cache/
+
+# Regenerated and large artifacts not needed to serve the snapshot
+data/raw/
+data/db/
+data/snapshots/
+logs/
+*.log

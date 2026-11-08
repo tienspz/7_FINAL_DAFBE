@@ -1,0 +1,58 @@
+# AICOR backend + persistent pipeline data.
+#
+#   cp .env.example .env    # then fill in the production values
+#   docker compose up -d --build
+#
+# The backend binds to 127.0.0.1 on the host so a reverse proxy (see deploy/)
+# terminates TLS and is the only public listener. If the pipeline runs on the
+# host instead of inside this container, replace the aicor-snapshot volume with
+# a bind mount:
+#
+#   volumes:
+#     - ./web/public/data:/app/web/public/data
+#
+services:
+  backend:
+    build: .
+    image: aicor-backend:local
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      AICOR_HOST: 0.0.0.0
+      AICOR_PORT: "8000"
+      AICOR_DATA_DIR: /app/web/public/data
+      AICOR_LOG_DIR: /app/logs
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      # Published snapshot served by the API.
+      - aicor-snapshot:/app/web/public/data
+      # Pipeline raw cache, verified reports, and SQLite handoff.
+      - aicor-pipeline-data:/app/data
+      # One log file per refresh job.
+      - aicor-logs:/app/logs
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import sys, urllib.request; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=4).status == 200 else 1)",
+        ]
+      interval: 30s
+      timeout: 5s
+      start_period: 15s
+      retries: 3
+    stop_grace_period: 30s
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    tmpfs:
+      - /tmp:size=64m
+
+volumes:
+  aicor-snapshot:
+  aicor-pipeline-data:
+  aicor-logs:

@@ -1,0 +1,91 @@
+metadata:
+  generated: "2026-11-07"
+  source_plan: "docs/plans/backend-readiness/plan.md"
+  target_tasks: "Task Breakdown in docs/plans/backend-readiness/plan.md"
+
+summary:
+  total_plan_items: 4
+  covered_plan_items: 4
+  missing_plan_items: 0
+  coverage_percentage: 100.0
+  total_tasks_generated: 11
+  orphan_tasks: 0
+
+phases:
+  - phase_id: "Phase-1"
+    phase_name: "Foundational"
+    items:
+      - item_id: "1.1"
+        description: "Inspect snapshot and contract requirements."
+        tasks:
+          - task_id: "T001"
+            description: "Inspect current verified JSON contracts and stats inputs."
+      - item_id: "2.1"
+        description: "Test handoff and checksum failure behavior."
+        tasks:
+          - task_id: "T002"
+            description: "Add focused stale metadata/checksum/failure tests."
+  - phase_id: "Phase-2"
+    phase_name: "Offline refresh and strict handoff validation"
+    items:
+      - item_id: "1.1"
+        description: "Regenerate stats using canonical pipeline functions."
+        tasks:
+          - task_id: "T003"
+            description: "Implement offline typed-input reconstruction."
+      - item_id: "2.1"
+        description: "Publish and validate all handoff files."
+        tasks:
+          - task_id: "T004"
+            description: "Atomically update tests JSON and manifest checksums."
+          - task_id: "T005"
+            description: "Validate staged SQLite in pipeline builder."
+          - task_id: "T006"
+            description: "Enforce snapshot/SQLite equality in acceptance."
+  - phase_id: "Phase-3"
+    phase_name: "Stage gate and documentation"
+    items:
+      - item_id: "3.1"
+        description: "Document and run readiness gate."
+        tasks:
+          - task_id: "T007"
+            description: "Document offline and live acceptance modes."
+          - task_id: "T008"
+            description: "Run tests, offline refresh, and acceptance checks."
+  - phase_id: "Phase-4"
+    phase_name: "External adjusted-close verification"
+    items:
+      - item_id: "4.1"
+        description: "Compare adjusted closes with a credentialed external provider."
+        tasks:
+          - task_id: "T009"
+            description: "Implement Tiingo fetch and conditional allowlist."
+          - task_id: "T010"
+            description: "Test parsing, credentials, failures, and reconciliation."
+          - task_id: "T011"
+            description: "Run live sample check and persist token-free evidence."
+
+missing_plan_items: []
+orphan_tasks: []
+upstream_trace:
+  - plan_item: "1.1"
+    source_requirements: ["FR-46", "FR-52", "CR-08"]
+    tasks: ["T001", "T003"]
+    full_trace: "FR-46,FR-52,CR-08 → 1.1 → T001,T003"
+  - plan_item: "2.1"
+    source_requirements: ["FR-45", "FR-46", "NFR-15"]
+    tasks: ["T002", "T004", "T005", "T006"]
+    full_trace: "FR-45,FR-46,NFR-15 → 2.1 → T002,T004,T005,T006"
+  - plan_item: "3.1"
+    source_requirements: ["FR-45", "FR-46", "FR-52", "CR-08", "NFR-15"]
+    tasks: ["T007", "T008"]
+    full_trace: "FR-45,FR-46,FR-52,CR-08,NFR-15 → 3.1 → T007,T008"
+  - plan_item: "4.1"
+    source_requirements: ["FR-45", "CR-08"]
+    tasks: ["T009", "T010", "T011"]
+    full_trace: "FR-45,CR-08 → 4.1 → T009,T010,T011"
+
+validation:
+  passed: true
+  errors: []
+  warnings: []

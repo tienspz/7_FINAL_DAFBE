@@ -1,0 +1,24 @@
+version: "1.0"
+# Member local-names are matched after stripping the XML namespace prefix.
+companies:
+  MSFT:
+    schemes:
+      msft_legacy_3:
+        label: "Microsoft legacy three-segment structure"
+        members:
+          ProductivityAndBusinessProcessesMember: "Productivity & Business Processes"
+          IntelligentCloudMember: "Intelligent Cloud"
+          MorePersonalComputingMember: "More Personal Computing"
+      msft_new_2:
+        label: "Microsoft new two-segment structure (FY2027+)"
+        members:
+          AgentsAndInfraMember: "Agents & Infrastructure"
+          DevicesAndConsumerMember: "Devices & Consumer"
+  GOOGL:
+    schemes:
+      goog_3:
+        label: "Alphabet segment structure"
+        members:
+          GoogleServicesMember: "Google Services"
+          GoogleCloudMember: "Google Cloud"
+          AllOtherSegmentsMember: "Other Bets"

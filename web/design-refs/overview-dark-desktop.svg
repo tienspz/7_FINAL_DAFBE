@@ -1,0 +1,68 @@
+<svg width="1440" height="900" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dark Background -->
+  <rect width="1440" height="900" fill="#07090C"/>
+  
+  <!-- Topbar -->
+  <rect width="1440" height="56" fill="#0D1116"/>
+  <line x1="0" y1="56" x2="1440" y2="56" stroke="#1F2933" stroke-width="1"/>
+  <text x="24" y="34" fill="#E8EDF2" font-family="Geist Sans" font-size="16" font-weight="600">AICOR</text>
+  <text x="96" y="34" fill="#8A97A6" font-family="Geist Sans" font-size="14">Tổng quan</text>
+  
+  <!-- Sync Status & Theme -->
+  <circle cx="1320" cy="28" r="4" fill="#34F5A0"/>
+  <text x="1332" y="32" fill="#8A97A6" font-family="Geist Sans" font-size="12">cập nhật 2 giờ trước</text>
+  <rect x="1396" y="16" width="24" height="24" rx="4" fill="#141A21" stroke="#1F2933"/>
+
+  <!-- Quarter Ruler (Signature) -->
+  <rect y="57" width="1440" height="36" fill="#0D1116"/>
+  <line x1="0" y1="93" x2="1440" y2="93" stroke="#1F2933" stroke-width="1"/>
+  <text x="32" y="80" fill="#8A97A6" font-family="Geist Mono" font-size="11">2022-Q1</text>
+  <text x="120" y="80" fill="#8A97A6" font-family="Geist Mono" font-size="11">2023-Q1</text>
+  <text x="220" y="80" fill="#8A97A6" font-family="Geist Mono" font-size="11">2024-Q1</text>
+  <text x="320" y="80" fill="#8A97A6" font-family="Geist Mono" font-size="11">2025-Q1</text>
+  <rect x="390" y="65" width="80" height="22" rx="4" fill="#1C242E" stroke="#22E5FF"/>
+  <text x="405" y="80" fill="#22E5FF" font-family="Geist Mono" font-size="11" font-weight="600">2026-Q3</text>
+
+  <!-- Container (1280px max) -->
+  <g transform="translate(80, 110)">
+    <!-- KPI Row MSFT -->
+    <text x="0" y="20" fill="#22E5FF" font-family="Geist Sans" font-size="14" font-weight="600">● Microsoft (MSFT)</text>
+    <g transform="translate(0, 32)">
+      <rect width="300" height="90" rx="6" fill="#0D1116" stroke="#1F2933"/>
+      <text x="16" y="30" fill="#8A97A6" font-family="Geist Sans" font-size="12">Lợi suất 1 năm</text>
+      <text x="16" y="66" fill="#E8EDF2" font-family="Geist Mono" font-size="28" font-weight="600">+18,4%</text>
+
+      <rect x="320" width="300" height="90" rx="6" fill="#0D1116" stroke="#1F2933"/>
+      <text x="336" y="30" fill="#8A97A6" font-family="Geist Sans" font-size="12">Tăng trưởng DT</text>
+      <text x="336" y="66" fill="#E8EDF2" font-family="Geist Mono" font-size="28" font-weight="600">+16,0%</text>
+
+      <rect x="640" width="300" height="90" rx="6" fill="#0D1116" stroke="#1F2933"/>
+      <text x="656" y="30" fill="#8A97A6" font-family="Geist Sans" font-size="12">Biên lợi nhuận HĐ</text>
+      <text x="656" y="66" fill="#E8EDF2" font-family="Geist Mono" font-size="28" font-weight="600">44,6%</text>
+
+      <rect x="960" width="300" height="90" rx="6" fill="#0D1116" stroke="#1F2933"/>
+      <text x="976" y="30" fill="#8A97A6" font-family="Geist Sans" font-size="12">Biên dòng tiền tự do</text>
+      <text x="976" y="66" fill="#E8EDF2" font-family="Geist Mono" font-size="28" font-weight="600">30,2%</text>
+    </g>
+
+    <!-- Main Chart: Normalized Prices -->
+    <g transform="translate(0, 150)">
+      <rect width="1260" height="380" rx="6" fill="#0D1116" stroke="#1F2933"/>
+      <text x="24" y="32" fill="#E8EDF2" font-family="Geist Sans" font-size="14" font-weight="600">Biểu đồ giá chuẩn hóa (Cơ sở 100)</text>
+      
+      <!-- Legends -->
+      <circle cx="850" cy="28" r="4" fill="#22E5FF"/>
+      <text x="860" y="32" fill="#8A97A6" font-family="Geist Sans" font-size="12">MSFT</text>
+      <rect x="920" y="24" width="8" height="8" fill="#FFB020"/>
+      <text x="934" y="32" fill="#8A97A6" font-family="Geist Sans" font-size="12">GOOGL</text>
+      <line x1="1000" y1="28" x2="1020" y2="28" stroke="#7C8794" stroke-dasharray="3,3"/>
+      <text x="1026" y="32" fill="#8A97A6" font-family="Geist Sans" font-size="12">SPY</text>
+
+      <!-- Curve simulation -->
+      <path d="M 40 320 Q 200 280 400 240 T 800 160 T 1220 120" stroke="#22E5FF" stroke-width="2" fill="none"/>
+      <path d="M 40 320 Q 200 300 400 260 T 800 180 T 1220 140" stroke="#FFB020" stroke-width="2" fill="none"/>
+      <path d="M 40 320 Q 200 310 400 290 T 800 230 T 1220 200" stroke="#7C8794" stroke-width="1.5" stroke-dasharray="4,4" fill="none"/>
+    </g>
+  </g>
+</svg>
+

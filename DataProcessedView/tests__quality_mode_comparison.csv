@@ -1,0 +1,78 @@
+﻿quality_mode,bt_code,test_name,n,p_value,p_adjusted,decision,excluded_quarters,low_quality_quarters,p_value_raw,p_value_display,p_adjusted_raw,p_adjusted_display
+exclude_low,BT2,Revenue growth YoY: MSFT vs GOOGL,13,0.3779,,fail_to_reject_h0,"[{""ticker"":""GOOGL"",""calendar_key"":""2025-Q2"",""reason"":""current: revenue quality_flag=low""},{""ticker"":""GOOGL"",""calendar_key"":""2026-Q2"",""reason"":""t-4: revenue quality_flag=low""}]","[{""ticker"":""GOOGL"",""calendar_key"":""2025-Q2"",""reason"":""current: revenue quality_flag=low""},{""ticker"":""GOOGL"",""calendar_key"":""2026-Q2"",""reason"":""t-4: revenue quality_flag=low""}]",0.3778837048850899,0.3779,,
+exclude_low,BT2,Net income growth YoY: MSFT vs GOOGL,15,0.107,,fail_to_reject_h0,[],[],0.10699462890625,0.107,,
+exclude_low,BT2,Net income growth YoY (excl. one-off quarters): MSFT vs GOOGL,12,0.1044,,fail_to_reject_h0,"[{""ticker"":""GOOGL"",""calendar_key"":""2026-Q1"",""reason"":""non-operating equity-investment gains dominate reported net income (see 10-Q)""},{""ticker"":""GOOGL"",""calendar_key"":""2026-Q2"",""reason"":""non-operating equity-investment gains dominate reported net income (see 10-Q)""},{""ticker"":""GOOGL"",""calendar_key"":""2026-Q3"",""reason"":""non-operating equity-investment losses depress reported net income (see 10-Q)""}]",[],0.10442516335613904,0.1044,,
+exclude_low,BT3,MSFT rd_intensity linear trend (HAC),19,< 0.001,,reject_h0,[],[],2.3768641906376577e-60,< 0.001,,
+exclude_low,BT3,MSFT capex_intensity linear trend (HAC),19,< 0.001,,reject_h0,[],[],3.9020478384337483e-13,< 0.001,,
+exclude_low,BT3,GOOGL rd_intensity linear trend (HAC),18,< 0.001,,reject_h0,"[{""ticker"":""GOOGL"",""calendar_key"":""2025-Q2"",""reason"":""current: revenue quality_flag=low""}]","[{""ticker"":""GOOGL"",""calendar_key"":""2025-Q2"",""reason"":""current: revenue quality_flag=low""}]",0.0003015091587451828,< 0.001,,
+exclude_low,BT3,GOOGL capex_intensity linear trend (HAC),9,< 0.001,,unreliable_nonstationary,"[{""ticker"":""GOOGL"",""calendar_key"":""2022-Q2"",""reason"":""current: capex quality_flag=low""},{""ticker"":""GOOGL"",""calendar_key"":""2022-Q3"",""reason"":""current: capex quality_flag=low""},{""ticker"":""GOOGL"",""calendar_key"":""2023-Q2"",""reason"":""current: capex quality_flag=low""},{""ticker"":""GOOGL"",""calendar_key"":""2023-Q3"",""reason"":""current: capex quality_flag=low""},{""ticker"":""GOOGL"",""calendar_key"":""2024-Q2"",""reason"":""current: capex quality_flag=low""},{""ticker"":""GOOGL"",""calendar_key"":""2024-Q3"",""reason"":""current: capex quality_flag=low""},{""ticker"":""GOOGL"",""calendar_key"":""2025-Q2"",""reason"":""current: capex quality_flag=low; revenue quality_flag=low""},{""ticker"":""GOOGL"",""calendar_key"":""2025-Q3"",""reason"":""current: capex quality_flag=low""},{""ticker"":""GOOGL"",""calendar_key"":""2026-Q2"",""reason"":""current: capex quality_flag=low""},{""ticker"":""GOOGL"",""calendar_key"":""2026-Q3"",""reason"":""current: capex quality_flag=low""}]","[{""ticker"":""GOOGL"",""calendar_key"":""2022-Q2"",""reason"":""current: capex quality_flag=low""},{""ticker"":""GOOGL"",""calendar_key"":""2022-Q3"",""reason"":""current: capex quality_flag=low""},{""ticker"":""GOOGL"",""calendar_key"":""2023-Q2"",""reason"":""current: capex quality_flag=low""},{""ticker"":""GOOGL"",""calendar_key"":""2023-Q3"",""reason"":""current: capex quality_flag=low""},{""ticker"":""GOOGL"",""calendar_key"":""2024-Q2"",""reason"":""current: capex quality_flag=low""},{""ticker"":""GOOGL"",""calendar_key"":""2024-Q3"",""reason"":""current: capex quality_flag=low""},{""ticker"":""GOOGL"",""calendar_key"":""2025-Q2"",""reason"":""current: capex quality_flag=low; current: revenue quality_flag=low""},{""ticker"":""GOOGL"",""calendar_key"":""2025-Q3"",""reason"":""current: capex quality_flag=low""},{""ticker"":""GOOGL"",""calendar_key"":""2026-Q2"",""reason"":""current: capex quality_flag=low""},{""ticker"":""GOOGL"",""calendar_key"":""2026-Q3"",""reason"":""current: capex quality_flag=low""}]",5.4186215009434017e-05,< 0.001,,
+exclude_low,BT4,MSFT rd_growth_yoy vs revenue_growth_yoy lag 0,14,0.8286,1,exploratory,[],[],0.8286264229286121,0.8286,1.0,1
+exclude_low,BT4,MSFT rd_growth_yoy vs revenue_growth_yoy lag 1,13,0.4821,1,exploratory,[],[],0.4820544547023681,0.4821,1.0,1
+exclude_low,BT4,MSFT rd_growth_yoy vs revenue_growth_yoy lag 2,12,0.00824,0.239,exploratory,[],[],0.008239768712338435,0.00824,0.2389532926578146,0.239
+exclude_low,BT4,MSFT rd_growth_yoy vs revenue_growth_yoy lag 3,11,0.9366,1,exploratory,[],[],0.9365584481926121,0.9366,1.0,1
+exclude_low,BT4,MSFT rd_growth_yoy vs revenue_growth_yoy lag 4,10,0.425,1,exploratory,[],[],0.4250381548921454,0.425,1.0,1
+exclude_low,BT4,MSFT rd_growth_yoy vs fcf_growth_yoy lag 0,14,0.817,1,exploratory,[],[],0.8169838797817922,0.817,1.0,1
+exclude_low,BT4,MSFT rd_growth_yoy vs fcf_growth_yoy lag 1,13,0.4821,1,exploratory,[],[],0.4820544547023681,0.4821,1.0,1
+exclude_low,BT4,MSFT rd_growth_yoy vs fcf_growth_yoy lag 2,12,0.002993,0.08979,exploratory,[],[],0.002992863680185982,0.002993,0.08978591040557946,0.08979
+exclude_low,BT4,MSFT rd_growth_yoy vs fcf_growth_yoy lag 3,11,0.5192,1,exploratory,[],[],0.5192482475549817,0.5192,1.0,1
+exclude_low,BT4,MSFT rd_growth_yoy vs fcf_growth_yoy lag 4,10,0.7009,1,exploratory,[],[],0.7009318849100584,0.7009,1.0,1
+exclude_low,BT4,MSFT rd_growth_yoy vs operating_margin lag 0,14,0.1491,1,exploratory,[],[],0.14910193900151347,0.1491,1.0,1
+exclude_low,BT4,MSFT rd_growth_yoy vs operating_margin lag 1,13,0.7074,1,exploratory,[],[],0.7073898735142603,0.7074,1.0,1
+exclude_low,BT4,MSFT rd_growth_yoy vs operating_margin lag 2,12,1,1,exploratory,[],[],1.0,1,1.0,1
+exclude_low,BT4,MSFT rd_growth_yoy vs operating_margin lag 3,11,0.8734,1,exploratory,[],[],0.8734465775233149,0.8734,1.0,1
+exclude_low,BT4,MSFT rd_growth_yoy vs operating_margin lag 4,10,0.9074,1,exploratory,[],[],0.9073638178128159,0.9074,1.0,1
+exclude_low,BT4,GOOGL rd_growth_yoy vs revenue_growth_yoy lag 0,10,0.425,1,exploratory,[],[],0.4250381548921454,0.425,1.0,1
+exclude_low,BT4,GOOGL rd_growth_yoy vs revenue_growth_yoy lag 1,9,0.6059,1,exploratory,[],[],0.6059012741795534,0.6059,1.0,1
+exclude_low,BT4,GOOGL rd_growth_yoy vs revenue_growth_yoy lag 2,8,0.3199,1,exploratory,[],[],0.3198886412288163,0.3199,1.0,1
+exclude_low,BT4,GOOGL rd_growth_yoy vs revenue_growth_yoy lag 3,7,,,insufficient_data,[],[],,,,
+exclude_low,BT4,GOOGL rd_growth_yoy vs revenue_growth_yoy lag 4,6,,,insufficient_data,[],[],,,,
+exclude_low,BT4,GOOGL rd_growth_yoy vs fcf_growth_yoy lag 0,3,,,insufficient_data,[],[],,,,
+exclude_low,BT4,GOOGL rd_growth_yoy vs fcf_growth_yoy lag 1,3,,,insufficient_data,[],[],,,,
+exclude_low,BT4,GOOGL rd_growth_yoy vs fcf_growth_yoy lag 2,3,,,insufficient_data,[],[],,,,
+exclude_low,BT4,GOOGL rd_growth_yoy vs fcf_growth_yoy lag 3,3,,,insufficient_data,[],[],,,,
+exclude_low,BT4,GOOGL rd_growth_yoy vs fcf_growth_yoy lag 4,2,,,insufficient_data,[],[],,,,
+exclude_low,BT4,GOOGL rd_growth_yoy vs operating_margin lag 0,12,0.1245,1,exploratory,[],[],0.12445479118883407,0.1245,1.0,1
+exclude_low,BT4,GOOGL rd_growth_yoy vs operating_margin lag 1,11,0.1097,1,exploratory,[],[],0.10973723224165632,0.1097,1.0,1
+exclude_low,BT4,GOOGL rd_growth_yoy vs operating_margin lag 2,10,0.6761,1,exploratory,[],[],0.6760651759978539,0.6761,1.0,1
+exclude_low,BT4,GOOGL rd_growth_yoy vs operating_margin lag 3,9,0.2861,1,exploratory,[],[],0.286105101908313,0.2861,1.0,1
+exclude_low,BT4,GOOGL rd_growth_yoy vs operating_margin lag 4,8,0.4556,1,exploratory,[],[],0.4556448907375822,0.4556,1.0,1
+exclude_low,BT4,MSFT capex_growth_yoy vs revenue_growth_yoy lag 0,14,0.2269,1,exploratory,[],[],0.2269486800417004,0.2269,1.0,1
+exclude_low,BT4,MSFT capex_growth_yoy vs revenue_growth_yoy lag 1,13,0.4371,1,exploratory,[],[],0.43708354383118136,0.4371,1.0,1
+exclude_low,BT4,MSFT capex_growth_yoy vs revenue_growth_yoy lag 2,12,0.2861,1,exploratory,[],[],0.28612290291498743,0.2861,1.0,1
+exclude_low,BT4,MSFT capex_growth_yoy vs revenue_growth_yoy lag 3,11,0.2466,1,exploratory,[],[],0.2465595757789701,0.2466,1.0,1
+exclude_low,BT4,MSFT capex_growth_yoy vs revenue_growth_yoy lag 4,10,0.6032,1,exploratory,[],[],0.6032176100292089,0.6032,1.0,1
+exclude_low,BT4,MSFT capex_growth_yoy vs fcf_growth_yoy lag 0,14,0.2269,1,exploratory,[],[],0.2269486800417004,0.2269,1.0,1
+exclude_low,BT4,MSFT capex_growth_yoy vs fcf_growth_yoy lag 1,13,0.694,1,exploratory,[],[],0.6940473279966857,0.694,1.0,1
+exclude_low,BT4,MSFT capex_growth_yoy vs fcf_growth_yoy lag 2,12,0.9312,1,exploratory,[],[],0.9312343512018807,0.9312,1.0,1
+exclude_low,BT4,MSFT capex_growth_yoy vs fcf_growth_yoy lag 3,11,0.7699,1,exploratory,[],[],0.7698749998921367,0.7699,1.0,1
+exclude_low,BT4,MSFT capex_growth_yoy vs fcf_growth_yoy lag 4,10,0.2763,1,exploratory,[],[],0.2762553333854362,0.2763,1.0,1
+exclude_low,BT4,MSFT capex_growth_yoy vs operating_margin lag 0,14,0.9109,1,exploratory,[],[],0.9109186530718452,0.9109,1.0,1
+exclude_low,BT4,MSFT capex_growth_yoy vs operating_margin lag 1,13,0.4706,1,exploratory,[],[],0.4706148514721425,0.4706,1.0,1
+exclude_low,BT4,MSFT capex_growth_yoy vs operating_margin lag 2,12,0.9312,1,exploratory,[],[],0.9312343512018807,0.9312,1.0,1
+exclude_low,BT4,MSFT capex_growth_yoy vs operating_margin lag 3,11,0.5192,1,exploratory,[],[],0.5192482475549817,0.5192,1.0,1
+exclude_low,BT4,MSFT capex_growth_yoy vs operating_margin lag 4,10,0.7009,1,exploratory,[],[],0.7009318849100584,0.7009,1.0,1
+exclude_low,BT4,GOOGL capex_growth_yoy vs revenue_growth_yoy lag 0,3,,,insufficient_data,[],[],,,,
+exclude_low,BT4,GOOGL capex_growth_yoy vs revenue_growth_yoy lag 1,1,,,insufficient_data,[],[],,,,
+exclude_low,BT4,GOOGL capex_growth_yoy vs revenue_growth_yoy lag 2,1,,,insufficient_data,[],[],,,,
+exclude_low,BT4,GOOGL capex_growth_yoy vs revenue_growth_yoy lag 3,2,,,insufficient_data,[],[],,,,
+exclude_low,BT4,GOOGL capex_growth_yoy vs revenue_growth_yoy lag 4,2,,,insufficient_data,[],[],,,,
+exclude_low,BT4,GOOGL capex_growth_yoy vs fcf_growth_yoy lag 0,7,,,insufficient_data,[],[],,,,
+exclude_low,BT4,GOOGL capex_growth_yoy vs fcf_growth_yoy lag 1,3,,,insufficient_data,[],[],,,,
+exclude_low,BT4,GOOGL capex_growth_yoy vs fcf_growth_yoy lag 2,0,,,insufficient_data,[],[],,,,
+exclude_low,BT4,GOOGL capex_growth_yoy vs fcf_growth_yoy lag 3,3,,,insufficient_data,[],[],,,,
+exclude_low,BT4,GOOGL capex_growth_yoy vs fcf_growth_yoy lag 4,5,,,insufficient_data,[],[],,,,
+exclude_low,BT4,GOOGL capex_growth_yoy vs operating_margin lag 0,7,,,insufficient_data,[],[],,,,
+exclude_low,BT4,GOOGL capex_growth_yoy vs operating_margin lag 1,6,,,insufficient_data,[],[],,,,
+exclude_low,BT4,GOOGL capex_growth_yoy vs operating_margin lag 2,6,,,insufficient_data,[],[],,,,
+exclude_low,BT4,GOOGL capex_growth_yoy vs operating_margin lag 3,6,,,insufficient_data,[],[],,,,
+exclude_low,BT4,GOOGL capex_growth_yoy vs operating_margin lag 4,5,,,insufficient_data,[],[],,,,
+exclude_low,BT5,MSFT revenue_growth_yoy vs stock_return_quarter lag 0,14,0.563,1,exploratory,[],[],0.5630172739962107,0.563,1.0,1
+exclude_low,BT5,MSFT revenue_growth_yoy vs stock_return_quarter lag 1,13,0.9007,1,exploratory,[],[],0.9007243023389339,0.9007,1.0,1
+exclude_low,BT5,MSFT revenue_growth_yoy vs stock_return_quarter lag 2,12,0.4168,1,exploratory,[],[],0.41677476889913817,0.4168,1.0,1
+exclude_low,BT5,MSFT revenue_growth_yoy vs stock_return_quarter lag 3,11,0.6307,1,exploratory,[],[],0.6306852146425356,0.6307,1.0,1
+exclude_low,BT5,MSFT revenue_growth_yoy vs stock_return_quarter lag 4,10,0.8548,1,exploratory,[],[],0.8548130882487427,0.8548,1.0,1
+exclude_low,BT5,GOOGL revenue_growth_yoy vs stock_return_quarter lag 0,10,0.3466,1,exploratory,[],[],0.3465935070873343,0.3466,1.0,1
+exclude_low,BT5,GOOGL revenue_growth_yoy vs stock_return_quarter lag 1,10,0.6761,1,exploratory,[],[],0.6760651759978539,0.6761,1.0,1
+exclude_low,BT5,GOOGL revenue_growth_yoy vs stock_return_quarter lag 2,10,0.2931,1,exploratory,[],[],0.29305007529282234,0.2931,1.0,1
+exclude_low,BT5,GOOGL revenue_growth_yoy vs stock_return_quarter lag 3,9,0.765,1,exploratory,[],[],0.765007942926146,0.765,1.0,1
+exclude_low,BT5,GOOGL revenue_growth_yoy vs stock_return_quarter lag 4,8,0.8225,1,exploratory,[],[],0.8225054302036114,0.8225,1.0,1

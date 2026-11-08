@@ -1,0 +1,42 @@
+<svg width="1000" height="600" viewBox="0 0 1000 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Light background -->
+  <rect width="1000" height="600" fill="#F6F5F1"/>
+  
+  <!-- Panel -->
+  <rect x="40" y="40" width="920" height="520" rx="8" fill="#FFFFFF" stroke="#DAD7CC"/>
+
+  <text x="64" y="80" fill="#0E1116" font-family="Geist Sans" font-size="16" font-weight="600">Hỗ trợ quyết định</text>
+  <text x="64" y="104" fill="#566070" font-family="Geist Sans" font-size="12">So sánh tổng hợp các chỉ số cốt lõi và trạng thái đánh giá</text>
+
+  <!-- Table header -->
+  <g transform="translate(64, 130)">
+    <rect width="872" height="36" fill="#EFEDE6"/>
+    <text x="16" y="22" fill="#566070" font-family="Geist Sans" font-size="11" font-weight="600">TIÊU CHÍ</text>
+    <text x="300" y="22" fill="#007C91" font-family="Geist Sans" font-size="11" font-weight="600">MICROSOFT (MSFT)</text>
+    <text x="560" y="22" fill="#B06A00" font-family="Geist Sans" font-size="11" font-weight="600">ALPHABET (GOOGL)</text>
+
+    <!-- Row 1: Status -->
+    <rect y="36" width="872" height="48" fill="#FFFFFF" stroke="#DAD7CC" stroke-width="0.5"/>
+    <text x="16" y="65" fill="#0E1116" font-family="Geist Sans" font-size="13">Đánh giá chung</text>
+    <!-- Badge MSFT Positive -->
+    <rect x="300" y="50" width="90" height="24" rx="4" fill="rgba(10, 135, 84, 0.12)" stroke="#0A8754"/>
+    <text x="320" y="66" fill="#0A8754" font-family="Geist Sans" font-size="12" font-weight="600">✓ Tích cực</text>
+
+    <!-- Badge GOOGL Positive -->
+    <rect x="560" y="50" width="90" height="24" rx="4" fill="rgba(10, 135, 84, 0.12)" stroke="#0A8754"/>
+    <text x="580" y="66" fill="#0A8754" font-family="Geist Sans" font-size="12" font-weight="600">✓ Tích cực</text>
+
+    <!-- Row 2: Revenue Growth -->
+    <rect y="84" width="872" height="44" fill="#FFFFFF" stroke="#DAD7CC" stroke-width="0.5"/>
+    <text x="16" y="111" fill="#0E1116" font-family="Geist Sans" font-size="13">Tăng trưởng doanh thu (YoY)</text>
+    <text x="300" y="111" fill="#0E1116" font-family="Geist Mono" font-size="13">+16,0%</text>
+    <text x="560" y="111" fill="#0E1116" font-family="Geist Mono" font-size="13">+15,1%</text>
+
+    <!-- Row 3: Operating Margin -->
+    <rect y="128" width="872" height="44" fill="#FFFFFF" stroke="#DAD7CC" stroke-width="0.5"/>
+    <text x="16" y="155" fill="#0E1116" font-family="Geist Sans" font-size="13">Biên lợi nhuận hoạt động</text>
+    <text x="300" y="155" fill="#0E1116" font-family="Geist Mono" font-size="13">44,6%</text>
+    <text x="560" y="155" fill="#0E1116" font-family="Geist Mono" font-size="13">32,3%</text>
+  </g>
+</svg>
+

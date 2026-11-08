@@ -1,0 +1,36 @@
+# AICOR reverse proxy sample (Caddy 2).
+#
+# Caddy obtains and renews TLS automatically. Replace aicor.example.com with
+# the real hostname and point its DNS A/AAAA record at this server first.
+# The backend listens on 127.0.0.1:8000 (see docker-compose.yml).
+
+aicor.example.com {
+	encode gzip
+
+	# SSE must not be buffered; flush every event immediately.
+	@events path /api/events
+	handle @events {
+		reverse_proxy 127.0.0.1:8000 {
+			flush_interval -1
+		}
+	}
+
+	# Everything else, including /api/refresh and dataset responses.
+	handle {
+		reverse_proxy 127.0.0.1:8000
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+
+	log {
+		output file /var/log/caddy/aicor-access.log {
+			roll_size 50MiB
+			roll_keep 5
+		}
+	}
+}

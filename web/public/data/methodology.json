@@ -1,0 +1,266 @@
+{
+  "schema_version": "1.0",
+  "snapshot_version": "v20261106.9",
+  "generated_at": "2026-11-08T06:51:43Z",
+  "formulas": {
+    "revenue_growth_yoy": "(Revenue_t - Revenue_t-4) / Revenue_t-4",
+    "operating_margin": "Operating Income / Revenue",
+    "net_profit_margin": "Net Income / Revenue",
+    "rd_intensity": "R&D / Revenue",
+    "capex_intensity": "CapEx / Revenue",
+    "fcf": "CFO - CapEx",
+    "fcf_margin": "FCF / Revenue",
+    "roe": "Net Income / Average Equity",
+    "tax_rate": "Income Tax Expense / Pretax Income, clamped [0, 0.5]",
+    "nopat": "Operating Income * (1 - Tax Rate)",
+    "invested_capital": "Total Debt + Total Equity - Cash & Short-term Investments",
+    "roic": "NOPAT / Average Invested Capital",
+    "eps_trailing_4q": "Sum of diluted EPS over four quarters",
+    "pe_trailing": "Quarter-end price / trailing four-quarter EPS",
+    "quarterly_return": "Adjusted close at quarter end / prior quarter end - 1"
+  },
+  "sources": [
+    {
+      "id": "S1",
+      "name": "SEC submissions - MSFT",
+      "url": "https://data.sec.gov/submissions/CIK0000789019.json",
+      "kind": "sec_submissions",
+      "status": "qualified"
+    },
+    {
+      "id": "S2",
+      "name": "SEC submissions - GOOGL",
+      "url": "https://data.sec.gov/submissions/CIK0001652044.json",
+      "kind": "sec_submissions",
+      "status": "qualified"
+    },
+    {
+      "id": "S3",
+      "name": "SEC companyfacts - MSFT",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+      "kind": "sec_companyfacts",
+      "status": "qualified"
+    },
+    {
+      "id": "S4",
+      "name": "SEC companyfacts - GOOGL",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001652044.json",
+      "kind": "sec_companyfacts",
+      "status": "qualified"
+    },
+    {
+      "id": "S5",
+      "name": "SEC companyconcept - MSFT revenue",
+      "url": "https://data.sec.gov/api/xbrl/companyconcept/CIK0000789019/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax.json",
+      "kind": "sec_companyconcept",
+      "status": "qualified"
+    },
+    {
+      "id": "S6",
+      "name": "SEC companyconcept - GOOGL revenue (old tag)",
+      "url": "https://data.sec.gov/api/xbrl/companyconcept/CIK0001652044/us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax.json",
+      "kind": "sec_companyconcept",
+      "status": "qualified_with_tag_switch"
+    },
+    {
+      "id": "S7",
+      "name": "SEC filing index - MSFT latest 10-Q",
+      "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526436133/",
+      "kind": "sec_filing_index",
+      "status": "qualified"
+    },
+    {
+      "id": "S8",
+      "name": "SEC filing index - GOOGL latest 10-Q",
+      "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000084/",
+      "kind": "sec_filing_index",
+      "status": "qualified"
+    },
+    {
+      "id": "S9",
+      "name": "SEC filing index JSON - MSFT latest 10-Q",
+      "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526436133/index.json",
+      "kind": "sec_filing_index_json",
+      "status": "qualified"
+    },
+    {
+      "id": "S10",
+      "name": "SEC XBRL instance - MSFT latest 10-Q",
+      "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526436133/msft-20260930_htm.xml",
+      "kind": "sec_xbrl_instance",
+      "status": "qualified_with_structural_break"
+    },
+    {
+      "id": "S11",
+      "name": "SEC XBRL instance - GOOGL latest 10-Q",
+      "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000084/goog-20260930_htm.xml",
+      "kind": "sec_xbrl_instance",
+      "status": "qualified"
+    },
+    {
+      "id": "S12",
+      "name": "SEC XBRL instance - MSFT FY2026 10-K",
+      "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526323660/msft-20260630_htm.xml",
+      "kind": "sec_xbrl_instance",
+      "status": "qualified_confirms_segment_break"
+    },
+    {
+      "id": "S13",
+      "name": "yfinance daily prices",
+      "url": "https://finance.yahoo.com/quote/MSFT/history/",
+      "kind": "prices",
+      "status": "qualified_primary_unofficial"
+    },
+    {
+      "id": "S14",
+      "name": "Yahoo Finance chart API",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT",
+      "kind": "price_evidence",
+      "status": "qualified_evidence_same_provider"
+    },
+    {
+      "id": "S15",
+      "name": "Nasdaq historical API",
+      "url": "https://api.nasdaq.com/api/quote/MSFT/historical",
+      "kind": "price_reconciliation",
+      "status": "qualified_secondary_close",
+      "allowlisted_on": "2026-11-05"
+    },
+    {
+      "id": "S16",
+      "name": "Microsoft Investor Relations",
+      "url": "https://www.microsoft.com/en-us/Investor/",
+      "kind": "ir_manual",
+      "status": "reachable_manual_only"
+    },
+    {
+      "id": "S17",
+      "name": "Alphabet Investor Relations",
+      "url": "https://abc.xyz/investor/",
+      "kind": "ir_manual",
+      "status": "reachable_manual_only"
+    },
+    {
+      "id": "S18",
+      "name": "Alpha Vantage daily adjusted",
+      "url": "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=MSFT",
+      "kind": "adjusted_close_cross_check",
+      "status": "retired_unavailable_on_free_tier",
+      "requires_env": "ALPHAVANTAGE_API_KEY",
+      "allowlisted_on": "2026-11-05",
+      "note": "Free API key cannot access TIME_SERIES_DAILY_ADJUSTED; replaced by Tiingo candidate."
+    },
+    {
+      "id": "S19",
+      "name": "Google official AI blog",
+      "url": "https://blog.google/innovation-and-ai/technology/ai/google-gemini-ai/",
+      "kind": "ai_event_source",
+      "status": "qualified",
+      "allowlisted_on": "2026-11-05"
+    },
+    {
+      "id": "S20",
+      "name": "Microsoft official blog",
+      "url": "https://blogs.microsoft.com/blog/2023/01/23/microsoftandopenaiextendpartnership/",
+      "kind": "ai_event_source",
+      "status": "qualified",
+      "allowlisted_on": "2026-11-05"
+    },
+    {
+      "id": "S21",
+      "name": "Tiingo daily adjusted prices",
+      "url": "https://api.tiingo.com/tiingo/daily/MSFT/prices",
+      "kind": "adjusted_close_cross_check",
+      "status": "qualified_live_30_day_cross_check",
+      "requires_env": "TIINGO_API_KEY",
+      "allowlisted_on": "2026-11-07",
+      "last_checked": "2026-11-07",
+      "evidence": "docs/evidence/adjusted_close_tiingo_2026-11-07.json"
+    }
+  ],
+  "negative_sources": [
+    {
+      "id": "R1",
+      "name": "Stooq CSV",
+      "url": "https://stooq.com/q/d/l/?s=msft.us&i=d",
+      "status": "rejected_for_server_side_crawler",
+      "reason": "HTTP 200 but a 796-byte JavaScript challenge; no CSV rows."
+    },
+    {
+      "id": "R2",
+      "name": "Guessed Microsoft Source OpenAI announcement URL",
+      "url": "https://news.microsoft.com/2023/01/23/microsoft-and-openai-announce-multiyear-multibillion-dollar-investment/",
+      "status": "broken",
+      "reason": "HTTP 404; title \"Page not found - Source\"."
+    },
+    {
+      "id": "R3",
+      "name": "Microsoft IR earnings page",
+      "url": "https://www.microsoft.com/en-us/investor/earnings",
+      "status": "soft404_or_invalid_content",
+      "reason": "HTTP 200 but title \"Default\" and no specific financial values in initial HTML."
+    },
+    {
+      "id": "R4",
+      "name": "Alpha Vantage demo key",
+      "url": "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=MSFT&outputsize=compact&apikey=demo",
+      "status": "insufficient_no_real_key",
+      "reason": "HTTP 200 but only a demo-key notice; no MSFT time series."
+    },
+    {
+      "id": "R5",
+      "name": "Google Gemini blog post",
+      "url": "https://blog.google/innovation-and-ai/technology/ai/google-gemini-ai/",
+      "status": "resolved_allowlist_approved",
+      "reason": "Page is valid; blog.google was approved for CR-13 on 2026-11-05 and is now used only as AI event evidence."
+    }
+  ],
+  "quality_report_summary": {
+    "companies": [
+      "MSFT",
+      "GOOGL"
+    ],
+    "quarters_expected_per_company": 19,
+    "quarters_expected_total": 38,
+    "quarters_present": 38,
+    "missing_metric_cells": 0,
+    "low_metric_cells": 34,
+    "excluded_quarters": 16,
+    "verified_ratio": 1.0
+  },
+  "quality_mode_primary": "B",
+  "holm_primary": "bt",
+  "link_report_summary": {
+    "total": 2351,
+    "ok": 2351,
+    "broken": 0,
+    "blocked": 0,
+    "soft404": 0,
+    "low": 0,
+    "pending": 0
+  },
+  "reconcile_summary": {
+    "total": 21,
+    "ok": 14,
+    "low": 3,
+    "fail": 0,
+    "pending": 0,
+    "unverified": 4
+  },
+  "limitations": [
+    "yfinance is an unofficial source; version and output format must be pinned.",
+    "Secondary unadjusted close is reconciled against the Nasdaq historical API over the last 30 trading days (api.nasdaq.com approved for CR-13 on 2026-11-05).",
+    "Adjusted-close cross-source verification uses Tiingo only when TIINGO_API_KEY is set; missing credentials or insufficient provider rows remain unverified.",
+    "MSFT changed its segment structure in 2026-Q3; old and new segments are not directly comparable, and the break is marked comparable=false.",
+    "GOOGL revenue changed XBRL tags at 2025-Q2; the switch is recorded in tag_switch.",
+    "n is small: 19 quarters; YoY leaves 15 and lag 4 leaves 11 before quality filtering.",
+    "Every x and y series is ADF-tested; when either is non-stationary at level, both are first-differenced and the effective n is reported.",
+    "Primary test quality mode is B (label_low): derived quarters with identity_ok=true are retained and labelled; low-quality quarters for any other reason are excluded. Mode A (exclude_low) is the sensitivity analysis (CR-04, DR-04.8, FR-52).",
+    "BT4/BT5 use two Holm families: lag family m=5 and company-wide BT family m=30 for BT4; the stricter BT family drives decision. Results that are not robust to level/first-difference/permutation checks are labelled exploratory.",
+    "BT3 reports trend on level and drift on first differences separately, with HAC and moving-block bootstrap p-values; p-value display below 0.001 is '< 0.001' while p_value_raw keeps the numeric value.",
+    "GOOGL net income in 2026-Q1..Q3 is dominated by non-operating equity-investment gains/losses; BT2 keeps the reported series and adds an exclusion variant with the bridge evidence.",
+    "BT1 uses completed calendar months from 2022-01 to the last complete month; the partial current month and 2026-Q4 are excluded.",
+    "Adjusted close is self-checked by recomputing it from close plus dividends; Tiingo cross-source verification requires a real API token.",
+    "AI events are only shown when the official page contains the recorded evidence quote and reports the expected publication date; the review is an automated evidence check, not human editorial review."
+  ]
+}

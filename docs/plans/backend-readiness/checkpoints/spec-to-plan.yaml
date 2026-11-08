@@ -1,0 +1,76 @@
+metadata:
+  generated: "2026-11-07"
+  source_spec: "SPEC.md"
+  target_plan: "docs/plans/backend-readiness/plan.md"
+
+summary:
+  total_requirements: 5
+  covered_requirements: 5
+  missing_requirements: 0
+  coverage_percentage: 100.0
+
+requirements:
+  - req_id: "FR-45"
+    req_description: "Check missing, duplicate, unit, and quality failures."
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2/Phase-4"
+      phase_name: "Offline handoff validation and adjusted-close verification"
+      items:
+        - item_id: "2.1"
+          description: "Validate snapshot and SQLite handoff contracts."
+        - item_id: "4.1"
+          description: "Run an external adjusted-close comparison with strict unverified behavior."
+    notes: ""
+  - req_id: "FR-46"
+    req_description: "Export calculated data for consumers."
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2"
+      phase_name: "Offline refresh and strict handoff validation"
+      items:
+        - item_id: "1.1"
+          description: "Recompute statistics from verified JSON."
+        - item_id: "2.1"
+          description: "Publish checksum-consistent JSON and SQLite."
+    notes: ""
+  - req_id: "FR-52"
+    req_description: "Use quality-approved data and list excluded quarters."
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2"
+      phase_name: "Offline refresh and strict handoff validation"
+      items:
+        - item_id: "1.1"
+          description: "Use canonical configured quality modes and statistics."
+    notes: ""
+  - req_id: "CR-08"
+    req_description: "Retain source response cache/traceability."
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2/Phase-4"
+      phase_name: "Offline handoff validation and adjusted-close verification"
+      items:
+        - item_id: "1.1"
+          description: "Do not modify verified financial inputs or raw archives."
+        - item_id: "4.1"
+          description: "Store source hashes and evidence without persisting credentials."
+    notes: ""
+  - req_id: "NFR-15"
+    req_description: "Preserve old handoff and expose source failures."
+    priority: "P1"
+    plan_mapping:
+      phase: "Phase-2"
+      phase_name: "Offline refresh and strict handoff validation"
+      items:
+        - item_id: "2.1"
+          description: "Validate staged SQLite and atomically replace handoff."
+    notes: ""
+
+missing_requirements: []
+orphan_plan_items: []
+
+validation:
+  passed: true
+  errors: []
+  warnings: []

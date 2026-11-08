@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aicor.example.com/schemas/sse-events.schema.json",
+  "title": "AICOR backend SSE events",
+  "description": "Payloads carried in the `data:` field of the /api/events stream. Every event is a JSON object on one line.",
+  "$defs": {
+    "Freshness": {
+      "type": "object",
+      "required": [
+        "available",
+        "snapshot_version",
+        "data_as_of",
+        "generated_at",
+        "run_id",
+        "age_seconds",
+        "stale",
+        "stale_after_seconds",
+        "checksum_ok",
+        "file_count",
+        "problems"
+      ],
+      "properties": {
+        "available": { "type": "boolean" },
+        "snapshot_version": { "type": ["string", "null"] },
+        "data_as_of": { "type": ["string", "null"] },
+        "generated_at": { "type": ["string", "null"] },
+        "run_id": { "type": ["string", "null"] },
+        "age_seconds": { "type": ["integer", "null"] },
+        "stale": {
+          "type": "boolean",
+          "description": "True when stale or when generated_at is missing/unparseable."
+        },
+        "stale_after_seconds": { "type": "integer" },
+        "checksum_ok": { "type": "boolean" },
+        "file_count": { "type": "integer" },
+        "problems": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "RefreshState": {
+      "type": "object",
+      "required": [
+        "status",
+        "job_id",
+        "reason",
+        "started_at",
+        "finished_at",
+        "detail",
+        "exit_code",
+        "target",
+        "log_path",
+        "run_id",
+        "snapshot_version",
+        "snapshot_changed"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["idle", "running", "succeeded", "failed"]
+        },
+        "job_id": { "type": ["string", "null"] },
+        "reason": { "type": "string" },
+        "started_at": { "type": ["string", "null"] },
+        "finished_at": { "type": ["string", "null"] },
+        "detail": { "type": "string" },
+        "exit_code": { "type": ["integer", "null"] },
+        "target": { "type": "string", "enum": ["local", "github"] },
+        "log_path": { "type": ["string", "null"] },
+        "run_id": { "type": ["integer", "null"] },
+        "snapshot_version": { "type": ["string", "null"] },
+        "snapshot_changed": {
+          "type": ["boolean", "null"],
+          "description": "True when the post-refresh snapshot version differs from the pre-refresh version; null when no snapshot was reread."
+        }
+      },
+      "additionalProperties": false
+    },
+    "SnapshotEvent": {
+      "type": "object",
+      "description": "Canonical snapshot event. Both the runner and the scheduler use this envelope.",
+      "required": ["snapshot", "changed"],
+      "properties": {
+        "snapshot": { "$ref": "#/$defs/Freshness" },
+        "changed": {
+          "type": "boolean",
+          "description": "The producer observed a version different from its previous snapshot event. Clients must still compare snapshot.snapshot_version for idempotence."
+        }
+      },
+      "additionalProperties": false
+    },
+    "ReadyEvent": {
+      "type": "object",
+      "required": ["snapshot", "refresh", "heartbeat_seconds"],
+      "properties": {
+        "snapshot": { "$ref": "#/$defs/Freshness" },
+        "refresh": { "$ref": "#/$defs/RefreshState" },
+        "heartbeat_seconds": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "RefreshEvent": {
+      "$ref": "#/$defs/RefreshState"
+    },
+    "RefreshFinishedEvent": {
+      "$ref": "#/$defs/RefreshState"
+    },
+    "SchedulerErrorEvent": {
+      "type": "object",
+      "required": ["error"],
+      "properties": {
+        "error": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "SseEvent": {
+      "type": "object",
+      "required": ["event", "data"],
+      "properties": {
+        "event": {
+          "type": "string",
+          "enum": [
+            "ready",
+            "snapshot",
+            "refresh",
+            "refresh_finished",
+            "scheduler_error"
+          ]
+        },
+        "data": {
+          "oneOf": [
+            { "$ref": "#/$defs/ReadyEvent" },
+            { "$ref": "#/$defs/SnapshotEvent" },
+            { "$ref": "#/$defs/RefreshEvent" },
+            { "$ref": "#/$defs/RefreshFinishedEvent" },
+            { "$ref": "#/$defs/SchedulerErrorEvent" }
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "oneOf": [
+    { "$ref": "#/$defs/ReadyEvent" },
+    { "$ref": "#/$defs/SnapshotEvent" },
+    { "$ref": "#/$defs/RefreshEvent" },
+    { "$ref": "#/$defs/RefreshFinishedEvent" },
+    { "$ref": "#/$defs/SchedulerErrorEvent" }
+  ]
+}
