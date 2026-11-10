@@ -2,7 +2,7 @@
   "ticker": "MSFT",
   "source_url": "https://api.nasdaq.com/api/quote/MSFT/historical?assetclass=stocks&fromdate=2026-08-12&todate=2026-11-10&limit=120",
   "http_status": 200,
-  "fetched_at": "2026-11-10T17:50:05Z",
+  "fetched_at": "2026-11-10T23:19:50Z",
   "response_sha256": "8822d3a213092087dcb6f96e2c7dd02a896668d9e6e21401e41cc496e4c61f94",
   "window": {
     "start": "2026-08-12",
