@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "snapshot_version": "v20261110.4",
-  "generated_at": "2026-11-11T14:20:57Z",
+  "snapshot_version": "v20261111.1",
+  "generated_at": "2026-11-11T21:59:26Z",
   "thresholds_version": "1.1",
   "comparison": [
     {
@@ -16,8 +16,8 @@
       "capex_intensity": 0.4266084374559759,
       "eps_trailing_4q": 19.15,
       "pe_trailing": 26.783291092118148,
-      "annualized_volatility": 0.27291083032542834,
-      "max_drawdown": -0.37148493864282106,
+      "annualized_volatility": 0.27298813175332814,
+      "max_drawdown": -0.37148484613572896,
       "status": "Tích cực",
       "reasons": [
         "Revenue growth above threshold",
@@ -37,8 +37,8 @@
       "capex_intensity": 0.40254121040626445,
       "eps_trailing_4q": 19.16,
       "pe_trailing": 17.958245645734113,
-      "annualized_volatility": 0.31413171808419177,
-      "max_drawdown": -0.44320046541398017,
+      "annualized_volatility": 0.31413536293668587,
+      "max_drawdown": -0.4432005226551581,
       "status": "Tích cực",
       "reasons": [
         "Revenue growth above threshold",
