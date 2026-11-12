@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "checked_at": "2026-11-12T02:59:40Z",
-  "snapshot_version": "v20261111.2",
+  "checked_at": "2026-11-12T11:04:54Z",
+  "snapshot_version": "v20261111.3",
   "data_as_of": "2026-11-11",
   "environment": {
     "python": "3.14.10",
@@ -37,7 +37,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "e3b7b0612986c02c0d846615a6675766013426a859e2d1fddb0d038042bf94c9",
-      "fetched_at": "2026-11-12T02:59:37Z",
+      "fetched_at": "2026-11-12T11:04:50Z",
       "id": "V01"
     },
     {
@@ -60,7 +60,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "3375e0a9a05ffe410d9d290b4b120e43ff93a87e013f6f27ec5052aa92779067",
-      "fetched_at": "2026-11-12T02:59:37Z",
+      "fetched_at": "2026-11-12T11:04:51Z",
       "id": "V02"
     },
     {
@@ -85,7 +85,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "a795727f74e61e9190e09e5a4333cee37d5b2db6c4933d8ce883b0f852e7009f",
-      "fetched_at": "2026-11-12T02:59:37Z",
+      "fetched_at": "2026-11-12T11:04:51Z",
       "id": "V03"
     },
     {
@@ -108,7 +108,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "baa3f1b8c8cb4c85e54a7990a70c0feeb834017658ca18525bca9768bffc7b8c",
-      "fetched_at": "2026-11-12T02:59:38Z",
+      "fetched_at": "2026-11-12T11:04:51Z",
       "id": "V04"
     },
     {
@@ -131,7 +131,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "796226022b0fc9c021465047021622fa00d33f3de1793484aa12474a0eef2cfb",
-      "fetched_at": "2026-11-12T02:59:38Z",
+      "fetched_at": "2026-11-12T11:04:52Z",
       "id": "V05"
     },
     {
@@ -156,7 +156,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "b22fef8d429677fc2c586ad00fc6cdca4b825dea1e1ab13991adbe881e31b7a3",
-      "fetched_at": "2026-11-12T02:59:38Z",
+      "fetched_at": "2026-11-12T11:04:52Z",
       "id": "V06"
     },
     {
@@ -179,7 +179,7 @@
       "source_value_display_unit": 15484.0,
       "http_status": 200,
       "response_sha256": "12c4dc9e8b1f6859dba65b3d0c4610dfdad224f249f2fd152505380b87bac761",
-      "fetched_at": "2026-11-12T02:59:39Z",
+      "fetched_at": "2026-11-12T11:04:52Z",
       "id": "V07"
     },
     {
@@ -202,7 +202,7 @@
       "source_value_display_unit": 285.0,
       "http_status": 200,
       "response_sha256": "bd401db600d8724a9eeb65bc85d4ad01d00129cf8a5783d05d845c22804b4171",
-      "fetched_at": "2026-11-12T02:59:39Z",
+      "fetched_at": "2026-11-12T11:04:53Z",
       "id": "V08"
     },
     {
@@ -220,8 +220,8 @@
       "difference": 0.0,
       "relative_difference": 0.0,
       "http_status": 200,
-      "response_sha256": "dd81b29306c79e7d5c5c9e05c4497e0a675dc0b014044dee4b8bc7c2b2ec9581",
-      "fetched_at": "2026-11-12T02:59:39Z",
+      "response_sha256": "bf7c7608206b4b1961e2550e33fc6ccbf2b8fdd698acb60a0acfce10c59795c7",
+      "fetched_at": "2026-11-12T11:04:53Z",
       "id": "V09"
     },
     {
@@ -239,8 +239,8 @@
       "difference": 0.0,
       "relative_difference": 0.0,
       "http_status": 200,
-      "response_sha256": "cf7b5ef4d79cf5aa1afd9494f9fa32d3c9c2ed1e3933528bf2f9c7a95355c930",
-      "fetched_at": "2026-11-12T02:59:40Z",
+      "response_sha256": "8fbb4c7cbe37aefd448252d0709208a6a4228b45344737aeac38f6b0d14ffd4a",
+      "fetched_at": "2026-11-12T11:04:53Z",
       "id": "V10"
     }
   ],
@@ -259,7 +259,7 @@
     {
       "name": "json_metadata",
       "result": "ok",
-      "detail": "snapshot=v20261111.2"
+      "detail": "snapshot=v20261111.3"
     },
     {
       "name": "manifest_checksums",
@@ -284,7 +284,7 @@
     {
       "name": "googl_2022q4_trailing_eps",
       "result": "ok",
-      "detail": "eps_trailing_4q=4.56, pe_trailing=19.166303935803867"
+      "detail": "eps_trailing_4q=4.56, pe_trailing=19.1663056089167"
     },
     {
       "name": "segment_contract",
@@ -419,7 +419,7 @@
     {
       "name": "adjusted_close_selfcheck_contract",
       "result": "ok",
-      "detail": "MSFT=max 0.012894%; GOOGL=max 0.006166%"
+      "detail": "MSFT=max 0.012875%; GOOGL=max 0.006158%"
     },
     {
       "name": "approved_allowlist_domains",
@@ -434,7 +434,7 @@
     {
       "name": "run_audit_trail",
       "result": "ok",
-      "detail": "run_id=run_20261112T025737Z_f6546be0"
+      "detail": "run_id=run_20261112T110252Z_96fb415b"
     },
     {
       "name": "response_cache_present",
@@ -449,12 +449,12 @@
     {
       "name": "sqlite_handoff",
       "result": "ok",
-      "detail": "run_id=run_20261112T025737Z_f6546be0, counts={'facts': 4677, 'filings': 48, 'segments': 461, 'company_financials': 38, 'prices': 5976}"
+      "detail": "run_id=run_20261112T110252Z_96fb415b, counts={'facts': 4677, 'filings': 48, 'segments': 461, 'company_financials': 38, 'prices': 5976}"
     },
     {
       "name": "web_data_size_under_5mb",
       "result": "ok",
-      "detail": "3777742 bytes"
+      "detail": "3777533 bytes"
     },
     {
       "name": "no_future_market_data",
