@@ -1,22 +1,14 @@
 {
   "ticker": "MSFT",
-  "source_url": "https://api.nasdaq.com/api/quote/MSFT/historical?assetclass=stocks&fromdate=2026-08-13&todate=2026-11-11&limit=120",
+  "source_url": "https://api.nasdaq.com/api/quote/MSFT/historical?assetclass=stocks&fromdate=2026-08-14&todate=2026-11-12&limit=120",
   "http_status": 200,
-  "fetched_at": "2026-11-12T11:03:39Z",
-  "response_sha256": "9a271385bf0a40d0d724eb6b066e330e59588f9050856159a499343f45ed229f",
+  "fetched_at": "2026-11-12T18:55:37Z",
+  "response_sha256": "2fb58f814cfeb5bea737a16d63a4288d253a6e2d0d44e9fedf8a71379150282e",
   "window": {
-    "start": "2026-08-13",
-    "end": "2026-11-11"
+    "start": "2026-08-14",
+    "end": "2026-11-12"
   },
   "rows": [
-    {
-      "trade_date": "2026-08-13",
-      "close": 496.88,
-      "open": 493.265,
-      "high": 501.34,
-      "low": 493.01,
-      "volume": 23038980.0
-    },
     {
       "trade_date": "2026-08-14",
       "close": 495.4,
