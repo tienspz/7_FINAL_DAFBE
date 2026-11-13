@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "checked_at": "2026-11-12T18:56:49Z",
+  "checked_at": "2026-11-13T00:22:13Z",
   "summary": {
     "total": 21,
     "ok": 18,
@@ -124,7 +124,7 @@
       "matched_days": 30,
       "max_relative_difference": 7.243197117537765e-06,
       "source_url": "https://api.tiingo.com/tiingo/daily/GOOGL/prices?startDate=2026-08-14&endDate=2026-11-12&format=json",
-      "response_sha256": "c9148e058bc7b0e78ef797a636af076a8b7079c3698b02452807ee699aa610b3"
+      "response_sha256": "c21d1d61ff6ec3d904cd8f81e547e23d05b1db07d24af29c0b6f662d12eb7fff"
     },
     {
       "check": "secondary_close",
@@ -150,9 +150,9 @@
       "ticker": "MSFT",
       "compared_days": 30,
       "matched_days": 30,
-      "max_relative_difference": 8.803355271445738e-06,
+      "max_relative_difference": 9.603996761813385e-06,
       "source_url": "https://api.tiingo.com/tiingo/daily/MSFT/prices?startDate=2026-08-14&endDate=2026-11-12&format=json",
-      "response_sha256": "b3dfc8b3c3ee659d21f38e1fbefb49de0fc7e6d788892723ce7e893b07b74428"
+      "response_sha256": "afb878286e3f5ccc118206debc4b046f42d32aaa2cb4e5c1e23e0e8fa653cefa"
     },
     {
       "check": "secondary_close",
@@ -180,7 +180,7 @@
       "matched_days": 30,
       "max_relative_difference": 2.8612350010950615e-05,
       "source_url": "https://api.tiingo.com/tiingo/daily/QQQ/prices?startDate=2026-08-14&endDate=2026-11-12&format=json",
-      "response_sha256": "ac51702563d8855c35bef69ed2dae7df2a9c07e93cf1f70a98342eecdc03f879"
+      "response_sha256": "b4e650c1628c8c300ae55d5543733f01176ad583a3e34e718fb077fe86b949f7"
     },
     {
       "check": "secondary_close",
@@ -208,15 +208,15 @@
       "matched_days": 30,
       "max_relative_difference": 3.459539618642065e-06,
       "source_url": "https://api.tiingo.com/tiingo/daily/SPY/prices?startDate=2026-08-14&endDate=2026-11-12&format=json",
-      "response_sha256": "ffc37b169454da75b42cbc271565c1e0b6c2095930e0cf197d27729dac66d381"
+      "response_sha256": "e701d19f4f5cb293e31ef2ddd7490402edbc7163c7342ac0dbc65fb88440b1be"
     },
     {
       "check": "adjusted_close_selfcheck",
       "status": "ok",
-      "detail": "MSFT: adjusted close recomputed from close + dividends; max relative difference 0.012884% (tolerance 0.100%); split continuity=True",
+      "detail": "MSFT: adjusted close recomputed from close + dividends; max relative difference 0.012920% (tolerance 0.100%); split continuity=True",
       "ticker": "MSFT",
-      "max_relative_difference": 0.00012884447571350448,
-      "mean_relative_difference": 6.276061901971713e-05,
+      "max_relative_difference": 0.00012919901775450314,
+      "mean_relative_difference": 6.28411771053815e-05,
       "tolerance": 0.001,
       "dividend_events": 23,
       "split_events": [],
@@ -226,10 +226,10 @@
     {
       "check": "adjusted_close_selfcheck",
       "status": "ok",
-      "detail": "GOOGL: adjusted close recomputed from close + dividends; max relative difference 0.006174% (tolerance 0.100%); split continuity=True",
+      "detail": "GOOGL: adjusted close recomputed from close + dividends; max relative difference 0.006176% (tolerance 0.100%); split continuity=True",
       "ticker": "GOOGL",
-      "max_relative_difference": 6.173618792917268e-05,
-      "mean_relative_difference": 1.588332813458187e-05,
+      "max_relative_difference": 6.175679133535255e-05,
+      "mean_relative_difference": 1.588615094858221e-05,
       "tolerance": 0.001,
       "dividend_events": 10,
       "split_events": [
