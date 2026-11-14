@@ -2,7 +2,7 @@
   "ticker": "GOOGL",
   "source_url": "https://api.nasdaq.com/api/quote/GOOGL/historical?assetclass=stocks&fromdate=2026-08-15&todate=2026-11-13&limit=120",
   "http_status": 200,
-  "fetched_at": "2026-11-14T03:13:51Z",
+  "fetched_at": "2026-11-14T10:23:33Z",
   "response_sha256": "976558cea4deaf2bcf89ec5c382a8b3ee10d3815e220ca1c10e3219bf7d9c334",
   "window": {
     "start": "2026-08-15",
