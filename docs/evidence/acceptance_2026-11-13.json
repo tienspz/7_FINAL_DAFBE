@@ -1,11 +1,11 @@
 {
   "schema_version": "1.0",
-  "checked_at": "2026-11-15T17:10:29Z",
-  "snapshot_version": "v20261113.9",
+  "checked_at": "2026-11-15T21:49:58Z",
+  "snapshot_version": "v20261113.10",
   "data_as_of": "2026-11-13",
   "environment": {
     "python": "3.14.10",
-    "platform": "Linux-7.0.0-1019-azure-x86_64-with-glibc2.43",
+    "platform": "Linux-7.0.0-1016-aws-x86_64-with-glibc2.43",
     "sec_user_agent_configured": true
   },
   "source_checks": {
@@ -37,7 +37,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "e3b7b0612986c02c0d846615a6675766013426a859e2d1fddb0d038042bf94c9",
-      "fetched_at": "2026-11-15T17:10:25Z",
+      "fetched_at": "2026-11-15T21:49:55Z",
       "id": "V01"
     },
     {
@@ -60,7 +60,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "3375e0a9a05ffe410d9d290b4b120e43ff93a87e013f6f27ec5052aa92779067",
-      "fetched_at": "2026-11-15T17:10:25Z",
+      "fetched_at": "2026-11-15T21:49:55Z",
       "id": "V02"
     },
     {
@@ -85,7 +85,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "a795727f74e61e9190e09e5a4333cee37d5b2db6c4933d8ce883b0f852e7009f",
-      "fetched_at": "2026-11-15T17:10:26Z",
+      "fetched_at": "2026-11-15T21:49:55Z",
       "id": "V03"
     },
     {
@@ -108,7 +108,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "baa3f1b8c8cb4c85e54a7990a70c0feeb834017658ca18525bca9768bffc7b8c",
-      "fetched_at": "2026-11-15T17:10:26Z",
+      "fetched_at": "2026-11-15T21:49:56Z",
       "id": "V04"
     },
     {
@@ -131,7 +131,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "796226022b0fc9c021465047021622fa00d33f3de1793484aa12474a0eef2cfb",
-      "fetched_at": "2026-11-15T17:10:27Z",
+      "fetched_at": "2026-11-15T21:49:56Z",
       "id": "V05"
     },
     {
@@ -156,7 +156,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "b22fef8d429677fc2c586ad00fc6cdca4b825dea1e1ab13991adbe881e31b7a3",
-      "fetched_at": "2026-11-15T17:10:27Z",
+      "fetched_at": "2026-11-15T21:49:57Z",
       "id": "V06"
     },
     {
@@ -179,7 +179,7 @@
       "source_value_display_unit": 15484.0,
       "http_status": 200,
       "response_sha256": "12c4dc9e8b1f6859dba65b3d0c4610dfdad224f249f2fd152505380b87bac761",
-      "fetched_at": "2026-11-15T17:10:27Z",
+      "fetched_at": "2026-11-15T21:49:57Z",
       "id": "V07"
     },
     {
@@ -202,7 +202,7 @@
       "source_value_display_unit": 285.0,
       "http_status": 200,
       "response_sha256": "bd401db600d8724a9eeb65bc85d4ad01d00129cf8a5783d05d845c22804b4171",
-      "fetched_at": "2026-11-15T17:10:28Z",
+      "fetched_at": "2026-11-15T21:49:57Z",
       "id": "V08"
     },
     {
@@ -220,8 +220,8 @@
       "difference": 0.0,
       "relative_difference": 0.0,
       "http_status": 200,
-      "response_sha256": "97f9260a344461fe6b2a1690fc58738d2ac8b9a05dcf30e94d0f2f8ed454f0b4",
-      "fetched_at": "2026-11-15T17:10:28Z",
+      "response_sha256": "898fea796edc4e8f88b27d86afd7246b759e4962b5ca07393d599e2e941b49dd",
+      "fetched_at": "2026-11-15T21:49:58Z",
       "id": "V09"
     },
     {
@@ -239,8 +239,8 @@
       "difference": 0.0,
       "relative_difference": 0.0,
       "http_status": 200,
-      "response_sha256": "490f6cc531001b2ea95a643c2a60386affc282b62fe7dccb3c0bf0780ac77605",
-      "fetched_at": "2026-11-15T17:10:28Z",
+      "response_sha256": "01b026046ebbcbd2a94a8c0b3e501e8c53626a0bc735c4429beb15ad2bc0590f",
+      "fetched_at": "2026-11-15T21:49:58Z",
       "id": "V10"
     }
   ],
@@ -259,7 +259,7 @@
     {
       "name": "json_metadata",
       "result": "ok",
-      "detail": "snapshot=v20261113.9"
+      "detail": "snapshot=v20261113.10"
     },
     {
       "name": "manifest_checksums",
@@ -419,7 +419,7 @@
     {
       "name": "adjusted_close_selfcheck_contract",
       "result": "ok",
-      "detail": "MSFT=max 0.012898%; GOOGL=max 0.006174%"
+      "detail": "MSFT=max 0.012904%; GOOGL=max 0.006174%"
     },
     {
       "name": "approved_allowlist_domains",
@@ -434,7 +434,7 @@
     {
       "name": "run_audit_trail",
       "result": "ok",
-      "detail": "run_id=run_20261115T170806Z_b457bf1c"
+      "detail": "run_id=run_20261115T214745Z_22058a14"
     },
     {
       "name": "response_cache_present",
@@ -449,12 +449,12 @@
     {
       "name": "sqlite_handoff",
       "result": "ok",
-      "detail": "run_id=run_20261115T170806Z_b457bf1c, counts={'facts': 4677, 'filings': 48, 'segments': 461, 'company_financials': 38, 'prices': 5984}"
+      "detail": "run_id=run_20261115T214745Z_22058a14, counts={'facts': 4677, 'filings': 48, 'segments': 461, 'company_financials': 38, 'prices': 5984}"
     },
     {
       "name": "web_data_size_under_5mb",
       "result": "ok",
-      "detail": "3780044 bytes"
+      "detail": "3780221 bytes"
     },
     {
       "name": "no_future_market_data",
