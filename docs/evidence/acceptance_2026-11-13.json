@@ -1,11 +1,11 @@
 {
   "schema_version": "1.0",
-  "checked_at": "2026-11-15T21:49:58Z",
-  "snapshot_version": "v20261113.10",
+  "checked_at": "2026-11-16T02:05:22Z",
+  "snapshot_version": "v20261113.11",
   "data_as_of": "2026-11-13",
   "environment": {
     "python": "3.14.10",
-    "platform": "Linux-7.0.0-1016-aws-x86_64-with-glibc2.43",
+    "platform": "Linux-7.0.0-1019-azure-x86_64-with-glibc2.43",
     "sec_user_agent_configured": true
   },
   "source_checks": {
@@ -37,7 +37,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "e3b7b0612986c02c0d846615a6675766013426a859e2d1fddb0d038042bf94c9",
-      "fetched_at": "2026-11-15T21:49:55Z",
+      "fetched_at": "2026-11-16T02:05:19Z",
       "id": "V01"
     },
     {
@@ -60,7 +60,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "3375e0a9a05ffe410d9d290b4b120e43ff93a87e013f6f27ec5052aa92779067",
-      "fetched_at": "2026-11-15T21:49:55Z",
+      "fetched_at": "2026-11-16T02:05:19Z",
       "id": "V02"
     },
     {
@@ -85,7 +85,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "a795727f74e61e9190e09e5a4333cee37d5b2db6c4933d8ce883b0f852e7009f",
-      "fetched_at": "2026-11-15T21:49:55Z",
+      "fetched_at": "2026-11-16T02:05:19Z",
       "id": "V03"
     },
     {
@@ -108,7 +108,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "baa3f1b8c8cb4c85e54a7990a70c0feeb834017658ca18525bca9768bffc7b8c",
-      "fetched_at": "2026-11-15T21:49:56Z",
+      "fetched_at": "2026-11-16T02:05:20Z",
       "id": "V04"
     },
     {
@@ -131,7 +131,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "796226022b0fc9c021465047021622fa00d33f3de1793484aa12474a0eef2cfb",
-      "fetched_at": "2026-11-15T21:49:56Z",
+      "fetched_at": "2026-11-16T02:05:20Z",
       "id": "V05"
     },
     {
@@ -156,7 +156,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "b22fef8d429677fc2c586ad00fc6cdca4b825dea1e1ab13991adbe881e31b7a3",
-      "fetched_at": "2026-11-15T21:49:57Z",
+      "fetched_at": "2026-11-16T02:05:20Z",
       "id": "V06"
     },
     {
@@ -179,7 +179,7 @@
       "source_value_display_unit": 15484.0,
       "http_status": 200,
       "response_sha256": "12c4dc9e8b1f6859dba65b3d0c4610dfdad224f249f2fd152505380b87bac761",
-      "fetched_at": "2026-11-15T21:49:57Z",
+      "fetched_at": "2026-11-16T02:05:21Z",
       "id": "V07"
     },
     {
@@ -202,7 +202,7 @@
       "source_value_display_unit": 285.0,
       "http_status": 200,
       "response_sha256": "bd401db600d8724a9eeb65bc85d4ad01d00129cf8a5783d05d845c22804b4171",
-      "fetched_at": "2026-11-15T21:49:57Z",
+      "fetched_at": "2026-11-16T02:05:21Z",
       "id": "V08"
     },
     {
@@ -212,16 +212,16 @@
       "trade_date": "2026-11-13",
       "displayed_value": 523.8800048828125,
       "displayed_unit": "USD/share",
-      "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?period1=1606780800&period2=1794787200&interval=1d&events=div%2Csplits",
-      "evidence_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?period1=1606780800&period2=1794787200&interval=1d&events=div%2Csplits",
+      "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?period1=1606780800&period2=1794873600&interval=1d&events=div%2Csplits",
+      "evidence_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?period1=1606780800&period2=1794873600&interval=1d&events=div%2Csplits",
       "result": "ok",
       "reason": "",
       "source_value_native": 523.8800048828125,
       "difference": 0.0,
       "relative_difference": 0.0,
       "http_status": 200,
-      "response_sha256": "898fea796edc4e8f88b27d86afd7246b759e4962b5ca07393d599e2e941b49dd",
-      "fetched_at": "2026-11-15T21:49:58Z",
+      "response_sha256": "d7b284c9d374bce14ab18e4f249b482b36e8120e9e318a0944aedfd59f15db1d",
+      "fetched_at": "2026-11-16T02:05:21Z",
       "id": "V09"
     },
     {
@@ -231,16 +231,16 @@
       "trade_date": "2026-11-13",
       "displayed_value": 295.7699890136719,
       "displayed_unit": "USD/share",
-      "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?period1=1606780800&period2=1794787200&interval=1d&events=div%2Csplits",
-      "evidence_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?period1=1606780800&period2=1794787200&interval=1d&events=div%2Csplits",
+      "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?period1=1606780800&period2=1794873600&interval=1d&events=div%2Csplits",
+      "evidence_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?period1=1606780800&period2=1794873600&interval=1d&events=div%2Csplits",
       "result": "ok",
       "reason": "",
       "source_value_native": 295.7699890136719,
       "difference": 0.0,
       "relative_difference": 0.0,
       "http_status": 200,
-      "response_sha256": "01b026046ebbcbd2a94a8c0b3e501e8c53626a0bc735c4429beb15ad2bc0590f",
-      "fetched_at": "2026-11-15T21:49:58Z",
+      "response_sha256": "c579b10dc9f332d306c756168543ec991c666d4e087c7bf40d02414ff22b2ce5",
+      "fetched_at": "2026-11-16T02:05:22Z",
       "id": "V10"
     }
   ],
@@ -259,7 +259,7 @@
     {
       "name": "json_metadata",
       "result": "ok",
-      "detail": "snapshot=v20261113.10"
+      "detail": "snapshot=v20261113.11"
     },
     {
       "name": "manifest_checksums",
@@ -419,7 +419,7 @@
     {
       "name": "adjusted_close_selfcheck_contract",
       "result": "ok",
-      "detail": "MSFT=max 0.012904%; GOOGL=max 0.006174%"
+      "detail": "MSFT=max 0.012912%; GOOGL=max 0.006148%"
     },
     {
       "name": "approved_allowlist_domains",
@@ -434,7 +434,7 @@
     {
       "name": "run_audit_trail",
       "result": "ok",
-      "detail": "run_id=run_20261115T214745Z_22058a14"
+      "detail": "run_id=run_20261116T020313Z_2bd5d72f"
     },
     {
       "name": "response_cache_present",
@@ -449,12 +449,12 @@
     {
       "name": "sqlite_handoff",
       "result": "ok",
-      "detail": "run_id=run_20261115T214745Z_22058a14, counts={'facts': 4677, 'filings': 48, 'segments': 461, 'company_financials': 38, 'prices': 5984}"
+      "detail": "run_id=run_20261116T020313Z_2bd5d72f, counts={'facts': 4677, 'filings': 48, 'segments': 461, 'company_financials': 38, 'prices': 5984}"
     },
     {
       "name": "web_data_size_under_5mb",
       "result": "ok",
-      "detail": "3780221 bytes"
+      "detail": "3780132 bytes"
     },
     {
       "name": "no_future_market_data",
