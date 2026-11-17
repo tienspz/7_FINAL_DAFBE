@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "checked_at": "2026-11-16T20:30:23Z",
-  "snapshot_version": "v20261116.1",
+  "checked_at": "2026-11-17T04:03:19Z",
+  "snapshot_version": "v20261116.2",
   "data_as_of": "2026-11-16",
   "environment": {
     "python": "3.14.10",
@@ -37,7 +37,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "e3b7b0612986c02c0d846615a6675766013426a859e2d1fddb0d038042bf94c9",
-      "fetched_at": "2026-11-16T20:30:20Z",
+      "fetched_at": "2026-11-17T04:03:16Z",
       "id": "V01"
     },
     {
@@ -60,7 +60,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "3375e0a9a05ffe410d9d290b4b120e43ff93a87e013f6f27ec5052aa92779067",
-      "fetched_at": "2026-11-16T20:30:20Z",
+      "fetched_at": "2026-11-17T04:03:16Z",
       "id": "V02"
     },
     {
@@ -85,7 +85,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "a795727f74e61e9190e09e5a4333cee37d5b2db6c4933d8ce883b0f852e7009f",
-      "fetched_at": "2026-11-16T20:30:20Z",
+      "fetched_at": "2026-11-17T04:03:16Z",
       "id": "V03"
     },
     {
@@ -108,7 +108,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "baa3f1b8c8cb4c85e54a7990a70c0feeb834017658ca18525bca9768bffc7b8c",
-      "fetched_at": "2026-11-16T20:30:21Z",
+      "fetched_at": "2026-11-17T04:03:17Z",
       "id": "V04"
     },
     {
@@ -131,7 +131,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "796226022b0fc9c021465047021622fa00d33f3de1793484aa12474a0eef2cfb",
-      "fetched_at": "2026-11-16T20:30:21Z",
+      "fetched_at": "2026-11-17T04:03:17Z",
       "id": "V05"
     },
     {
@@ -156,7 +156,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "b22fef8d429677fc2c586ad00fc6cdca4b825dea1e1ab13991adbe881e31b7a3",
-      "fetched_at": "2026-11-16T20:30:22Z",
+      "fetched_at": "2026-11-17T04:03:17Z",
       "id": "V06"
     },
     {
@@ -179,7 +179,7 @@
       "source_value_display_unit": 15484.0,
       "http_status": 200,
       "response_sha256": "12c4dc9e8b1f6859dba65b3d0c4610dfdad224f249f2fd152505380b87bac761",
-      "fetched_at": "2026-11-16T20:30:22Z",
+      "fetched_at": "2026-11-17T04:03:18Z",
       "id": "V07"
     },
     {
@@ -202,45 +202,45 @@
       "source_value_display_unit": 285.0,
       "http_status": 200,
       "response_sha256": "bd401db600d8724a9eeb65bc85d4ad01d00129cf8a5783d05d845c22804b4171",
-      "fetched_at": "2026-11-16T20:30:22Z",
+      "fetched_at": "2026-11-17T04:03:18Z",
       "id": "V08"
     },
     {
       "type": "price",
       "ticker": "MSFT",
       "metric": "close",
-      "trade_date": "2026-11-13",
-      "displayed_value": 523.8800048828125,
+      "trade_date": "2026-11-16",
+      "displayed_value": 517.989990234375,
       "displayed_unit": "USD/share",
-      "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?period1=1606780800&period2=1794873600&interval=1d&events=div%2Csplits",
-      "evidence_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?period1=1606780800&period2=1794873600&interval=1d&events=div%2Csplits",
+      "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?period1=1606780800&period2=1794960000&interval=1d&events=div%2Csplits",
+      "evidence_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?period1=1606780800&period2=1794960000&interval=1d&events=div%2Csplits",
       "result": "ok",
       "reason": "",
-      "source_value_native": 523.8800048828125,
+      "source_value_native": 517.989990234375,
       "difference": 0.0,
       "relative_difference": 0.0,
       "http_status": 200,
-      "response_sha256": "67d435489e47b4e2c8c9b779335df06844db898d56838d4b932e97a213117cb3",
-      "fetched_at": "2026-11-16T20:30:23Z",
+      "response_sha256": "960b21801f63955829ff9d2027f5a65da6e10efdecf096574d41016d8d541ecf",
+      "fetched_at": "2026-11-17T04:03:18Z",
       "id": "V09"
     },
     {
       "type": "price",
       "ticker": "GOOGL",
       "metric": "adj_close",
-      "trade_date": "2026-11-13",
-      "displayed_value": 295.7699890136719,
+      "trade_date": "2026-11-16",
+      "displayed_value": 283.7200012207031,
       "displayed_unit": "USD/share",
-      "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?period1=1606780800&period2=1794873600&interval=1d&events=div%2Csplits",
-      "evidence_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?period1=1606780800&period2=1794873600&interval=1d&events=div%2Csplits",
+      "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?period1=1606780800&period2=1794960000&interval=1d&events=div%2Csplits",
+      "evidence_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?period1=1606780800&period2=1794960000&interval=1d&events=div%2Csplits",
       "result": "ok",
       "reason": "",
-      "source_value_native": 295.7699890136719,
+      "source_value_native": 283.7200012207031,
       "difference": 0.0,
       "relative_difference": 0.0,
       "http_status": 200,
-      "response_sha256": "a7e64ea6340b3268c46cbcfe86f4c9a50176885e6a0ea96722164dc98e8ed7fb",
-      "fetched_at": "2026-11-16T20:30:23Z",
+      "response_sha256": "0a8f00d02de7641180911709e9654646ea00e4f35c4a15ac949df36991bd0b46",
+      "fetched_at": "2026-11-17T04:03:19Z",
       "id": "V10"
     }
   ],
@@ -259,7 +259,7 @@
     {
       "name": "json_metadata",
       "result": "ok",
-      "detail": "snapshot=v20261116.1"
+      "detail": "snapshot=v20261116.2"
     },
     {
       "name": "manifest_checksums",
@@ -284,7 +284,7 @@
     {
       "name": "googl_2022q4_trailing_eps",
       "result": "ok",
-      "detail": "eps_trailing_4q=4.56, pe_trailing=19.1663056089167"
+      "detail": "eps_trailing_4q=4.56, pe_trailing=19.16630226269103"
     },
     {
       "name": "segment_contract",
@@ -419,7 +419,7 @@
     {
       "name": "adjusted_close_selfcheck_contract",
       "result": "ok",
-      "detail": "MSFT=max 0.012894%; GOOGL=max 0.006159%"
+      "detail": "MSFT=max 0.012900%; GOOGL=max 0.006180%"
     },
     {
       "name": "approved_allowlist_domains",
@@ -434,7 +434,7 @@
     {
       "name": "run_audit_trail",
       "result": "ok",
-      "detail": "run_id=run_20261116T202749Z_22b0d8cf"
+      "detail": "run_id=run_20261117T035028Z_df4aef4e"
     },
     {
       "name": "response_cache_present",
@@ -449,12 +449,12 @@
     {
       "name": "sqlite_handoff",
       "result": "ok",
-      "detail": "run_id=run_20261116T202749Z_22b0d8cf, counts={'facts': 4677, 'filings': 48, 'segments': 461, 'company_financials': 38, 'prices': 5988}"
+      "detail": "run_id=run_20261117T035028Z_df4aef4e, counts={'facts': 4677, 'filings': 48, 'segments': 461, 'company_financials': 38, 'prices': 5988}"
     },
     {
       "name": "web_data_size_under_5mb",
       "result": "ok",
-      "detail": "3781043 bytes"
+      "detail": "3780977 bytes"
     },
     {
       "name": "no_future_market_data",
