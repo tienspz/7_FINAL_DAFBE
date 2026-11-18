@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "checked_at": "2026-11-17T22:34:59Z",
+  "checked_at": "2026-11-18T04:20:40Z",
   "summary": {
     "total": 21,
     "ok": 18,
@@ -101,18 +101,18 @@
     {
       "check": "secondary_close",
       "status": "ok",
-      "detail": "GOOGL: 30/30 Nasdaq closes within 0.100% (max 0.0000%); seeded random sample from 63 available days",
+      "detail": "GOOGL: 30/30 Nasdaq closes within 0.100% (max 0.0015%); seeded random sample from 64 available days",
       "ticker": "GOOGL",
       "compared_days": 30,
-      "available_days": 63,
+      "available_days": 64,
       "matched_days": 30,
-      "max_relative_difference": 4.508737576916009e-08,
+      "max_relative_difference": 1.4690410100353355e-05,
       "window_start": "2026-08-19",
-      "window_end": "2026-11-12",
+      "window_end": "2026-11-16",
       "sample_method": "seeded_random",
       "sample_seed": 20261104,
       "source_url": "https://api.nasdaq.com/api/quote/GOOGL/historical?assetclass=stocks&fromdate=2026-08-19&todate=2026-11-17&limit=120",
-      "response_sha256": "36fb14142df8b03d0b88dda31fdd4a69df259fda25ccd74b0742cfe0cedacd67",
+      "response_sha256": "238812943acbf838479b331c336018e7de2a8e0b60a593a03325dcd369a14f0d",
       "artifact": "data/raw/prices/nasdaq/GOOGL.json"
     },
     {
@@ -124,23 +124,23 @@
       "matched_days": 30,
       "max_relative_difference": 1.4690410100353355e-05,
       "source_url": "https://api.tiingo.com/tiingo/daily/GOOGL/prices?startDate=2026-08-19&endDate=2026-11-17&format=json",
-      "response_sha256": "4dc940f057ef6049d8238d25444070b99498d21616147e66adf21c55c74a635f"
+      "response_sha256": "a12ad394fc7cbf6a6bc0de4fef7fe8bc32c7296ab8cd1cc06f6a41fcdb343f72"
     },
     {
       "check": "secondary_close",
       "status": "ok",
-      "detail": "MSFT: 30/30 Nasdaq closes within 0.100% (max 0.0000%); seeded random sample from 63 available days",
+      "detail": "MSFT: 30/30 Nasdaq closes within 0.100% (max 0.0010%); seeded random sample from 64 available days",
       "ticker": "MSFT",
       "compared_days": 30,
-      "available_days": 63,
+      "available_days": 64,
       "matched_days": 30,
-      "max_relative_difference": 5.7049977659114056e-08,
+      "max_relative_difference": 9.603996761813385e-06,
       "window_start": "2026-08-19",
-      "window_end": "2026-11-12",
+      "window_end": "2026-11-16",
       "sample_method": "seeded_random",
       "sample_seed": 20261104,
       "source_url": "https://api.nasdaq.com/api/quote/MSFT/historical?assetclass=stocks&fromdate=2026-08-19&todate=2026-11-17&limit=120",
-      "response_sha256": "3323810ee1268de1dc14be61469972a8e627ab2aafcb314ff4dc1b9a7ae71442",
+      "response_sha256": "1c2df480c0d48315a37ae67eb1fac49dfe29f92f9ffbf8beaa491e23bfc659f0",
       "artifact": "data/raw/prices/nasdaq/MSFT.json"
     },
     {
@@ -152,23 +152,23 @@
       "matched_days": 30,
       "max_relative_difference": 9.603996761813385e-06,
       "source_url": "https://api.tiingo.com/tiingo/daily/MSFT/prices?startDate=2026-08-19&endDate=2026-11-17&format=json",
-      "response_sha256": "f1651871951f781da40342113c5de8714aac78c1c64d4068ff269fa25b67de6f"
+      "response_sha256": "45792c36f334e0ac04a452c5d3683773953c65683cfca64390b1966db7e279bb"
     },
     {
       "check": "secondary_close",
       "status": "ok",
-      "detail": "QQQ: 30/30 Nasdaq closes within 0.100% (max 0.0000%); seeded random sample from 63 available days",
+      "detail": "QQQ: 30/30 Nasdaq closes within 0.100% (max 0.0000%); seeded random sample from 64 available days",
       "ticker": "QQQ",
       "compared_days": 30,
-      "available_days": 63,
+      "available_days": 64,
       "matched_days": 30,
-      "max_relative_difference": 4.27516854822625e-08,
+      "max_relative_difference": 4.122140227837241e-08,
       "window_start": "2026-08-19",
-      "window_end": "2026-11-12",
+      "window_end": "2026-11-16",
       "sample_method": "seeded_random",
       "sample_seed": 20261104,
       "source_url": "https://api.nasdaq.com/api/quote/QQQ/historical?assetclass=etf&fromdate=2026-08-19&todate=2026-11-17&limit=120",
-      "response_sha256": "625d8e4bd5e99f83415dd737e032c698d3e5decbd9ff1023705528fbed031157",
+      "response_sha256": "43513a152d922587b1b0403cb72b003c615bb8bcc2197cc46933f7bc6585f453",
       "artifact": "data/raw/prices/nasdaq/QQQ.json"
     },
     {
@@ -180,23 +180,23 @@
       "matched_days": 30,
       "max_relative_difference": 2.8614067091379186e-05,
       "source_url": "https://api.tiingo.com/tiingo/daily/QQQ/prices?startDate=2026-08-19&endDate=2026-11-17&format=json",
-      "response_sha256": "15567bc0fad063fb61b9f56f9ae54a2925fa3251153b2b967814792dab5eb321"
+      "response_sha256": "855f7289f117ec7911ccf146727fc63f41a4aa5c1bcce5209d8e9ff15444e651"
     },
     {
       "check": "secondary_close",
       "status": "ok",
-      "detail": "SPY: 30/30 Nasdaq closes within 0.100% (max 0.0000%); seeded random sample from 63 available days",
+      "detail": "SPY: 30/30 Nasdaq closes within 0.100% (max 0.0000%); seeded random sample from 64 available days",
       "ticker": "SPY",
       "compared_days": 30,
-      "available_days": 63,
+      "available_days": 64,
       "matched_days": 30,
-      "max_relative_difference": 3.7694443049953476e-08,
+      "max_relative_difference": 3.876683828307421e-08,
       "window_start": "2026-08-19",
-      "window_end": "2026-11-12",
+      "window_end": "2026-11-16",
       "sample_method": "seeded_random",
       "sample_seed": 20261104,
       "source_url": "https://api.nasdaq.com/api/quote/SPY/historical?assetclass=etf&fromdate=2026-08-19&todate=2026-11-17&limit=120",
-      "response_sha256": "b0bb724ce74ee34d890fd10ed85287a10d8879aafb2bdde4f66c0386ff7795a5",
+      "response_sha256": "5a0008d5bd0f0dccaaf65191ba1fa75b897258450d207255050fbf76399de237",
       "artifact": "data/raw/prices/nasdaq/SPY.json"
     },
     {
@@ -208,15 +208,15 @@
       "matched_days": 30,
       "max_relative_difference": 3.459539618642065e-06,
       "source_url": "https://api.tiingo.com/tiingo/daily/SPY/prices?startDate=2026-08-19&endDate=2026-11-17&format=json",
-      "response_sha256": "fbd6590dbf434b1879f940c4ce5472c568eb15f91906b957845b6a1666a74d9b"
+      "response_sha256": "83c481e3a11004f446a4184902905b12823e55824be33a51323ba817bb906e94"
     },
     {
       "check": "adjusted_close_selfcheck",
       "status": "ok",
-      "detail": "MSFT: adjusted close recomputed from close + dividends; max relative difference 0.012899% (tolerance 0.100%); split continuity=True",
+      "detail": "MSFT: adjusted close recomputed from close + dividends; max relative difference 0.012910% (tolerance 0.100%); split continuity=True",
       "ticker": "MSFT",
-      "max_relative_difference": 0.00012898507331141683,
-      "mean_relative_difference": 6.276890079822568e-05,
+      "max_relative_difference": 0.00012910137881797803,
+      "mean_relative_difference": 6.288835976370958e-05,
       "tolerance": 0.001,
       "dividend_events": 23,
       "split_events": [],
@@ -229,7 +229,7 @@
       "detail": "GOOGL: adjusted close recomputed from close + dividends; max relative difference 0.006163% (tolerance 0.100%); split continuity=True",
       "ticker": "GOOGL",
       "max_relative_difference": 6.163275522796871e-05,
-      "mean_relative_difference": 1.5925918453615693e-05,
+      "mean_relative_difference": 1.5925663185038604e-05,
       "tolerance": 0.001,
       "dividend_events": 10,
       "split_events": [
