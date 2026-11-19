@@ -2,8 +2,8 @@
   "ticker": "SPY",
   "source_url": "https://api.nasdaq.com/api/quote/SPY/historical?assetclass=etf&fromdate=2026-08-20&todate=2026-11-18&limit=120",
   "http_status": 200,
-  "fetched_at": "2026-11-18T21:56:20Z",
-  "response_sha256": "f0af4c2de8b43cee99d878f793ac65bc6fc62490bdc569452bef9c457825cbd9",
+  "fetched_at": "2026-11-19T03:25:34Z",
+  "response_sha256": "fa08c7886071268a64c61b9b83ae159304ca0fa1677d08e69d22974f969b51cf",
   "window": {
     "start": "2026-08-20",
     "end": "2026-11-18"
@@ -512,6 +512,14 @@
       "high": 739.76,
       "low": 727.0,
       "volume": 71636290.0
+    },
+    {
+      "trade_date": "2026-11-18",
+      "close": 730.2,
+      "open": 733.37,
+      "high": 735.06,
+      "low": 726.795,
+      "volume": 51804810.0
     }
   ]
 }
