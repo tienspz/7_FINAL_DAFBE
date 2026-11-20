@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "snapshot_version": "v20261119.1",
-  "generated_at": "2026-11-19T21:32:48Z",
+  "snapshot_version": "v20261119.2",
+  "generated_at": "2026-11-20T03:13:37Z",
   "data_as_of": "2026-11-19",
   "latest_quarter": "2026-Q3",
   "companies": [
@@ -57,17 +57,17 @@
     "verified_ratio": 1.0
   },
   "checksums": {
-    "financials.json": "sha256:1a420d51e9daf0ea568c021bca0f9109ce8816db7f8ff16ae57164c6c8d74b63",
-    "overview.json": "sha256:3ec7258433726cae9390afa851295ea5195b9a91740dda655c832ac6f0474d52",
-    "investor.json": "sha256:9a4753ff74054305c1e05efe77531a85a969d8162964c9e25cda9b6810e1013e",
-    "ai_analysis.json": "sha256:7828cdd191afc65439551330d5da3095a48608a43b174b682817972b4fe0063a",
-    "decision.json": "sha256:71696c0520a4b0f1389528ba05a8b6efa904ec05b6ae45a4254ed84939aeaece",
-    "methodology.json": "sha256:7b232afa0ba312603fcffad11381e6663ab65307ba7461569a57960a4645e526",
-    "tests.json": "sha256:bc316fd3b5d77a1155b49bd6bf895cc929ecc2f20f59deb94f362c0b1b43258b",
-    "prices/GOOGL.json": "sha256:c110e8dc4b90391af9c07628fd6d5a159cbc984d28032f25d21888dc5c88e8fe",
-    "prices/MSFT.json": "sha256:b8e9b7d908d932fd380e32e630d01978b0e47b5fdd43ea19b2004e1ccfbbf99f",
-    "prices/QQQ.json": "sha256:c78964abde5f007a6945ef14680335c845eab771b91ac4d4323387f5390a5bc0",
-    "prices/SPY.json": "sha256:6be0ec06aca9e86a5fbaccd6ff37f1c40d377fcc4725a4364d22542461a83c94"
+    "financials.json": "sha256:037e2d07f1a55be09dce99912e37030331a7645149b988e689407b8dfb09e350",
+    "overview.json": "sha256:cb1e7c6ef3b8b75408a1ec23ed08859ec7bdf058605daa6a81f1f76d7c0f2685",
+    "investor.json": "sha256:36617519ccd117fbb4279db1c16dc12b8e0900fa800802016f1f17e84fe9a216",
+    "ai_analysis.json": "sha256:da9e75800bfdaaaf82088517b1c00c55de9777c7bc7039f7382c2f608ebc55b5",
+    "decision.json": "sha256:dfae8631184e2b5124049b3e85274da9b39e7c79a8c279e4072cc51db00a3c8f",
+    "methodology.json": "sha256:e1b85cb2ad9995d34804a31e11b6b5327eded13438acb53a22060ba91754ca5d",
+    "tests.json": "sha256:9426dea489449d5b241909fa0a7e7d6720872698c16bb005607a4da03f1e6b23",
+    "prices/GOOGL.json": "sha256:3c5ee5220196c0b2c218d7885747d9e0cecd314b0327b8a53b70a2b85bf0a7bb",
+    "prices/MSFT.json": "sha256:e8aba0d6b8c0c976f7f191a45dc0ec3773d03773c911aa0a87b40997dd2ec745",
+    "prices/QQQ.json": "sha256:2073f8c17aefbca2c204697635c670359bec5bb1c76b6937fd80520040d7a409",
+    "prices/SPY.json": "sha256:d811906d896dd8261b35e44b210e8b63b3074865f01f9fc69eb767bb493d40f3"
   },
-  "run_id": "run_20261119T213029Z_179b9d01"
+  "run_id": "run_20261120T031117Z_5763af4b"
 }
