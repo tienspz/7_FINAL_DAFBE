@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "snapshot_version": "v20261119.3",
-  "generated_at": "2026-11-20T11:45:34Z",
+  "snapshot_version": "v20261120.1",
+  "generated_at": "2026-11-20T20:24:38Z",
   "label_definitions": {
     "Reported": "Value taken directly from an SEC filing.",
     "Proxy": "R&D or CapEx used as a company-level proxy for AI investment; not AI-specific spend.",
@@ -6363,7 +6363,7 @@
       "n": 14,
       "alpha": 0.05,
       "decision": "exploratory",
-      "note": "Lag family=MSFT|revenue_growth_yoy|stock_return_quarter|lags0-4 (m=5); lag 0; n_eff=14; ADF x level p=0.1328115688775942, y level p=0.2053801178786379; transformation=first_difference; n < 30: reference only; fragility=evaluated fragile=False; Holm lag family m=5 p_adj=1.0; Holm BT family m=5 p_adj=1.0; primary=bt; fragile=False",
+      "note": "Lag family=MSFT|revenue_growth_yoy|stock_return_quarter|lags0-4 (m=5); lag 0; n_eff=14; ADF x level p=0.1328115688775942, y level p=0.20537922487977184; transformation=first_difference; n < 30: reference only; fragility=evaluated fragile=False; Holm lag family m=5 p_adj=1.0; Holm BT family m=5 p_adj=1.0; primary=bt; fragile=False",
       "ticker": "MSFT",
       "x": "revenue_growth_yoy",
       "y": "stock_return_quarter",
@@ -6391,15 +6391,15 @@
           "n": 19,
           "regression": "c",
           "autolag": "AIC",
-          "statistic": -2.4985900606207685,
-          "p_value": 0.11581775524271642,
+          "statistic": -2.4986257486340437,
+          "p_value": 0.11580905311714018,
           "stationary": false,
           "transformation": "first_difference",
-          "level_statistic": -2.202387377523929,
-          "level_p_value": 0.2053801178786379,
+          "level_statistic": -2.2023898444701255,
+          "level_p_value": 0.20537922487977184,
           "level_stationary": false,
-          "differenced_statistic": -2.4985900606207685,
-          "differenced_p_value": 0.11581775524271642,
+          "differenced_statistic": -2.4986257486340437,
+          "differenced_p_value": 0.11580905311714018,
           "differenced_stationary": false
         }
       },
@@ -6445,7 +6445,7 @@
       "n": 13,
       "alpha": 0.05,
       "decision": "exploratory",
-      "note": "Lag family=MSFT|revenue_growth_yoy|stock_return_quarter|lags0-4 (m=5); lag 1; n_eff=13; ADF x level p=0.1328115688775942, y level p=0.2053801178786379; transformation=first_difference; n < 30: reference only; fragility=evaluated fragile=False; Holm lag family m=5 p_adj=1.0; Holm BT family m=5 p_adj=1.0; primary=bt; fragile=False",
+      "note": "Lag family=MSFT|revenue_growth_yoy|stock_return_quarter|lags0-4 (m=5); lag 1; n_eff=13; ADF x level p=0.1328115688775942, y level p=0.20537922487977184; transformation=first_difference; n < 30: reference only; fragility=evaluated fragile=False; Holm lag family m=5 p_adj=1.0; Holm BT family m=5 p_adj=1.0; primary=bt; fragile=False",
       "ticker": "MSFT",
       "x": "revenue_growth_yoy",
       "y": "stock_return_quarter",
@@ -6473,15 +6473,15 @@
           "n": 19,
           "regression": "c",
           "autolag": "AIC",
-          "statistic": -2.4985900606207685,
-          "p_value": 0.11581775524271642,
+          "statistic": -2.4986257486340437,
+          "p_value": 0.11580905311714018,
           "stationary": false,
           "transformation": "first_difference",
-          "level_statistic": -2.202387377523929,
-          "level_p_value": 0.2053801178786379,
+          "level_statistic": -2.2023898444701255,
+          "level_p_value": 0.20537922487977184,
           "level_stationary": false,
-          "differenced_statistic": -2.4985900606207685,
-          "differenced_p_value": 0.11581775524271642,
+          "differenced_statistic": -2.4986257486340437,
+          "differenced_p_value": 0.11580905311714018,
           "differenced_stationary": false
         }
       },
@@ -6527,7 +6527,7 @@
       "n": 12,
       "alpha": 0.05,
       "decision": "exploratory",
-      "note": "Lag family=MSFT|revenue_growth_yoy|stock_return_quarter|lags0-4 (m=5); lag 2; n_eff=12; ADF x level p=0.1328115688775942, y level p=0.2053801178786379; transformation=first_difference; n < 30: reference only; fragility=evaluated fragile=False; Holm lag family m=5 p_adj=1.0; Holm BT family m=5 p_adj=1.0; primary=bt; fragile=False",
+      "note": "Lag family=MSFT|revenue_growth_yoy|stock_return_quarter|lags0-4 (m=5); lag 2; n_eff=12; ADF x level p=0.1328115688775942, y level p=0.20537922487977184; transformation=first_difference; n < 30: reference only; fragility=evaluated fragile=False; Holm lag family m=5 p_adj=1.0; Holm BT family m=5 p_adj=1.0; primary=bt; fragile=False",
       "ticker": "MSFT",
       "x": "revenue_growth_yoy",
       "y": "stock_return_quarter",
@@ -6555,15 +6555,15 @@
           "n": 19,
           "regression": "c",
           "autolag": "AIC",
-          "statistic": -2.4985900606207685,
-          "p_value": 0.11581775524271642,
+          "statistic": -2.4986257486340437,
+          "p_value": 0.11580905311714018,
           "stationary": false,
           "transformation": "first_difference",
-          "level_statistic": -2.202387377523929,
-          "level_p_value": 0.2053801178786379,
+          "level_statistic": -2.2023898444701255,
+          "level_p_value": 0.20537922487977184,
           "level_stationary": false,
-          "differenced_statistic": -2.4985900606207685,
-          "differenced_p_value": 0.11581775524271642,
+          "differenced_statistic": -2.4986257486340437,
+          "differenced_p_value": 0.11580905311714018,
           "differenced_stationary": false
         }
       },
@@ -6609,7 +6609,7 @@
       "n": 11,
       "alpha": 0.05,
       "decision": "exploratory",
-      "note": "Lag family=MSFT|revenue_growth_yoy|stock_return_quarter|lags0-4 (m=5); lag 3; n_eff=11; ADF x level p=0.1328115688775942, y level p=0.2053801178786379; transformation=first_difference; n < 30: reference only; fragility=evaluated fragile=False; Holm lag family m=5 p_adj=1.0; Holm BT family m=5 p_adj=1.0; primary=bt; fragile=False",
+      "note": "Lag family=MSFT|revenue_growth_yoy|stock_return_quarter|lags0-4 (m=5); lag 3; n_eff=11; ADF x level p=0.1328115688775942, y level p=0.20537922487977184; transformation=first_difference; n < 30: reference only; fragility=evaluated fragile=False; Holm lag family m=5 p_adj=1.0; Holm BT family m=5 p_adj=1.0; primary=bt; fragile=False",
       "ticker": "MSFT",
       "x": "revenue_growth_yoy",
       "y": "stock_return_quarter",
@@ -6637,15 +6637,15 @@
           "n": 19,
           "regression": "c",
           "autolag": "AIC",
-          "statistic": -2.4985900606207685,
-          "p_value": 0.11581775524271642,
+          "statistic": -2.4986257486340437,
+          "p_value": 0.11580905311714018,
           "stationary": false,
           "transformation": "first_difference",
-          "level_statistic": -2.202387377523929,
-          "level_p_value": 0.2053801178786379,
+          "level_statistic": -2.2023898444701255,
+          "level_p_value": 0.20537922487977184,
           "level_stationary": false,
-          "differenced_statistic": -2.4985900606207685,
-          "differenced_p_value": 0.11581775524271642,
+          "differenced_statistic": -2.4986257486340437,
+          "differenced_p_value": 0.11580905311714018,
           "differenced_stationary": false
         }
       },
@@ -6691,7 +6691,7 @@
       "n": 10,
       "alpha": 0.05,
       "decision": "exploratory",
-      "note": "Lag family=MSFT|revenue_growth_yoy|stock_return_quarter|lags0-4 (m=5); lag 4; n_eff=10; ADF x level p=0.1328115688775942, y level p=0.2053801178786379; transformation=first_difference; n < 30: reference only; fragility=evaluated fragile=False; Holm lag family m=5 p_adj=1.0; Holm BT family m=5 p_adj=1.0; primary=bt; fragile=False",
+      "note": "Lag family=MSFT|revenue_growth_yoy|stock_return_quarter|lags0-4 (m=5); lag 4; n_eff=10; ADF x level p=0.1328115688775942, y level p=0.20537922487977184; transformation=first_difference; n < 30: reference only; fragility=evaluated fragile=False; Holm lag family m=5 p_adj=1.0; Holm BT family m=5 p_adj=1.0; primary=bt; fragile=False",
       "ticker": "MSFT",
       "x": "revenue_growth_yoy",
       "y": "stock_return_quarter",
@@ -6719,15 +6719,15 @@
           "n": 19,
           "regression": "c",
           "autolag": "AIC",
-          "statistic": -2.4985900606207685,
-          "p_value": 0.11581775524271642,
+          "statistic": -2.4986257486340437,
+          "p_value": 0.11580905311714018,
           "stationary": false,
           "transformation": "first_difference",
-          "level_statistic": -2.202387377523929,
-          "level_p_value": 0.2053801178786379,
+          "level_statistic": -2.2023898444701255,
+          "level_p_value": 0.20537922487977184,
           "level_stationary": false,
-          "differenced_statistic": -2.4985900606207685,
-          "differenced_p_value": 0.11581775524271642,
+          "differenced_statistic": -2.4986257486340437,
+          "differenced_p_value": 0.11580905311714018,
           "differenced_stationary": false
         }
       },
@@ -6773,7 +6773,7 @@
       "n": 14,
       "alpha": 0.05,
       "decision": "exploratory",
-      "note": "Lag family=GOOGL|revenue_growth_yoy|stock_return_quarter|lags0-4 (m=5); lag 0; n_eff=14; ADF x level p=0.8899856020306087, y level p=0.006114121366274386; transformation=first_difference; n < 30: reference only; fragility=evaluated fragile=False; Holm lag family m=5 p_adj=1.0; Holm BT family m=5 p_adj=1.0; primary=bt; fragile=False",
+      "note": "Lag family=GOOGL|revenue_growth_yoy|stock_return_quarter|lags0-4 (m=5); lag 0; n_eff=14; ADF x level p=0.8899856020306087, y level p=0.006114103949768557; transformation=first_difference; n < 30: reference only; fragility=evaluated fragile=False; Holm lag family m=5 p_adj=1.0; Holm BT family m=5 p_adj=1.0; primary=bt; fragile=False",
       "ticker": "GOOGL",
       "x": "revenue_growth_yoy",
       "y": "stock_return_quarter",
@@ -6801,12 +6801,12 @@
           "n": 19,
           "regression": "c",
           "autolag": "AIC",
-          "statistic": -3.5820247847139126,
-          "p_value": 0.006114121366274386,
+          "statistic": -3.582025647894876,
+          "p_value": 0.006114103949768557,
           "stationary": true,
           "transformation": "level",
-          "level_statistic": -3.5820247847139126,
-          "level_p_value": 0.006114121366274386,
+          "level_statistic": -3.582025647894876,
+          "level_p_value": 0.006114103949768557,
           "level_stationary": true,
           "differenced_statistic": null,
           "differenced_p_value": null,
@@ -6881,7 +6881,7 @@
       "n": 13,
       "alpha": 0.05,
       "decision": "exploratory",
-      "note": "Lag family=GOOGL|revenue_growth_yoy|stock_return_quarter|lags0-4 (m=5); lag 1; n_eff=13; ADF x level p=0.8899856020306087, y level p=0.006114121366274386; transformation=first_difference; n < 30: reference only; fragility=evaluated fragile=False; Holm lag family m=5 p_adj=1.0; Holm BT family m=5 p_adj=1.0; primary=bt; fragile=False",
+      "note": "Lag family=GOOGL|revenue_growth_yoy|stock_return_quarter|lags0-4 (m=5); lag 1; n_eff=13; ADF x level p=0.8899856020306087, y level p=0.006114103949768557; transformation=first_difference; n < 30: reference only; fragility=evaluated fragile=False; Holm lag family m=5 p_adj=1.0; Holm BT family m=5 p_adj=1.0; primary=bt; fragile=False",
       "ticker": "GOOGL",
       "x": "revenue_growth_yoy",
       "y": "stock_return_quarter",
@@ -6909,12 +6909,12 @@
           "n": 19,
           "regression": "c",
           "autolag": "AIC",
-          "statistic": -3.5820247847139126,
-          "p_value": 0.006114121366274386,
+          "statistic": -3.582025647894876,
+          "p_value": 0.006114103949768557,
           "stationary": true,
           "transformation": "level",
-          "level_statistic": -3.5820247847139126,
-          "level_p_value": 0.006114121366274386,
+          "level_statistic": -3.582025647894876,
+          "level_p_value": 0.006114103949768557,
           "level_stationary": true,
           "differenced_statistic": null,
           "differenced_p_value": null,
@@ -6989,7 +6989,7 @@
       "n": 12,
       "alpha": 0.05,
       "decision": "exploratory",
-      "note": "Lag family=GOOGL|revenue_growth_yoy|stock_return_quarter|lags0-4 (m=5); lag 2; n_eff=12; ADF x level p=0.8899856020306087, y level p=0.006114121366274386; transformation=first_difference; n < 30: reference only; fragility=evaluated fragile=False; Holm lag family m=5 p_adj=1.0; Holm BT family m=5 p_adj=1.0; primary=bt; fragile=False",
+      "note": "Lag family=GOOGL|revenue_growth_yoy|stock_return_quarter|lags0-4 (m=5); lag 2; n_eff=12; ADF x level p=0.8899856020306087, y level p=0.006114103949768557; transformation=first_difference; n < 30: reference only; fragility=evaluated fragile=False; Holm lag family m=5 p_adj=1.0; Holm BT family m=5 p_adj=1.0; primary=bt; fragile=False",
       "ticker": "GOOGL",
       "x": "revenue_growth_yoy",
       "y": "stock_return_quarter",
@@ -7017,12 +7017,12 @@
           "n": 19,
           "regression": "c",
           "autolag": "AIC",
-          "statistic": -3.5820247847139126,
-          "p_value": 0.006114121366274386,
+          "statistic": -3.582025647894876,
+          "p_value": 0.006114103949768557,
           "stationary": true,
           "transformation": "level",
-          "level_statistic": -3.5820247847139126,
-          "level_p_value": 0.006114121366274386,
+          "level_statistic": -3.582025647894876,
+          "level_p_value": 0.006114103949768557,
           "level_stationary": true,
           "differenced_statistic": null,
           "differenced_p_value": null,
@@ -7085,7 +7085,7 @@
       "n": 11,
       "alpha": 0.05,
       "decision": "exploratory",
-      "note": "Lag family=GOOGL|revenue_growth_yoy|stock_return_quarter|lags0-4 (m=5); lag 3; n_eff=11; ADF x level p=0.8899856020306087, y level p=0.006114121366274386; transformation=first_difference; n < 30: reference only; fragility=evaluated fragile=False; Holm lag family m=5 p_adj=1.0; Holm BT family m=5 p_adj=1.0; primary=bt; fragile=False",
+      "note": "Lag family=GOOGL|revenue_growth_yoy|stock_return_quarter|lags0-4 (m=5); lag 3; n_eff=11; ADF x level p=0.8899856020306087, y level p=0.006114103949768557; transformation=first_difference; n < 30: reference only; fragility=evaluated fragile=False; Holm lag family m=5 p_adj=1.0; Holm BT family m=5 p_adj=1.0; primary=bt; fragile=False",
       "ticker": "GOOGL",
       "x": "revenue_growth_yoy",
       "y": "stock_return_quarter",
@@ -7113,12 +7113,12 @@
           "n": 19,
           "regression": "c",
           "autolag": "AIC",
-          "statistic": -3.5820247847139126,
-          "p_value": 0.006114121366274386,
+          "statistic": -3.582025647894876,
+          "p_value": 0.006114103949768557,
           "stationary": true,
           "transformation": "level",
-          "level_statistic": -3.5820247847139126,
-          "level_p_value": 0.006114121366274386,
+          "level_statistic": -3.582025647894876,
+          "level_p_value": 0.006114103949768557,
           "level_stationary": true,
           "differenced_statistic": null,
           "differenced_p_value": null,
@@ -7181,7 +7181,7 @@
       "n": 10,
       "alpha": 0.05,
       "decision": "exploratory",
-      "note": "Lag family=GOOGL|revenue_growth_yoy|stock_return_quarter|lags0-4 (m=5); lag 4; n_eff=10; ADF x level p=0.8899856020306087, y level p=0.006114121366274386; transformation=first_difference; n < 30: reference only; fragility=evaluated fragile=False; Holm lag family m=5 p_adj=1.0; Holm BT family m=5 p_adj=1.0; primary=bt; fragile=False",
+      "note": "Lag family=GOOGL|revenue_growth_yoy|stock_return_quarter|lags0-4 (m=5); lag 4; n_eff=10; ADF x level p=0.8899856020306087, y level p=0.006114103949768557; transformation=first_difference; n < 30: reference only; fragility=evaluated fragile=False; Holm lag family m=5 p_adj=1.0; Holm BT family m=5 p_adj=1.0; primary=bt; fragile=False",
       "ticker": "GOOGL",
       "x": "revenue_growth_yoy",
       "y": "stock_return_quarter",
@@ -7209,12 +7209,12 @@
           "n": 19,
           "regression": "c",
           "autolag": "AIC",
-          "statistic": -3.5820247847139126,
-          "p_value": 0.006114121366274386,
+          "statistic": -3.582025647894876,
+          "p_value": 0.006114103949768557,
           "stationary": true,
           "transformation": "level",
-          "level_statistic": -3.5820247847139126,
-          "level_p_value": 0.006114121366274386,
+          "level_statistic": -3.582025647894876,
+          "level_p_value": 0.006114103949768557,
           "level_stationary": true,
           "differenced_statistic": null,
           "differenced_p_value": null,
@@ -7278,7 +7278,7 @@
         "revenue_growth_yoy": null,
         "fcf_growth_yoy": null,
         "operating_margin": 0.4125607779578606,
-        "stock_return_quarter": -0.08138817679556964
+        "stock_return_quarter": -0.08138835821381007
       },
       {
         "calendar_key": "2022-Q2",
@@ -7287,7 +7287,7 @@
         "revenue_growth_yoy": null,
         "fcf_growth_yoy": null,
         "operating_margin": 0.3959124650535043,
-        "stock_return_quarter": -0.16503480840144868
+        "stock_return_quarter": -0.1650345165850995
       },
       {
         "calendar_key": "2022-Q3",
@@ -7296,7 +7296,7 @@
         "revenue_growth_yoy": null,
         "fcf_growth_yoy": null,
         "operating_margin": 0.42931247755476637,
-        "stock_return_quarter": -0.09124950687903743
+        "stock_return_quarter": -0.0912498542211514
       },
       {
         "calendar_key": "2022-Q4",
@@ -7305,7 +7305,7 @@
         "revenue_growth_yoy": null,
         "fcf_growth_yoy": null,
         "operating_margin": 0.3867328947617874,
-        "stock_return_quarter": 0.03261427020748586
+        "stock_return_quarter": 0.0326144781205302
       },
       {
         "calendar_key": "2023-Q1",
@@ -7314,7 +7314,7 @@
         "revenue_growth_yoy": 0.0708468395461912,
         "fcf_growth_yoy": -0.11034620373141779,
         "operating_margin": 0.4228768185859962,
-        "stock_return_quarter": 0.20516251405377472
+        "stock_return_quarter": 0.20516230351566356
       },
       {
         "calendar_key": "2023-Q2",
@@ -7323,7 +7323,7 @@
         "revenue_growth_yoy": 0.08337028824833692,
         "fcf_growth_yoy": 0.11651086834102942,
         "operating_margin": 0.4316503230169606,
-        "stock_return_quarter": 0.1837823678363879
+        "stock_return_quarter": 0.18378227886075282
       },
       {
         "calendar_key": "2023-Q3",
@@ -7332,7 +7332,7 @@
         "revenue_growth_yoy": 0.12758868361198683,
         "fcf_growth_yoy": 0.22175583801359733,
         "operating_margin": 0.4758745156324646,
-        "stock_return_quarter": -0.07083294657248851
+        "stock_return_quarter": -0.07083286753199203
       },
       {
         "calendar_key": "2023-Q4",
@@ -7341,7 +7341,7 @@
         "revenue_growth_yoy": 0.17580146738203117,
         "fcf_growth_yoy": 0.8611961624821391,
         "operating_margin": 0.43585940019348596,
-        "stock_return_quarter": 0.19335933144761275
+        "stock_return_quarter": 0.1933596479283204
       },
       {
         "calendar_key": "2024-Q1",
@@ -7350,7 +7350,7 @@
         "revenue_growth_yoy": 0.17028964943148495,
         "fcf_growth_yoy": 0.17556353033531447,
         "operating_margin": 0.4458760386692101,
-        "stock_return_quarter": 0.12088605035171995
+        "stock_return_quarter": 0.1208859472252859
       },
       {
         "calendar_key": "2024-Q2",
@@ -7359,7 +7359,7 @@
         "revenue_growth_yoy": 0.15195144957198026,
         "fcf_growth_yoy": 0.17627477681948855,
         "operating_margin": 0.43142737960974553,
-        "stock_return_quarter": 0.06426190295725442
+        "stock_return_quarter": 0.0642616759223873
       },
       {
         "calendar_key": "2024-Q3",
@@ -7368,7 +7368,7 @@
         "revenue_growth_yoy": 0.1604472990427659,
         "fcf_growth_yoy": -0.06817961869737732,
         "operating_margin": 0.4658382252039338,
-        "stock_return_quarter": -0.03551736774700898
+        "stock_return_quarter": -0.03551723345732205
       },
       {
         "calendar_key": "2024-Q4",
@@ -7386,7 +7386,7 @@
         "revenue_growth_yoy": 0.13269100197225914,
         "fcf_growth_yoy": -0.031767231099451454,
         "operating_margin": 0.456712242742557,
-        "stock_return_quarter": -0.10760920644189131
+        "stock_return_quarter": -0.10760913290096175
       },
       {
         "calendar_key": "2025-Q2",
@@ -7395,7 +7395,7 @@
         "revenue_growth_yoy": 0.18097548163826538,
         "fcf_growth_yoy": 0.0963039190463939,
         "operating_margin": 0.44901296424693554,
-        "stock_return_quarter": 0.3274811213607618
+        "stock_return_quarter": 0.32748109437341033
       },
       {
         "calendar_key": "2025-Q3",
@@ -7404,7 +7404,7 @@
         "revenue_growth_yoy": 0.18431043683769155,
         "fcf_growth_yoy": 0.3326582541413512,
         "operating_margin": 0.48872838695557014,
-        "stock_return_quarter": 0.04300575765384562
+        "stock_return_quarter": 0.04300569290495093
       },
       {
         "calendar_key": "2025-Q4",
@@ -7431,7 +7431,7 @@
         "revenue_growth_yoy": 0.17747020577962092,
         "fcf_growth_yoy": -0.2318914267834794,
         "operating_margin": 0.4511093581610319,
-        "stock_return_quarter": 0.009881582240802933
+        "stock_return_quarter": 0.009881665176858734
       },
       {
         "calendar_key": "2026-Q3",
@@ -7440,7 +7440,7 @@
         "revenue_growth_yoy": 0.18804475171552526,
         "fcf_growth_yoy": -0.2739352375014612,
         "operating_margin": 0.4975671604590427,
-        "stock_return_quarter": 0.3775819235356517
+        "stock_return_quarter": 0.3775818104023856
       }
     ],
     "GOOGL": [
@@ -7451,7 +7451,7 @@
         "revenue_growth_yoy": null,
         "fcf_growth_yoy": null,
         "operating_margin": 0.2954522062607519,
-        "stock_return_quarter": -0.03993389723444574
+        "stock_return_quarter": -0.03993368879525039
       },
       {
         "calendar_key": "2022-Q2",
@@ -7460,7 +7460,7 @@
         "revenue_growth_yoy": null,
         "fcf_growth_yoy": null,
         "operating_margin": 0.279156202913109,
-        "stock_return_quarter": -0.21647398875944002
+        "stock_return_quarter": -0.2164742416970452
       },
       {
         "calendar_key": "2022-Q3",
@@ -7469,7 +7469,7 @@
         "revenue_growth_yoy": null,
         "fcf_growth_yoy": null,
         "operating_margin": 0.24800266311584554,
-        "stock_return_quarter": -0.12217918558330632
+        "stock_return_quarter": -0.12217892875384506
       },
       {
         "calendar_key": "2022-Q4",
@@ -7478,7 +7478,7 @@
         "revenue_growth_yoy": null,
         "fcf_growth_yoy": null,
         "operating_margin": 0.2387965495476541,
-        "stock_return_quarter": -0.07757457969981474
+        "stock_return_quarter": -0.07757441240796359
       },
       {
         "calendar_key": "2023-Q1",
@@ -7487,7 +7487,7 @@
         "revenue_growth_yoy": 0.026113422828660138,
         "fcf_growth_yoy": 0.12402088772845943,
         "operating_margin": 0.24954504420594092,
-        "stock_return_quarter": 0.17567749706384905
+        "stock_return_quarter": 0.17567710187886543
       },
       {
         "calendar_key": "2023-Q2",
@@ -7496,7 +7496,7 @@
         "revenue_growth_yoy": 0.07058907942885839,
         "fcf_growth_yoy": 0.7292361441956487,
         "operating_margin": 0.2927188890676103,
-        "stock_return_quarter": 0.15395736379341662
+        "stock_return_quarter": 0.15395744947520562
       },
       {
         "calendar_key": "2023-Q3",
@@ -7514,7 +7514,7 @@
         "revenue_growth_yoy": 0.13494108983799702,
         "fcf_growth_yoy": -0.5070853361633061,
         "operating_margin": 0.27455683003128256,
-        "stock_return_quarter": 0.06747678660533474
+        "stock_return_quarter": 0.067476668891844
       },
       {
         "calendar_key": "2024-Q1",
@@ -7523,7 +7523,7 @@
         "revenue_growth_yoy": 0.15406880937710454,
         "fcf_growth_yoy": -0.022299651567944223,
         "operating_margin": 0.3162691366915407,
-        "stock_return_quarter": 0.08046396554553192
+        "stock_return_quarter": 0.08046397441850739
       },
       {
         "calendar_key": "2024-Q2",
@@ -7532,7 +7532,7 @@
         "revenue_growth_yoy": 0.1358908369524423,
         "fcf_growth_yoy": -0.3822205895858205,
         "operating_margin": 0.32362936914399,
-        "stock_return_quarter": 0.20823568699037387
+        "stock_return_quarter": 0.20823581030347382
       },
       {
         "calendar_key": "2024-Q3",
@@ -7550,7 +7550,7 @@
         "revenue_growth_yoy": 0.11770362646275045,
         "fcf_growth_yoy": 2.145516717325228,
         "operating_margin": 0.3210565051985612,
-        "stock_return_quarter": 0.14270086944243654
+        "stock_return_quarter": 0.14270096209204297
       },
       {
         "calendar_key": "2025-Q1",
@@ -7559,7 +7559,7 @@
         "revenue_growth_yoy": 0.12037646357665222,
         "fcf_growth_yoy": 0.1257424566405323,
         "operating_margin": 0.3391847862224882,
-        "stock_return_quarter": -0.18215480912874005
+        "stock_return_quarter": -0.1821548754392076
       },
       {
         "calendar_key": "2025-Q2",
@@ -7630,7 +7630,7 @@
       "evidence_quote": "It extends our ongoing collaboration across AI supercomputing and research and enables each of us to independently commercialize the resulting advanced AI technologies.",
       "content_sha256": "44ca9b1bcc2ba572f10f1b18738bdf6b2ad28a1aba21a1059d7be84bddd8a3ce",
       "http_status": 200,
-      "fetched_at": "2026-11-20T11:35:33Z",
+      "fetched_at": "2026-11-20T20:14:39Z",
       "entered_by": "curated:config/ai_events.yaml",
       "reviewed_by": "pipeline.ai_events.autoverify@1.0",
       "review_method": "automated_evidence_check",
@@ -7651,9 +7651,9 @@
       "page_published_date": "2023-02-06",
       "source_url": "https://blog.google/innovation-and-ai/technology/ai/bard-google-ai-search-updates/",
       "evidence_quote": "We've been working on an experimental conversational AI service, powered by LaMDA, that we're calling Bard.",
-      "content_sha256": "ddbe6451000b2fce43715432b638aa20f4f8b36594839508d2dd14f114d2a181",
+      "content_sha256": "1f3b68bc4010519aaf48e00771b01179921999d0051ceea1da78a6745a5705b3",
       "http_status": 200,
-      "fetched_at": "2026-11-20T11:35:32Z",
+      "fetched_at": "2026-11-20T20:14:38Z",
       "entered_by": "curated:config/ai_events.yaml",
       "reviewed_by": "pipeline.ai_events.autoverify@1.0",
       "review_method": "automated_evidence_check",
@@ -7676,7 +7676,7 @@
       "evidence_quote": "Today, we are bringing the power of next-generation AI to work.",
       "content_sha256": "7891f339e531e4f1c9b02444651557e555f58599ad6711f714a7db32566150c8",
       "http_status": 200,
-      "fetched_at": "2026-11-20T11:35:34Z",
+      "fetched_at": "2026-11-20T20:14:40Z",
       "entered_by": "curated:config/ai_events.yaml",
       "reviewed_by": "pipeline.ai_events.autoverify@1.0",
       "review_method": "automated_evidence_check",
@@ -7697,9 +7697,9 @@
       "page_published_date": "2023-12-06",
       "source_url": "https://blog.google/innovation-and-ai/technology/ai/google-gemini-ai/",
       "evidence_quote": "Today, we're a step closer to this vision as we introduce Gemini, the most capable and general model we've ever built.",
-      "content_sha256": "94580f39534a900e6a8326e860ab9db7cabf1484f618553049647e879b17c92b",
+      "content_sha256": "cad6dcd5138c107f3e30e0c2551bdddbe314409aa0c9cde4974f57320fbf72a2",
       "http_status": 200,
-      "fetched_at": "2026-11-20T11:35:35Z",
+      "fetched_at": "2026-11-20T20:14:41Z",
       "entered_by": "curated:config/ai_events.yaml",
       "reviewed_by": "pipeline.ai_events.autoverify@1.0",
       "review_method": "automated_evidence_check",
@@ -7720,9 +7720,9 @@
       "page_published_date": "2024-02-15",
       "source_url": "https://blog.google/innovation-and-ai/products/google-gemini-next-generation-model-february-2024/",
       "evidence_quote": "Today, we're announcing our next-generation model: Gemini 1.5.",
-      "content_sha256": "f49d8718527976b124a22c2798239416c69789e03dc661bb04f2f766a40c4bf9",
+      "content_sha256": "d25c99bf3584262efcb6fb85459497fea79720f7d177072cabd7ef23ffbdb253",
       "http_status": 200,
-      "fetched_at": "2026-11-20T11:35:36Z",
+      "fetched_at": "2026-11-20T20:14:42Z",
       "entered_by": "curated:config/ai_events.yaml",
       "reviewed_by": "pipeline.ai_events.autoverify@1.0",
       "review_method": "automated_evidence_check",
@@ -7745,7 +7745,7 @@
       "evidence_quote": "Today, at a special event on our new Microsoft campus, we introduced the world to a new category of Windows PCs designed for AI, Copilot+ PCs.",
       "content_sha256": "941498c7a8f9c26cb0bdddc307fc62b3386ed6ed506ee5636f582e1d2579cb7e",
       "http_status": 200,
-      "fetched_at": "2026-11-20T11:35:37Z",
+      "fetched_at": "2026-11-20T20:14:43Z",
       "entered_by": "curated:config/ai_events.yaml",
       "reviewed_by": "pipeline.ai_events.autoverify@1.0",
       "review_method": "automated_evidence_check",
@@ -7766,9 +7766,9 @@
       "page_published_date": "2024-12-11",
       "source_url": "https://blog.google/innovation-and-ai/models-and-research/google-deepmind/google-gemini-ai-update-december-2024/",
       "evidence_quote": "Today we're excited to launch our next era of models built for this new agentic era: introducing Gemini 2.0, our most capable model yet.",
-      "content_sha256": "a2572a93bba3ce8bdbb312b8bd9a7635638a6acb2f629d6ac65abf7113e87586",
+      "content_sha256": "5777cb1bbc48977c0f6b2dac79743c3a692869816d6ca43cb780bd8f1e9e40e7",
       "http_status": 200,
-      "fetched_at": "2026-11-20T11:35:38Z",
+      "fetched_at": "2026-11-20T20:14:44Z",
       "entered_by": "curated:config/ai_events.yaml",
       "reviewed_by": "pipeline.ai_events.autoverify@1.0",
       "review_method": "automated_evidence_check",
@@ -7789,9 +7789,9 @@
       "page_published_date": "2025-05-06",
       "source_url": "https://blog.google/products-and-platforms/products/gemini/gemini-2-5-pro-updates/",
       "evidence_quote": "This builds on the overwhelmingly positive feedback to Gemini 2.5 Pro's coding and multimodal reasoning capabilities.",
-      "content_sha256": "f2211b26b0994d7d71617878037f7556474769f9d03b2eb7611ef7b677e04083",
+      "content_sha256": "8da1446bb5865ca91de263e1626c96b509d9e40f673fdaf67c1d43965f45deb9",
       "http_status": 200,
-      "fetched_at": "2026-11-20T11:35:40Z",
+      "fetched_at": "2026-11-20T20:14:45Z",
       "entered_by": "curated:config/ai_events.yaml",
       "reviewed_by": "pipeline.ai_events.autoverify@1.0",
       "review_method": "automated_evidence_check",
@@ -7814,7 +7814,7 @@
       "evidence_quote": "We've entered the era of AI agents.",
       "content_sha256": "0c04b460cc7bd9dd5d11890de7b4813670016be46b30e22c28a021e3ac62670b",
       "http_status": 200,
-      "fetched_at": "2026-11-20T11:35:41Z",
+      "fetched_at": "2026-11-20T20:14:46Z",
       "entered_by": "curated:config/ai_events.yaml",
       "reviewed_by": "pipeline.ai_events.autoverify@1.0",
       "review_method": "automated_evidence_check",
@@ -7837,7 +7837,7 @@
       "evidence_quote": "As we enter the next phase of this partnership, we've signed a new definitive agreement that builds on our foundation, strengthens our partnership, and sets the stage for long-term success for both organizations.",
       "content_sha256": "febf8c4d7ed5915ca1ac5a244f778a1f22042410502726a32e71f1e6bcad7784",
       "http_status": 200,
-      "fetched_at": "2026-11-20T11:35:42Z",
+      "fetched_at": "2026-11-20T20:14:47Z",
       "entered_by": "curated:config/ai_events.yaml",
       "reviewed_by": "pipeline.ai_events.autoverify@1.0",
       "review_method": "automated_evidence_check",
@@ -7858,9 +7858,9 @@
       "page_published_date": "2025-11-18",
       "source_url": "https://blog.google/products-and-platforms/products/gemini/gemini-3/",
       "evidence_quote": "Google introduces Gemini 3, its most intelligent AI model, enhancing reasoning and multimodal capabilities.",
-      "content_sha256": "0cc064aaa4f15832479cb71c60181686f175daee1fc0c1aaf3c32f8b20e3a410",
+      "content_sha256": "40c4913de9473038c2f748a0ee818c114fc1c029fb71c90493d6bec5a2cfe8d0",
       "http_status": 200,
-      "fetched_at": "2026-11-20T11:35:43Z",
+      "fetched_at": "2026-11-20T20:14:49Z",
       "entered_by": "curated:config/ai_events.yaml",
       "reviewed_by": "pipeline.ai_events.autoverify@1.0",
       "review_method": "automated_evidence_check",
@@ -7883,7 +7883,7 @@
       "evidence_quote": "Maia 200 is also the most efficient inference system Microsoft has ever deployed, with 30% better performance per dollar than the latest generation hardware in our fleet today.",
       "content_sha256": "da3d80719fd2550e7ee396e2b16535f877ff3f182f1422b3200eb1f8dcfaba94",
       "http_status": 200,
-      "fetched_at": "2026-11-20T11:35:44Z",
+      "fetched_at": "2026-11-20T20:14:50Z",
       "entered_by": "curated:config/ai_events.yaml",
       "reviewed_by": "pipeline.ai_events.autoverify@1.0",
       "review_method": "automated_evidence_check",
@@ -7904,9 +7904,9 @@
       "page_published_date": "2026-05-19",
       "source_url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-5/",
       "evidence_quote": "This represents a major leap forward in building more capable, intelligent agents.",
-      "content_sha256": "e1dbb46f14ab2087d8e58117d14a3b5001753ae0a8ac298f64d06fd853378ce2",
+      "content_sha256": "9052404e36fad6f535ad71ef9fb55eda8d689f4a05e9d06d718d0e4be9e435da",
       "http_status": 200,
-      "fetched_at": "2026-11-20T11:35:45Z",
+      "fetched_at": "2026-11-20T20:14:51Z",
       "entered_by": "curated:config/ai_events.yaml",
       "reviewed_by": "pipeline.ai_events.autoverify@1.0",
       "review_method": "automated_evidence_check",
@@ -7927,9 +7927,9 @@
       "page_published_date": "2026-05-20",
       "source_url": "https://blog.google/innovation-and-ai/technology/ai/google-io-2026-all-our-announcements/",
       "evidence_quote": "We launched Gemini 3.5 Flash: the first in our latest series of models combining frontier intelligence with action.",
-      "content_sha256": "85239b202ca9b4a1522f1558440adf499e101a2fb59d2bcd8fbd3b5af6a3f3c7",
+      "content_sha256": "a0d8a413ff5c4e526e3b1f9dae4bd3105924167a2b863a2b2bf7c50e69ff3131",
       "http_status": 200,
-      "fetched_at": "2026-11-20T11:35:46Z",
+      "fetched_at": "2026-11-20T20:14:52Z",
       "entered_by": "curated:config/ai_events.yaml",
       "reviewed_by": "pipeline.ai_events.autoverify@1.0",
       "review_method": "automated_evidence_check",
@@ -7952,7 +7952,7 @@
       "evidence_quote": "Today, Microsoft is announcing one of the largest single capacity additions in our history.",
       "content_sha256": "25b001371ec5f8c2b4ecb37939c200e561d1e4577f14f7dd3ff9389044eedde5",
       "http_status": 200,
-      "fetched_at": "2026-11-20T11:35:47Z",
+      "fetched_at": "2026-11-20T20:14:53Z",
       "entered_by": "curated:config/ai_events.yaml",
       "reviewed_by": "pipeline.ai_events.autoverify@1.0",
       "review_method": "automated_evidence_check",
@@ -7973,9 +7973,9 @@
       "page_published_date": "2026-07-20",
       "source_url": "https://blogs.microsoft.com/blog/2026/07/20/microsoft-expands-azure-ai-and-hpc-infrastructure-with-amd/",
       "evidence_quote": "Building on our close collaboration with AMD, Microsoft is bringing AMD's latest Helios AI platform and next-generation EPYC datacenter processors to Azure.",
-      "content_sha256": "a15465084d022846288ee0aa3f7ac601b7e9bf82dddbc8c4e30fa7b2ce07a09f",
+      "content_sha256": "f84ad537326ea7711c461a87fe168aea8cdc73c0687879281ddafc8e47c69701",
       "http_status": 200,
-      "fetched_at": "2026-11-20T11:35:48Z",
+      "fetched_at": "2026-11-20T20:14:54Z",
       "entered_by": "curated:config/ai_events.yaml",
       "reviewed_by": "pipeline.ai_events.autoverify@1.0",
       "review_method": "automated_evidence_check",
@@ -7996,9 +7996,9 @@
       "page_published_date": "2026-08-13",
       "source_url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-3-7-flash/",
       "evidence_quote": "Today, we're building on the progress of our widely used Flash series by introducing Gemini 3.7 Flash, our most intelligent workhorse model yet for coding and agents.",
-      "content_sha256": "3f8bed8438c41ac09bf887d1a3511e58ffa62de34eb418125510aa7baf10e00c",
+      "content_sha256": "70c12e4dd5b6955bcfbc5e9b1a6b7d5f0a74b4b376dad082e3639dff421b285d",
       "http_status": 200,
-      "fetched_at": "2026-11-20T11:35:49Z",
+      "fetched_at": "2026-11-20T20:14:55Z",
       "entered_by": "curated:config/ai_events.yaml",
       "reviewed_by": "pipeline.ai_events.autoverify@1.0",
       "review_method": "automated_evidence_check",
@@ -8019,9 +8019,9 @@
       "page_published_date": "2026-09-15",
       "source_url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-8-live-gemini-3-8-live-extended-thinking/",
       "evidence_quote": "We are launching Gemini 3.8 Live and Gemini 3.8 Live Extended Thinking to make voice interactions more natural, fluid, and intelligent.",
-      "content_sha256": "a05b17ae9733b46e5fadb89fb826bc8460c12f115823959e1f2f6a7ee605ed34",
+      "content_sha256": "316a01f8c5f3b1c84e20b81fe4ae146d5c27b9a8c67acb677491dc61537c0fed",
       "http_status": 200,
-      "fetched_at": "2026-11-20T11:35:50Z",
+      "fetched_at": "2026-11-20T20:14:56Z",
       "entered_by": "curated:config/ai_events.yaml",
       "reviewed_by": "pipeline.ai_events.autoverify@1.0",
       "review_method": "automated_evidence_check",
