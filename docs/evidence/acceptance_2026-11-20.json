@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "checked_at": "2026-11-22T11:20:07Z",
-  "snapshot_version": "v20261120.6",
+  "checked_at": "2026-11-22T19:47:22Z",
+  "snapshot_version": "v20261120.7",
   "data_as_of": "2026-11-20",
   "environment": {
     "python": "3.14.10",
@@ -37,7 +37,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "e3b7b0612986c02c0d846615a6675766013426a859e2d1fddb0d038042bf94c9",
-      "fetched_at": "2026-11-22T11:20:04Z",
+      "fetched_at": "2026-11-22T19:47:18Z",
       "id": "V01"
     },
     {
@@ -60,7 +60,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "3375e0a9a05ffe410d9d290b4b120e43ff93a87e013f6f27ec5052aa92779067",
-      "fetched_at": "2026-11-22T11:20:04Z",
+      "fetched_at": "2026-11-22T19:47:19Z",
       "id": "V02"
     },
     {
@@ -85,7 +85,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "a795727f74e61e9190e09e5a4333cee37d5b2db6c4933d8ce883b0f852e7009f",
-      "fetched_at": "2026-11-22T11:20:05Z",
+      "fetched_at": "2026-11-22T19:47:19Z",
       "id": "V03"
     },
     {
@@ -108,7 +108,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "baa3f1b8c8cb4c85e54a7990a70c0feeb834017658ca18525bca9768bffc7b8c",
-      "fetched_at": "2026-11-22T11:20:05Z",
+      "fetched_at": "2026-11-22T19:47:19Z",
       "id": "V04"
     },
     {
@@ -131,7 +131,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "796226022b0fc9c021465047021622fa00d33f3de1793484aa12474a0eef2cfb",
-      "fetched_at": "2026-11-22T11:20:05Z",
+      "fetched_at": "2026-11-22T19:47:20Z",
       "id": "V05"
     },
     {
@@ -156,7 +156,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "b22fef8d429677fc2c586ad00fc6cdca4b825dea1e1ab13991adbe881e31b7a3",
-      "fetched_at": "2026-11-22T11:20:06Z",
+      "fetched_at": "2026-11-22T19:47:20Z",
       "id": "V06"
     },
     {
@@ -179,7 +179,7 @@
       "source_value_display_unit": 15484.0,
       "http_status": 200,
       "response_sha256": "12c4dc9e8b1f6859dba65b3d0c4610dfdad224f249f2fd152505380b87bac761",
-      "fetched_at": "2026-11-22T11:20:06Z",
+      "fetched_at": "2026-11-22T19:47:20Z",
       "id": "V07"
     },
     {
@@ -202,7 +202,7 @@
       "source_value_display_unit": 285.0,
       "http_status": 200,
       "response_sha256": "bd401db600d8724a9eeb65bc85d4ad01d00129cf8a5783d05d845c22804b4171",
-      "fetched_at": "2026-11-22T11:20:06Z",
+      "fetched_at": "2026-11-22T19:47:21Z",
       "id": "V08"
     },
     {
@@ -220,8 +220,8 @@
       "difference": 0.0,
       "relative_difference": 0.0,
       "http_status": 200,
-      "response_sha256": "ac85539a51d78b3603baa72450eb8f464b7b886c1912cf68044266f1620a362b",
-      "fetched_at": "2026-11-22T11:20:07Z",
+      "response_sha256": "9305b71aa54948b2023ff8c8d7403ebb2c5273fb8d45a914a60a25790a2badbc",
+      "fetched_at": "2026-11-22T19:47:21Z",
       "id": "V09"
     },
     {
@@ -239,8 +239,8 @@
       "difference": 0.0,
       "relative_difference": 0.0,
       "http_status": 200,
-      "response_sha256": "c2687a171cc648275e362e8f193bbb4acdb86f35f6fabd2a7715ed91f87b58cf",
-      "fetched_at": "2026-11-22T11:20:07Z",
+      "response_sha256": "15a268bd7eed977ab0755cf18073a3bb79e273464da0ec30097e1595abe4e021",
+      "fetched_at": "2026-11-22T19:47:21Z",
       "id": "V10"
     }
   ],
@@ -259,7 +259,7 @@
     {
       "name": "json_metadata",
       "result": "ok",
-      "detail": "snapshot=v20261120.6"
+      "detail": "snapshot=v20261120.7"
     },
     {
       "name": "manifest_checksums",
@@ -419,7 +419,7 @@
     {
       "name": "adjusted_close_selfcheck_contract",
       "result": "ok",
-      "detail": "MSFT=max 0.012910%; GOOGL=max 0.006174%"
+      "detail": "MSFT=max 0.012897%; GOOGL=max 0.006174%"
     },
     {
       "name": "approved_allowlist_domains",
@@ -434,7 +434,7 @@
     {
       "name": "run_audit_trail",
       "result": "ok",
-      "detail": "run_id=run_20261122T111813Z_ffe272a4"
+      "detail": "run_id=run_20261122T193600Z_bdc35a22"
     },
     {
       "name": "response_cache_present",
@@ -449,12 +449,12 @@
     {
       "name": "sqlite_handoff",
       "result": "ok",
-      "detail": "run_id=run_20261122T111813Z_ffe272a4, counts={'facts': 4677, 'filings': 48, 'segments': 461, 'company_financials': 38, 'prices': 6004}"
+      "detail": "run_id=run_20261122T193600Z_bdc35a22, counts={'facts': 4677, 'filings': 48, 'segments': 461, 'company_financials': 38, 'prices': 6004}"
     },
     {
       "name": "web_data_size_under_5mb",
       "result": "ok",
-      "detail": "3786048 bytes"
+      "detail": "3785763 bytes"
     },
     {
       "name": "no_future_market_data",
