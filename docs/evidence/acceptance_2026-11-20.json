@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "checked_at": "2026-11-22T19:47:22Z",
-  "snapshot_version": "v20261120.7",
+  "checked_at": "2026-11-23T00:52:50Z",
+  "snapshot_version": "v20261120.8",
   "data_as_of": "2026-11-20",
   "environment": {
     "python": "3.14.10",
@@ -37,7 +37,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "e3b7b0612986c02c0d846615a6675766013426a859e2d1fddb0d038042bf94c9",
-      "fetched_at": "2026-11-22T19:47:18Z",
+      "fetched_at": "2026-11-23T00:52:46Z",
       "id": "V01"
     },
     {
@@ -60,7 +60,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "3375e0a9a05ffe410d9d290b4b120e43ff93a87e013f6f27ec5052aa92779067",
-      "fetched_at": "2026-11-22T19:47:19Z",
+      "fetched_at": "2026-11-23T00:52:47Z",
       "id": "V02"
     },
     {
@@ -85,7 +85,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "a795727f74e61e9190e09e5a4333cee37d5b2db6c4933d8ce883b0f852e7009f",
-      "fetched_at": "2026-11-22T19:47:19Z",
+      "fetched_at": "2026-11-23T00:52:47Z",
       "id": "V03"
     },
     {
@@ -108,7 +108,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "baa3f1b8c8cb4c85e54a7990a70c0feeb834017658ca18525bca9768bffc7b8c",
-      "fetched_at": "2026-11-22T19:47:19Z",
+      "fetched_at": "2026-11-23T00:52:47Z",
       "id": "V04"
     },
     {
@@ -131,7 +131,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "796226022b0fc9c021465047021622fa00d33f3de1793484aa12474a0eef2cfb",
-      "fetched_at": "2026-11-22T19:47:20Z",
+      "fetched_at": "2026-11-23T00:52:48Z",
       "id": "V05"
     },
     {
@@ -156,7 +156,7 @@
       "difference": 0.0,
       "http_status": 200,
       "response_sha256": "b22fef8d429677fc2c586ad00fc6cdca4b825dea1e1ab13991adbe881e31b7a3",
-      "fetched_at": "2026-11-22T19:47:20Z",
+      "fetched_at": "2026-11-23T00:52:48Z",
       "id": "V06"
     },
     {
@@ -179,7 +179,7 @@
       "source_value_display_unit": 15484.0,
       "http_status": 200,
       "response_sha256": "12c4dc9e8b1f6859dba65b3d0c4610dfdad224f249f2fd152505380b87bac761",
-      "fetched_at": "2026-11-22T19:47:20Z",
+      "fetched_at": "2026-11-23T00:52:48Z",
       "id": "V07"
     },
     {
@@ -202,7 +202,7 @@
       "source_value_display_unit": 285.0,
       "http_status": 200,
       "response_sha256": "bd401db600d8724a9eeb65bc85d4ad01d00129cf8a5783d05d845c22804b4171",
-      "fetched_at": "2026-11-22T19:47:21Z",
+      "fetched_at": "2026-11-23T00:52:49Z",
       "id": "V08"
     },
     {
@@ -212,16 +212,16 @@
       "trade_date": "2026-11-20",
       "displayed_value": 484.5199890136719,
       "displayed_unit": "USD/share",
-      "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?period1=1606780800&period2=1795392000&interval=1d&events=div%2Csplits",
-      "evidence_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?period1=1606780800&period2=1795392000&interval=1d&events=div%2Csplits",
+      "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?period1=1606780800&period2=1795478400&interval=1d&events=div%2Csplits",
+      "evidence_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?period1=1606780800&period2=1795478400&interval=1d&events=div%2Csplits",
       "result": "ok",
       "reason": "",
       "source_value_native": 484.5199890136719,
       "difference": 0.0,
       "relative_difference": 0.0,
       "http_status": 200,
-      "response_sha256": "9305b71aa54948b2023ff8c8d7403ebb2c5273fb8d45a914a60a25790a2badbc",
-      "fetched_at": "2026-11-22T19:47:21Z",
+      "response_sha256": "7354f170d467b981d2f386bf0431d7571a010c7c43c6ccc41e3a1a9a491f0d97",
+      "fetched_at": "2026-11-23T00:52:49Z",
       "id": "V09"
     },
     {
@@ -231,16 +231,16 @@
       "trade_date": "2026-11-20",
       "displayed_value": 265.2900085449219,
       "displayed_unit": "USD/share",
-      "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?period1=1606780800&period2=1795392000&interval=1d&events=div%2Csplits",
-      "evidence_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?period1=1606780800&period2=1795392000&interval=1d&events=div%2Csplits",
+      "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?period1=1606780800&period2=1795478400&interval=1d&events=div%2Csplits",
+      "evidence_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?period1=1606780800&period2=1795478400&interval=1d&events=div%2Csplits",
       "result": "ok",
       "reason": "",
       "source_value_native": 265.2900085449219,
       "difference": 0.0,
       "relative_difference": 0.0,
       "http_status": 200,
-      "response_sha256": "15a268bd7eed977ab0755cf18073a3bb79e273464da0ec30097e1595abe4e021",
-      "fetched_at": "2026-11-22T19:47:21Z",
+      "response_sha256": "ea7b7d3bda23166a896c7a689cfa68ffb9a926ee5f82bc9b0866dfbe98ae7a5c",
+      "fetched_at": "2026-11-23T00:52:50Z",
       "id": "V10"
     }
   ],
@@ -259,7 +259,7 @@
     {
       "name": "json_metadata",
       "result": "ok",
-      "detail": "snapshot=v20261120.7"
+      "detail": "snapshot=v20261120.8"
     },
     {
       "name": "manifest_checksums",
@@ -419,7 +419,7 @@
     {
       "name": "adjusted_close_selfcheck_contract",
       "result": "ok",
-      "detail": "MSFT=max 0.012897%; GOOGL=max 0.006174%"
+      "detail": "MSFT=max 0.012880%; GOOGL=max 0.006176%"
     },
     {
       "name": "approved_allowlist_domains",
@@ -434,7 +434,7 @@
     {
       "name": "run_audit_trail",
       "result": "ok",
-      "detail": "run_id=run_20261122T193600Z_bdc35a22"
+      "detail": "run_id=run_20261123T005042Z_50614b8c"
     },
     {
       "name": "response_cache_present",
@@ -449,12 +449,12 @@
     {
       "name": "sqlite_handoff",
       "result": "ok",
-      "detail": "run_id=run_20261122T193600Z_bdc35a22, counts={'facts': 4677, 'filings': 48, 'segments': 461, 'company_financials': 38, 'prices': 6004}"
+      "detail": "run_id=run_20261123T005042Z_50614b8c, counts={'facts': 4677, 'filings': 48, 'segments': 461, 'company_financials': 38, 'prices': 6004}"
     },
     {
       "name": "web_data_size_under_5mb",
       "result": "ok",
-      "detail": "3785763 bytes"
+      "detail": "3785891 bytes"
     },
     {
       "name": "no_future_market_data",
