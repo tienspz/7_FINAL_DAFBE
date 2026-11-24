@@ -1,22 +1,14 @@
 {
   "ticker": "QQQ",
-  "source_url": "https://api.nasdaq.com/api/quote/QQQ/historical?assetclass=etf&fromdate=2026-08-22&todate=2026-11-20&limit=120",
+  "source_url": "https://api.nasdaq.com/api/quote/QQQ/historical?assetclass=etf&fromdate=2026-08-25&todate=2026-11-23&limit=120",
   "http_status": 200,
-  "fetched_at": "2026-11-23T09:01:16Z",
-  "response_sha256": "a756d329e0ee27c95b7f7016de498686d077c936f115c3af16314e8f6c5a0e02",
+  "fetched_at": "2026-11-24T06:01:11Z",
+  "response_sha256": "b7b0c9bc0276718bd359d5454ff8d698e079aef20d465780c2076a8798d8a7ff",
   "window": {
-    "start": "2026-08-22",
-    "end": "2026-11-20"
+    "start": "2026-08-25",
+    "end": "2026-11-23"
   },
   "rows": [
-    {
-      "trade_date": "2026-08-24",
-      "close": 706.32,
-      "open": 709.66,
-      "high": 709.79,
-      "low": 702.7,
-      "volume": 37443140.0
-    },
     {
       "trade_date": "2026-08-25",
       "close": 710.72,
@@ -520,6 +512,14 @@
       "high": 643.28,
       "low": 606.2293,
       "volume": 134753500.0
+    },
+    {
+      "trade_date": "2026-11-23",
+      "close": 651.03,
+      "open": 655.98,
+      "high": 657.53,
+      "low": 641.9501,
+      "volume": 85330830.0
     }
   ]
 }
