@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "snapshot_version": "v20261124.3",
-  "generated_at": "2026-11-25T12:51:19Z",
+  "snapshot_version": "v20261125.1",
+  "generated_at": "2026-11-25T22:32:31Z",
   "formulas": {
     "revenue_growth_yoy": "(Revenue_t - Revenue_t-4) / Revenue_t-4",
     "operating_margin": "Operating Income / Revenue",

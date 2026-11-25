@@ -1,22 +1,14 @@
 {
   "ticker": "GOOGL",
-  "source_url": "https://api.nasdaq.com/api/quote/GOOGL/historical?assetclass=stocks&fromdate=2026-08-26&todate=2026-11-24&limit=120",
+  "source_url": "https://api.nasdaq.com/api/quote/GOOGL/historical?assetclass=stocks&fromdate=2026-08-27&todate=2026-11-25&limit=120",
   "http_status": 200,
-  "fetched_at": "2026-11-25T12:50:11Z",
-  "response_sha256": "96f705cc61a9f78db12e2ccf87275bf68f6d14b3f5e95c90f5f5fcd1373f7540",
+  "fetched_at": "2026-11-25T22:31:21Z",
+  "response_sha256": "71c4bbd7848db7aebc0685a153a41be8020619fe3c2766960ea02038aa71dfa4",
   "window": {
-    "start": "2026-08-26",
-    "end": "2026-11-24"
+    "start": "2026-08-27",
+    "end": "2026-11-25"
   },
   "rows": [
-    {
-      "trade_date": "2026-08-26",
-      "close": 342.0,
-      "open": 346.62,
-      "high": 346.88,
-      "low": 340.18,
-      "volume": 20420260.0
-    },
     {
       "trade_date": "2026-08-27",
       "close": 340.65,
