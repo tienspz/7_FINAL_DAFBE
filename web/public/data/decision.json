@@ -1,14 +1,14 @@
 {
   "schema_version": "1.0",
-  "snapshot_version": "v20261125.4",
-  "generated_at": "2026-11-26T23:53:37Z",
+  "snapshot_version": "v20261125.5",
+  "generated_at": "2026-11-27T08:28:06Z",
   "thresholds_version": "1.1",
   "comparison": [
     {
       "ticker": "MSFT",
       "calendar_key": "2026-Q3",
       "period_end": "2026-09-30",
-      "stock_return_quarter": 0.3775818104023856,
+      "stock_return_quarter": 0.3775819235356517,
       "revenue_growth_yoy": 0.18804475171552526,
       "operating_margin": 0.4975671604590427,
       "fcf_growth_yoy": -0.2739352375014612,
@@ -16,8 +16,8 @@
       "capex_intensity": 0.4266084374559759,
       "eps_trailing_4q": 19.15,
       "pe_trailing": 26.73165184399478,
-      "annualized_volatility": 0.2727944724214974,
-      "max_drawdown": -0.3714847522601431,
+      "annualized_volatility": 0.2727943912664295,
+      "max_drawdown": -0.3714846820941581,
       "status": "Tích cực",
       "reasons": [
         "Revenue growth above threshold",
@@ -37,8 +37,8 @@
       "capex_intensity": 0.40254121040626445,
       "eps_trailing_4q": 19.16,
       "pe_trailing": 17.958245645734113,
-      "annualized_volatility": 0.3154770338218572,
-      "max_drawdown": -0.44320046541398017,
+      "annualized_volatility": 0.31547706805119435,
+      "max_drawdown": -0.443200574057121,
       "status": "Tích cực",
       "reasons": [
         "Revenue growth above threshold",
