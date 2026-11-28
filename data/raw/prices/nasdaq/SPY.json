@@ -2,7 +2,7 @@
   "ticker": "SPY",
   "source_url": "https://api.nasdaq.com/api/quote/SPY/historical?assetclass=etf&fromdate=2026-08-29&todate=2026-11-27&limit=120",
   "http_status": 200,
-  "fetched_at": "2026-11-27T18:58:46Z",
+  "fetched_at": "2026-11-28T10:24:24Z",
   "response_sha256": "a053d33220cd92fd7df9c04f51f975ce31fe0c2146ae066de3be727cc22b9ff8",
   "window": {
     "start": "2026-08-29",
